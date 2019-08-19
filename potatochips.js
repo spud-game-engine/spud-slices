@@ -120,6 +120,18 @@
 		this.transpose(x,y);//from Center
 		return this;
 	}
+	out.Shape.prototype.roundPoints=function(otherF) {
+		if (typeof otherF==="undefined") {
+			otherF=Math.round;
+		}
+		for (var i=0;i<this.points.length;i++) {
+			if (typeof this.points[i]=="number")
+				this.points[i]=otherF(this.points[i]);
+			for (var ii=0;ii<this.points[i].length;ii++)
+				this.points[i][ii]=otherF(this.points[i][ii]);
+		}
+		return this;
+	}
 	out.Shape.prototype.rotCenter=function(rad) {
 		var pos=this.findCenter();
 		return this.rotate(pos[0],pos[1],rad);
@@ -139,6 +151,7 @@
 				}
 			}
 		}
+		s.pointColor=this.pointColor+"";
 		s.pointColors=[];
 		for (i=0; i<this.pointColors.length;i++) {
 			if (typeof this.pointColors[i]=="number") s.pointColors[i]=this.pointColors[i];
@@ -159,6 +172,7 @@
 				}
 			}
 		}
+		s.segmentColor=this.segmentColor+"";
 		s.segmentColors=[];
 		for (i=0; i<this.segmentColors.length;i++) {
 			if (typeof this.segmentColors[i]=="number") s.segmentColors[i]=this.segmentColors[i];
@@ -179,6 +193,7 @@
 				}
 			}
 		}
+		s.faceColor=this.faceColor+"";
 		s.faceColors=[];
 		for (i=0; i<this.faceColors.length;i++) {
 			if (typeof this.faceColors[i]=="number") s.faceColors[i]=this.faceColors[i];

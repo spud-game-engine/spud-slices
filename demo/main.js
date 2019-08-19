@@ -49,8 +49,15 @@
 		else if (percentage>=65) gradeL="D";
 		return gradeL;
 	}
-	function invert(a,c) {
-		return a!==c;
+	function recursiveCheck(a,s,hasCheckedBefore) {
+		for (var i in a) {
+			if (typeof s[i]!==typeof a[i]) return false;
+			if (typeof a[i]==="object") {
+				if (!recursiveCheck(a[i],s[i])) return false;
+			}else if (a[i]!=s[i]) return false;
+		}
+		if (!hasCheckedBefore) return recursiveCheck(s,a,true);
+		return true;
 	}
 
 	console.group("Unit test of library");
@@ -78,15 +85,21 @@
 		pc.Shape.prototype.constructor);
 	
 	var a=new pc.Square(0,10,10);
+	claim("The return of makeDup",a.makeDup(),a,true,recursiveCheck);
 	claim("The return of transpose",a.transpose(10,0),a);
-	claim("The result of transpose (x)",a.points[0][0],10);
-	claim("The result of transpose (y)",a.points[0][1],10);
+	claim("The result of transpose",a.points[0],[10,10],true,recursiveCheck);
+	//Rotate it around itself
+	claim("The return of rotate shape",a.rotate(15,15,Math.PI),a);
+	claim("The return of roundpoints",a.roundPoints(),a);//round the points
+	claim("The result of rotate",a.points[1],[10,20],true,recursiveCheck);
+	claim("The return of rotCenter",a.rotCenter(-Math.PI),a);//undo said rotation
+	a.roundPoints();
+	//test for collisionWith goes here
+
 	claim("The return of scale (one argument)",a.scale(4),a);
-	claim("The result of scale (x)",a.points[1][0],80);
-	claim("The result of scale (y)",a.points[1][1],40);
+	claim("The result of scale",a.points[1],[80,40],true,recursiveCheck);
 	claim("The return of scale (two arguments)",a.scale(1/2,1/2),a);
-	claim("The result of scale (x)",a.points[1][0],40);
-	claim("The result of scale (y)",a.points[1][1],20);
+	claim("The result of scale",a.points[1],[40,20],true,recursiveCheck);
 	claim("The return of drawOn",a.drawOn(ctx),a);
 	a.transpose(40,0);
 	claim("The return of drawPointsOn",a.drawPointsOn(ctx),a);
