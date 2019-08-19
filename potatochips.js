@@ -100,18 +100,15 @@
 		return this;
 	}
 	out.Shape.prototype.scale=function(x,y) {
-		//console.log(this.points,x,y);
+		if(typeof y==="undefined") y=x;
 		for(var i=0;i<this.points.length;i++) {
 			if (typeof this.points[i]=="number") {
 				this.points[i]*=((x+y)/2);
 				continue;
 			}
-			//console.log(this.points[i])
 			this.points[i][0]*=x;
 			this.points[i][1]*=y;
-			//console.log(this.points[i])
 		}
-		//console.log(this.points,(x+y)/2);
 		return this;
 	}
 	out.Shape.prototype.rotate=function(x,y,rad) {
