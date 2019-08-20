@@ -1,4 +1,4 @@
-# PotatoChips v0.0.0
+# Spud-Slices v0.0.0
 
 The library that lets you make shapes.
 

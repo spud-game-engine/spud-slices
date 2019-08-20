@@ -62,29 +62,29 @@
 
 	console.group("Unit test of library");
 	
-	claim("The distance of (0,1) from the origin",pc.distance(0,1),1);
+	claim("The distance of (0,1) from the origin",ss.distance(0,1),1);
 	claim("The the radian rotation of (0,1) from (1,0)",
-		pc.findRot(0,1),Math.PI/2);
+		ss.findRot(0,1),Math.PI/2);
 	claim("The the radian rotation of (0,-1) from (1,0)",
-		pc.findRot(0,-1),3*Math.PI/2,false);
+		ss.findRot(0,-1),3*Math.PI/2,false);
 	claim("The x-position of the raw rotation of the point (0,1) pi radians",
-		pc.rawRotate(-1,0,Math.PI)[0],-1);
-	claimTypeof("newShape.dimensions",new pc.Shape().dimensions,"number");
-	claimArray("newShape.points",new pc.Shape().points);
-	claimTypeof("newShape.pointColor",new pc.Shape().pointColor,"string");
-	claimArray("newShape.pointColors",new pc.Shape().pointColors);
-	claimTypeof("newShape.pointSize",new pc.Shape().pointSize,"number");
-	claimArray("newShape.segments",new pc.Shape().segments);
-	claimTypeof("newShape.segmentColor",new pc.Shape().segmentColor,"string");
-	claimArray("newShape.segmentColors",new pc.Shape().segmentColors);
-	claimTypeof("newShape.segmentSize",new pc.Shape().segmentSize,"number");
-	claimArray("newShape.faces",new pc.Shape().faces);
-	claimTypeof("newShape.faceColor",new pc.Shape().faceColor,"string");
-	claimArray("newShape.facesColors",new pc.Shape().faceColors);
-	claim("The constructor for shape",pc.Shape,
-		pc.Shape.prototype.constructor);
+		ss.rawRotate(-1,0,Math.PI)[0],-1);
+	claimTypeof("newShape.dimensions",new ss.Shape().dimensions,"number");
+	claimArray("newShape.points",new ss.Shape().points);
+	claimTypeof("newShape.pointColor",new ss.Shape().pointColor,"string");
+	claimArray("newShape.pointColors",new ss.Shape().pointColors);
+	claimTypeof("newShape.pointSize",new ss.Shape().pointSize,"number");
+	claimArray("newShape.segments",new ss.Shape().segments);
+	claimTypeof("newShape.segmentColor",new ss.Shape().segmentColor,"string");
+	claimArray("newShape.segmentColors",new ss.Shape().segmentColors);
+	claimTypeof("newShape.segmentSize",new ss.Shape().segmentSize,"number");
+	claimArray("newShape.faces",new ss.Shape().faces);
+	claimTypeof("newShape.faceColor",new ss.Shape().faceColor,"string");
+	claimArray("newShape.facesColors",new ss.Shape().faceColors);
+	claim("The constructor for shape",ss.Shape,
+		ss.Shape.prototype.constructor);
 	
-	var a=new pc.Square(0,10,10);
+	var a=new ss.Square(0,10,10);
 	claim("The return of makeDup",a.makeDup(),a,true,recursiveCheck);
 	claim("The return of transpose",a.transpose(10,0),a);
 	claim("The result of transpose",a.points[0],[10,10],true,recursiveCheck);

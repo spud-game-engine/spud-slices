@@ -425,6 +425,6 @@
 		}
 		return out.Polygon.apply(this,points).transpose(x,y);
 	}
-	if (typeof window.pc=="undefined") window.pc=out;
-	if (typeof window.potatochips=="undefined") window.potatochips=out;
+	if (typeof window.ss=="undefined") window.ss=out;
+	if (typeof window.spudslices=="undefined") window.spudslices=out;
 })()
