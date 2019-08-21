@@ -8,31 +8,25 @@
 	window.onresize();
 
 	var tested=0,
-		failed=0,
-		importantF=0;
-	function claim(name,actual,shouldbe,important,boolOverride) {
+		failed=0;
+	function claim(name,actual,shouldbe,boolOverride) {
 		console.log("[Test #"+(tested+1)+"] "+name+" is",actual,"(should be",shouldbe,")");
 		tested++;
 		var bool=actual===shouldbe;
 		if (typeof boolOverride!=="undefined") bool=boolOverride(actual,shouldbe);
 		if (bool) {
 			console.info("PASS");
-		}else if (typeof important==="undefined"||important){
-			console.error("CRITICAL FAIL");
-			failed++;
-			importantF++;
 		}else{
 			console.warn("FAIL");
 			failed++;
 		}
 	}
-	function claimTypeof(name,actual,shouldbe,important,boolOverride) {
-		claim("The type of "+name,typeof actual,shouldbe,important,
-			boolOverride);
+	function claimTypeof(name,actual,shouldbe,boolOverride) {
+		claim("The type of "+name,typeof actual,shouldbe,boolOverride);
 	}
-	function claimArray(name,actual,important,boolOverride) {
-		claimTypeof(name,actual,"object",important,boolOverride);
-		claimTypeof(name+".length",actual.length,"number",important,boolOverride);
+	function claimArray(name,actual,boolOverride) {
+		claimTypeof(name,actual,"object",boolOverride);
+		claimTypeof(name+".length",actual.length,"number",boolOverride);
 	}
 	function gradeLetter(percentage) {
 		var gradeL="F";
@@ -49,14 +43,14 @@
 		else if (percentage>=65) gradeL="D";
 		return gradeL;
 	}
-	function recursiveCheck(a,s,hasCheckedBefore) {
+	function recursivelyCheck(a,s,hasCheckedBefore) {
 		for (var i in a) {
 			if (typeof s[i]!==typeof a[i]) return false;
 			if (typeof a[i]==="object") {
-				if (!recursiveCheck(a[i],s[i])) return false;
+				if (!recursivelyCheck(a[i],s[i])) return false;
 			}else if (a[i]!=s[i]) return false;
 		}
-		if (!hasCheckedBefore) return recursiveCheck(s,a,true);
+		if (!hasCheckedBefore) return recursivelyCheck(s,a,true);
 		return true;
 	}
 
@@ -66,7 +60,7 @@
 	claim("The the radian rotation of (0,1) from (1,0)",
 		ss.findRot(0,1),Math.PI/2);
 	claim("The the radian rotation of (0,-1) from (1,0)",
-		ss.findRot(0,-1),3*Math.PI/2,false);
+		ss.findRot(0,-1),3*Math.PI/2);
 	claim("The x-position of the raw rotation of the point (0,1) pi radians",
 		ss.rawRotate(-1,0,Math.PI)[0],-1);
 	claimTypeof("newShape.dimensions",new ss.Shape().dimensions,"number");
@@ -85,21 +79,39 @@
 		ss.Shape.prototype.constructor);
 	
 	var a=new ss.Square(0,10,10);
-	claim("The return of makeDup",a.makeDup(),a,true,recursiveCheck);
+	claim("The return of makeDup",a.makeDup(),a,recursivelyCheck);
 	claim("The return of transpose",a.transpose(10,0),a);
-	claim("The result of transpose",a.points[0],[10,10],true,recursiveCheck);
+	claim("The result of transpose",a.points[0],[10,10],recursivelyCheck);
 	//Rotate it around itself
 	claim("The return of rotate shape",a.rotate(15,15,Math.PI),a);
 	claim("The return of roundpoints",a.roundPoints(),a);//round the points
-	claim("The result of rotate",a.points[1],[10,20],true,recursiveCheck);
+	claim("The result of rotate",a.points[1],[10,20],recursivelyCheck);
 	claim("The return of rotCenter",a.rotCenter(-Math.PI),a);//undo said rotation
+	claim("The result of rotCenter",a.points[0],[10,10],recursivelyCheck);
 	a.roundPoints();
 	//test for collisionWith goes here
+	var b=a.makeDup();
+	claim("The result of identical collisionWith (0) (square,square)",
+		ss.Polygon.apply(ss,a.collisionWith(b)[0]).roundPoints().points,
+		[[10,20],[10,10]],recursivelyCheck);
+	claim("The result of identical collisionWith (1) (square,square)",
+	ss.Polygon.apply(ss,a.collisionWith(b)[0]).roundPoints().points,
+		[[10,20],[10,10]],recursivelyCheck);
+	b.transpose(5,5);
+	claim("The result of good collisionWith (0) (square,square)",
+		ss.Polygon.apply(ss,a.collisionWith(b)[0]).roundPoints().points,
+		[[20,10],[20,20]],recursivelyCheck);
+	claim("The result of good collisionWith (1) (square,square)",
+	ss.Polygon.apply(ss,a.collisionWith(b)[0]).roundPoints().points,
+		[[20,10],[20,20]],recursivelyCheck);
+	b.transpose(10,10);
+	claim("The result of failed collisionWith (square,square)",
+		a.collisionWith(b),[],recursivelyCheck);
 
 	claim("The return of scale (one argument)",a.scale(4),a);
-	claim("The result of scale",a.points[1],[80,40],true,recursiveCheck);
+	claim("The result of scale",a.points[1],[80,40],recursivelyCheck);
 	claim("The return of scale (two arguments)",a.scale(1/2,1/2),a);
-	claim("The result of scale",a.points[1],[40,20],true,recursiveCheck);
+	claim("The result of scale",a.points[1],[40,20],recursivelyCheck);
 	claim("The return of drawOn",a.drawOn(ctx),a);
 	a.transpose(40,0);
 	claim("The return of drawPointsOn",a.drawPointsOn(ctx),a);
@@ -110,10 +122,7 @@
 	
 	var grade=(tested-failed)/tested*100,gradeL=gradeLetter(grade);
 	console.info("Got a(n)",gradeL,"(",Math.round(grade),
-		"%) in the strict unit test.");
-	var grade=(tested-importantF)/tested*100,gradeL=gradeLetter(grade);
-	console.info("Got a(n)",gradeL,"(",Math.round(grade),
-		"%) in the critical unit test.");
+		"%) in the unit test.");
 	console.table({
 		"Tested":{
 			Count:tested,
@@ -126,14 +135,10 @@
 		"Failed":{
 			Count:failed,
 			Percent:failed/tested*100+"%",
-		},
-		"Critical Failures":{
-			Count:importantF,
-			Percent:importantF/tested*100+"%",
 		}
 	})
 	console.groupEnd();
-	if (gradeL==="F") console.error("Failed crit in unit test!");
-	else if (grade<100) console.warn("Imperfect crit score in unit test");
+	if (gradeL==="F") console.error("Failed unit test!");
+	else if (grade<100) console.warn("Imperfect score in unit test");
 	window.a=a;
 })()
