@@ -89,7 +89,18 @@
 	claim("The return of rotCenter",a.rotCenter(-Math.PI),a);//undo said rotation
 	claim("The result of rotCenter",a.points[0],[10,10],recursivelyCheck);
 	a.roundPoints();
-	//test for collisionWith goes here
+	claim("The return of scale (one argument)",a.scale(4),a);
+	claim("The result of scale",a.points[1],[80,40],recursivelyCheck);
+	claim("The return of scale (two arguments)",a.scale(1/2,1/2),a);
+	claim("The result of scale",a.points[1],[40,20],recursivelyCheck);
+	claim("The return of drawOn",a.drawOn(ctx),a);
+	a.transpose(40,0);
+	claim("The return of drawPointsOn",a.drawPointsOn(ctx),a);
+	a.transpose(40,0);
+	claim("The return of drawSegmentsOn",a.drawSegmentsOn(ctx),a);
+	a.transpose(40,0);
+	claim("The return of drawFacesOn",a.drawFacesOn(ctx),a);
+	a.transpose(-40*3,0).scale(1/2);
 	var b=a.makeDup();
 	claim("The result of identical collisionWith (0) (square,square)",
 		ss.Polygon.apply(ss,a.collisionWith(b)[0]).roundPoints().points,
@@ -107,19 +118,25 @@
 	b.transpose(10,10);
 	claim("The result of failed collisionWith (square,square)",
 		a.collisionWith(b),[],recursivelyCheck);
+	b=new ss.Circle();
+	throw JSON.stringify(a.drawOn(ctx));
+	claim("The result of identical collisionWith (0) (circle,square)",
+		ss.Polygon.apply(ss,a.collisionWith(b)[0]).roundPoints().points,
+		[[10,20],[10,10]],recursivelyCheck);
+	claim("The result of identical collisionWith (1) (circle,square)",
+	ss.Polygon.apply(ss,a.collisionWith(b)[0]).roundPoints().points,
+		[[10,20],[10,10]],recursivelyCheck);
+	b.transpose(5,5);
+	claim("The result of good collisionWith (0) (circle,square)",
+		ss.Polygon.apply(ss,a.collisionWith(b)[0]).roundPoints().points,
+		[[20,10],[20,20]],recursivelyCheck);
+	claim("The result of good collisionWith (1) (circle,square)",
+	ss.Polygon.apply(ss,a.collisionWith(b)[0]).roundPoints().points,
+		[[20,10],[20,20]],recursivelyCheck);
+	b.transpose(10,10);
+	claim("The result of failed collisionWith (circle,square)",
+		a.collisionWith(b),[],recursivelyCheck);
 
-	claim("The return of scale (one argument)",a.scale(4),a);
-	claim("The result of scale",a.points[1],[80,40],recursivelyCheck);
-	claim("The return of scale (two arguments)",a.scale(1/2,1/2),a);
-	claim("The result of scale",a.points[1],[40,20],recursivelyCheck);
-	claim("The return of drawOn",a.drawOn(ctx),a);
-	a.transpose(40,0);
-	claim("The return of drawPointsOn",a.drawPointsOn(ctx),a);
-	a.transpose(40,0);
-	claim("The return of drawSegmentsOn",a.drawSegmentsOn(ctx),a);
-	a.transpose(40,0);
-	claim("The return of drawFacesOn",a.drawFacesOn(ctx),a);
-	
 	var grade=(tested-failed)/tested*100,gradeL=gradeLetter(grade);
 	console.info("Got a(n)",gradeL,"(",Math.round(grade),
 		"%) in the unit test.");
