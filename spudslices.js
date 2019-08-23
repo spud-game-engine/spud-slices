@@ -465,9 +465,6 @@
 		s.findCenter=function() {
 			return this.points[1];
 		}
-		s.rotate=function() {
-			return this;
-		}
 		return s;
 	}
 	out.Polygon=function() {
