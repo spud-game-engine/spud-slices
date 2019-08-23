@@ -118,15 +118,7 @@
 	b.transpose(10,10);
 	claim("The result of failed collisionWith (square,square)",
 		a.collisionWith(b),[],recursivelyCheck);
-	b=new ss.Circle();
-	throw JSON.stringify(a.drawOn(ctx));
-	claim("The result of identical collisionWith (0) (circle,square)",
-		ss.Polygon.apply(ss,a.collisionWith(b)[0]).roundPoints().points,
-		[[10,20],[10,10]],recursivelyCheck);
-	claim("The result of identical collisionWith (1) (circle,square)",
-	ss.Polygon.apply(ss,a.collisionWith(b)[0]).roundPoints().points,
-		[[10,20],[10,10]],recursivelyCheck);
-	b.transpose(5,5);
+	b=new ss.Circle(20,20,10);
 	claim("The result of good collisionWith (0) (circle,square)",
 		ss.Polygon.apply(ss,a.collisionWith(b)[0]).roundPoints().points,
 		[[20,10],[20,20]],recursivelyCheck);
