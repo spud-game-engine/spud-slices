@@ -212,252 +212,46 @@
 		}
 		return s;
 	}
-	out.Shape.prototype.collisionWith=function(sh) {
-		//input: another Shape instance
-		var ths=this.makeDup(),//make sure that the original ones aren't altered
-			sha=sh.makeDup(),countOfRotateTimes=0;
-
-		/* TODO:
-		 * if all of ths's points are within the bounds for sha's points (or
-		 * visa-versa) return true;
-		 *
-		 * no idea how to do this...
-		 */
-
-		/* TODO:
-		 * make return actualy return the original data
-		 */
-
-		//iterate through each segment on ths
-		for (var thsPt=0;thsPt<ths.segments.length;thsPt++) {
-			//variables must be declared here so they are properly global
-			var seg=ths.segments[thsPt],//ths's current segment
-				thsPts=[ths.points[seg[0]],ths.points[seg[1]]],/*ths's current
-					points as defined by `seg`*/
-				thsM,//Slope of ths's segment
-				thsB,//Y-intercept of ths's segment
-				innerR=false,//See usage below for a better comment description
-				thsType;//The type of shape that ths is.
-				//thsL="";//I don't know what this is.
-			if (typeof thsPts[0]=="number") {
-				thsType="s";/*indicate to later part of script that the first
-					shape is a circle*/
-			}else{
-				thsType="l";/*indicate to later part of script that the first
-				shape is a line*/
-				//find slope of thsSegment
-				thsM=(thsPts[0][1]-thsPts[1][1])/(thsPts[0][0]-thsPts[1][0]);
-				if (thsPts[0][0]==thsPts[1][0]||innerR) {//for a vertical line |
-					ths.rotate(0,0,.01);
-					sha.rotate(0,0,.01);
-					countOfRotateTimes++;
-
-					/*this is so it tries this line (and all after it) again
-					 * without any lines with an infinite slope*/
-					thsPt--;//decrement thsPt
-
-					//see vertical line check inside of the below for loop
-					innerR=false;
-					//console.info("Outer Vertical!");
-					continue;
-				}
-				//find y intercept of thsSegment
-				thsB=thsPts[0][1]-(thsM*thsPts[0][0]);
-			}
-			//iterate through each segment on sha
-			for (var shaPt=0;shaPt<sha.segments.length;shaPt++) {
-				var segS=sha.segments[shaPt],/*sha's current segment */
-					shaPts=[sha.points[segS[0]],sha.points[segS[1]]],/* sha's
-						current points as determined by `segS`*/
-					shaM,//Slope of sha's segment
-					shaB;//Y-intercept of sha's segment
-				if (typeof shaPts[0]=="number") {
-					if (thsType=="l") {//Sha is Circle, ths is Line
-						if(shaPts[1][0]!=0||shaPts[1][1]!=0) {
-							/*Transpose the circle to center (this causes some
-								data curruption later, as this is lossy)*/
-							ths.transpose(-shaPts[1][0],-shaPts[1][1]);
-							sha.transpose(-shaPts[1][0],-shaPts[1][1]);
-							thsPt--;
-							break;
-						}
-						/* Below is a complicated equation for circle-line
-						 * collsision.
-						 *
-						 * Quite frankly, I don't think that this is easy to
-						 * understand, but good luck.
-						 *
-						 * (I don't remember exactly, but I got the mathmatical
-						 * representation of this off of the internet, then I
-						 * adapted their tutorial into the below code)
-						 *
-						 * Much of this code was cleanly formatted only after
-						 * making the unit tests.
-						 */
-						var d_x=thsPts[1][0]-thsPts[0][0],
-							d_y=thsPts[1][1]-thsPts[0][1],
-							D=(thsPts[0][0]*thsPts[1][1])-
-								(thsPts[1][0]*thsPts[0][1]),
-							d_r=Math.sqrt(Math.pow(d_x,2)+Math.pow(d_y,2));
-
-						if (((Math.pow(shaPts[0],2)*Math.pow(d_r,2))-
-							Math.pow(D,2))<0) break;//line doesn't collide.
-
-						var x_p =(((D*d_y)+
-								(Math.sign(d_y)*d_x*Math.sqrt(
-									(Math.pow(shaPts[0],2)*Math.pow(d_r,2))
-										-Math.pow(D,2)
-								)))/(Math.pow(d_r,2))),
-							x_p2=(((D*d_y)-
-								(Math.sign(d_y)*d_x*Math.sqrt(
-									(Math.pow(shaPts[0],2)*Math.pow(d_r,2))
-										-Math.pow(D,2)
-								)))/(Math.pow(d_r,2)));
-
-						if (!((x_p>=thsPts[0][0]&&x_p<=thsPts[1][0])||
-								//(shaRX > x > shaLX or
-							  (x_p>=thsPts[1][0]&&x_p<=thsPts[0][0])||
-									//or
-							  (x_p2>=thsPts[0][0]&&x_p2<=thsPts[1][0])||
-								//(shaRX > x > shaLX or
-							  (x_p2>=thsPts[1][0]&&x_p2<=thsPts[0][0])))
-							continue; //If outside of bounds, continue
-
-						var y_p =((-D*d_x)+
-									(Math.abs(d_y)*
-										Math.sqrt(
-											(Math.pow(shaPts[0],2)
-												*Math.pow(d_r,2))-
-											Math.pow(D,2)
-										)
-									)
-								)/(Math.pow(d_r,2)),
-							y_p2=((-D*d_x)-
-									(Math.abs(d_y)*
-										Math.sqrt(
-											(Math.pow(shaPts[0],2)
-												*Math.pow(d_r,2))-
-											Math.pow(D,2)
-										)
-									)
-								)/(Math.pow(d_r,2));
-						if (!((y_p>=thsPts[0][1]&&y_p<=thsPts[1][1])||
-							  (y_p>=thsPts[1][1]&&y_p<=thsPts[0][1])||
-									//or
-							  (y_p2>=thsPts[0][1]&&y_p2<=thsPts[1][1])||
-							  (y_p2>=thsPts[1][1]&&y_p2<=thsPts[0][1])))
-							continue; //If outside of bounds, continue
-						return [thsPts,shaPts];
-					}else if (thsType=="s"
-						&&((out.distance(
-								thsPts[1][0]-shaPts[1][0],
-								thsPts[1][1]-shaPts[1][1]
-							)-Math.abs(thsPts[0]) /* Circle-Circle */
-							)-Math.abs(shaPts[0]<=0))) return [thsPts,shaPts];
-				}else{
-
-					//avoid circle line, only do line circle
-					if (typeof thsM=="undefined"){
-						var a=sha.collisionWith(ths);
-						if (a.length>0) return [a[1],a[0]];
-						return [];
-					}//also preserves any rotation involving verticall lines
-
-					/* Line-Line */
-
-					if   (shaPts[0][0]==thsPts[0][0]
-						&&shaPts[0][1]==thsPts[0][1]
-						&&shaPts[1][0]==thsPts[1][0]
-						&&shaPts[1][1]==thsPts[1][1])
-							return [thsPts,shaPts];//lines are identical
-
-					//find slope of shaSegment //sham mate
-					shaM=(shaPts[0][1]-shaPts[1][1])/
-						 (shaPts[0][0]-shaPts[1][0]);
-
-					if (shaPts[0][0]==shaPts[1][0]) {//for a vertical line |
-						/* all info for sha is reset, and tell the earlier
-						 * vertical line catcher to fix both, then try both
-						 * again.
-						 * (this is _really_ hard to test, but it basically acts
-						 * like a goto)
-						 */
-						//console.info("Inner Vertical!");
-						innerR=true;
-						break;
-					}
-
-					//find y intercept of shaSegment
-					shaB=shaPts[0][1]-(shaM*shaPts[0][0]);
-					
-					/* Below in this very hard to read code, I compare each end 
-					 * of ths to see if it is in both bounds of sha.
-					 * 
-					 * I then swap their roles and repeat everything.
-					 * 
-					 * _then_, I swap x for y, and repeat everying (including
-					 * repeats) thus handling for all 64 combinations (8^2)
-					 * 
-					 * (note that the outlines for the lines must overlap in
-					 * both x and y)
-					 * 
-					 * (also, I didn't handle for both borders of one being
-					 * inside of both of the other, but according to testing,
-					 * this situation would be handled for elsewere)
-					 */
-					if (!(((thsPts[0][0]>=shaPts[0][0]&&thsPts[0][0]<=shaPts[1][0])|| //(shaRX > thsLX > shaLX or
-						   (thsPts[0][0]>=shaPts[1][0]&&thsPts[0][0]<=shaPts[0][0])|| // shaLX > thsLX > shaRX or
-						   (thsPts[1][0]>=shaPts[0][0]&&thsPts[1][0]<=shaPts[1][0])|| // shaRX > thsRX > shaLX or
-						   (thsPts[1][0]>=shaPts[1][0]&&thsPts[1][0]<=shaPts[0][0])|| // shaLX > thsRX > shaRX or
-						   (shaPts[0][0]>=thsPts[0][0]&&shaPts[0][0]<=thsPts[1][0])|| // thsRX > shaLX > thsLX or
-						   (shaPts[0][0]>=thsPts[1][0]&&shaPts[0][0]<=thsPts[0][0])|| // thsLX > shaLX > thsRX or
-						   (shaPts[1][0]>=thsPts[0][0]&&shaPts[1][0]<=thsPts[1][0])|| // thsRX > shaRX > thsLX or
-						   (shaPts[1][0]>=thsPts[1][0]&&shaPts[1][0]<=thsPts[0][0]))&&// thsLX > shaRX > thsRX) and
-						  ((thsPts[0][1]>=shaPts[0][1]&&thsPts[0][1]<=shaPts[1][1])|| //(shaRY > thsLY > shaLY or
-						   (thsPts[0][1]>=shaPts[1][1]&&thsPts[0][1]<=shaPts[0][1])|| // shaLY > thsLY > shaRY or
-						   (thsPts[1][1]>=shaPts[0][1]&&thsPts[1][1]<=shaPts[1][1])|| // shaRY > thsRY > shaLY or
-						   (thsPts[1][1]>=shaPts[1][1]&&thsPts[1][1]<=shaPts[0][1])|| // shaLY > thsRY > shaRY or
-						   (shaPts[0][1]>=thsPts[0][1]&&shaPts[0][1]<=thsPts[1][1])|| // thsRY > shaLY > thsLY or
-						   (shaPts[0][1]>=thsPts[1][1]&&shaPts[0][1]<=thsPts[0][1])|| // thsLY > shaLY > thsRY or
-						   (shaPts[1][1]>=thsPts[0][1]&&shaPts[1][1]<=thsPts[1][1])|| // thsRY > shaRY > thsLY or
-						   (shaPts[1][1]>=thsPts[1][1]&&shaPts[1][1]<=thsPts[0][1]))  // thsLY > shaRY > thsRY)
-						  )) continue;
-					// the outlines of these two lines do not overlap (or touch)
-
-					/*check for lines that share the same equation,
-						but have different bounds*/
-					if (thsB==shaB&&thsM==shaM)
-						return [thsPts,shaPts];
-					if (thsM==shaM)
-						continue;//lines are either paralell or identical
-					var x=(shaB-thsB)/(thsM-shaM);
-						//get the x position of the x,y intercept
-					if (!(((x>=shaPts[0][0]&&x<=shaPts[1][0])|| //(shaRX > x > shaLX or
-						   (x>=shaPts[1][0]&&x<=shaPts[0][0]))&&// shaLX > x > shaRX) and
-						  ((x>=thsPts[0][0]&&x<=thsPts[1][0])|| //(thsRX > x > thsLX or
-						   (x>=thsPts[1][0]&&x<=thsPts[0][0]))  // thsLX > x > thsRX)
-							   )) continue;
-					//if it is outside of bounds, it's not a collision
-					
-					//var y=(thsM*x)+thsB;
-					//if (!(((y>=shaPts[0][1]&&y<=shaPts[1][1])|| //(shaRY > y > shaLY or
-					//	   (y>=shaPts[1][1]&&y<=shaPts[0][1]))&&// shaLY > y > shaRY) and
-					//	  ((y>=thsPts[0][1]&&y<=thsPts[1][1])|| //(thsRY > y > thsLY or
-					//	   (y>=thsPts[1][1]&&y<=thsPts[0][1]))  // thsLY > y > thsRY)
-					//	 )) continue;//if it is outside of bounds, it's not a collision
-					
-					return [thsPts,shaPts];//it's a collision
-					/* mathematically found calculation using
-					 * https://www.desmos.com/calculator/pkdnismmhs algorithm
-					 * (made by myself, but followed a few different tutorials)
-					 */
-				}
-			}
+	//An object that follows the template below in structure. Handles all cases.
+	out.collisionDetectors={
+		/*"shape name":{
+			/*A function that returns [] on no collision, or the information for
+				the line segments, this one in [0] and the other in [1]* /
+			"shape name":function() { ... },
+			"a different shape name":function() { ... }
+		},
+		"a different shape name":{
+			"a different shape name":function() { ... }
 		}
-		return [];
-	}
+		*/
+	};
+	out.Shape.prototype.collisionWith=function(sh) {
+		/*
+		 * Search for the shape category `Shape.category` of both, then run the
+		 * other's function if it can be found. If not, run this one's.
+		 *
+		 * Why? Because I want it to be possible to override one if you really
+		 * wanted to. This should make it easier.  -- NOTE: NOT ACTUALY HAPPENING RN!
+		 */
+		//input: another Shape instance
+		if (typeof out.collisionDetectors[this.category]!=="undefined"&&
+			typeof out.collisionDetectors[this.category][sh.category]
+				!=="undefined") {
+			return out.collisionDetectors[this.category]
+				[sh.category].call(this,sh);
+		}else if (typeof out.collisionDetectors[sh.category]!=="undefined"&&
+			typeof out.collisionDetectors[sh.category][this.category]
+				!=="undefined") {
+			var tmp=out.collisionDetectors[sh.category]
+				[this.category].call(sh,this);
+			if (tmp.length===0) return [];
+			else return [tmp[1],tmp[0]];
+		}else throw "Could not find shape collision detector for a \""+
+			this.category+"\"-\""+sh.category+"\" collision.";
+	};
 	out.Circle=function(x,y,r) {
-		var s=new out.Shape()
+		var s=new out.Shape();
+		s.category="circle";
 		s.points[0]=r;
 		s.points[1]=[x,y];
 		s.segments[0]=[0,1];
@@ -467,8 +261,37 @@
 		}
 		return s;
 	}
+	out.collisionDetectors["circle"]={};
+	out.collisionDetectors["circle"]["circle"]=function(sh) {
+		var ths=this.makeDup(),//make sure that the original ones aren't altered
+		sha=sh.makeDup();
+		//iterate through each segment on ths
+		for (var thsPt=0;thsPt<ths.segments.length;thsPt++) {
+			//variables must be declared here so they are properly global
+			var seg=ths.segments[thsPt],//ths's current segment
+				thsRadius=ths.points[seg[0]],
+				thsX=ths.points[seg[1]][0],
+				thsY=ths.points[seg[1]][1];
+			//iterate through each segment on sha
+			for (var shaPt=0;shaPt<sha.segments.length;shaPt++) {
+				var segS=sha.segments[shaPt],/*sha's current segment */
+					shaRadius=sha.points[segS[0]],
+					shaX=sha.points[segS[1]][0],
+					shaY=sha.points[segS[1]][1];
+				if ((   (   out.distance(
+								thsX-shaX,
+								thsY-shaY
+							)-Math.abs(shaRadius)
+						)-Math.abs(thsRadius)
+					)<=0) return [[this.points[seg [0]],this.points[seg [1]]],
+								  [  sh.points[segS[0]],  sh.points[segS[1]]]];
+			}
+		}
+		return [];
+	}
 	out.Polygon=function() {
-		var s=new out.Shape()
+		var s=new out.Shape();
+		s.category="polygon";
 		s.faces[0]=[];
 		for (var i=0; i<arguments.length; i++) {
 			s.points.push(arguments[i]);
@@ -524,6 +347,249 @@
 		};
 		return s;
 	};
+	out.collisionDetectors["polygon"]={};
+	out.collisionDetectors["polygon"]["polygon"]=function(sh) {
+		var ths=this.makeDup(),//make sure that the original ones aren't altered
+		sha=sh.makeDup();
+		//iterate through each segment on ths
+		for (var thsPt=0;thsPt<ths.segments.length;thsPt++) {
+			//variables must be declared here so they are properly global
+			var seg=ths.segments[thsPt],//ths's current segment
+				innerR=false,//See usage below for a better comment description
+				thsRX=ths.points[seg[0]][0],
+				thsLX=ths.points[seg[1]][0],
+				thsRY=ths.points[seg[0]][1],
+				thsLY=ths.points[seg[1]][1];
+
+			if (thsRX==thsLX||innerR) {//for a vertical line |
+
+				ths.rotate(0,0,.01);
+				sha.rotate(0,0,.01);
+
+				/*this is so it tries this line (and all after it) again
+				 * without any lines with an infinite slope*/
+				thsPt--;//decrement thsPt
+
+				//see vertical line check inside of the below for loop
+				innerR=false;
+				//console.info("Outer Vertical!");
+				continue;
+			}
+			//iterate through each segment on sha
+			for (var shaPt=0;shaPt<sha.segments.length;shaPt++) {
+				var segS=sha.segments[shaPt],/*sha's current segment */
+					//The value we return
+					retVal=[[this.points[seg [0]],this.points[seg [1]]],
+							[  sh.points[segS[0]],  sh.points[segS[1]]]],
+					shaRX=sha.points[segS[0]][0],
+					shaLX=sha.points[segS[1]][0],
+					shaRY=sha.points[segS[0]][1],
+					shaLY=sha.points[segS[1]][1];
+
+				if   (shaRX==thsRX
+					&&shaRY==thsRY
+					&&shaLX==thsLX
+					&&shaLY==thsLY)//lines are identical
+						return retVal;
+
+				/* Below in this very hard to read code, I compare each end
+				 * of ths to see if it is in both bounds of sha.
+				 *
+				 * I then swap their roles and repeat everything.
+				 *
+				 * _then_, I swap x for y, and repeat everying (including
+				 * repeats) thus handling for all 64 combinations (8^2)
+				 *
+				 * (note that the outlines for the lines must overlap in
+				 * both x and y)
+				 *
+				 * (also, I didn't handle for both borders of one being
+				 * inside of both of the other, but according to testing,
+				 * this situation would be handled for elsewere)
+				 */
+				if (!(((thsRX>=shaRX&&thsRX<=shaLX)|| //(shaRX > thsRX > shaLX or
+					   (thsRX>=shaLX&&thsRX<=shaRX)|| // shaLX > thsRX > shaRX or
+					   (thsLX>=shaRX&&thsLX<=shaLX)|| // shaRX > thsLX > shaLX or
+					   (thsLX>=shaLX&&thsLX<=shaRX)|| // shaLX > thsLX > shaRX or
+					   (shaRX>=thsRX&&shaRX<=thsLX)|| // thsLX > shaLX > thsRX or
+					   (shaRX>=thsLX&&shaRX<=thsRX)|| // thsRX > shaLX > thsLX or
+					   (shaLX>=thsRX&&shaLX<=thsLX)|| // thsLX > shaRX > thsRX or
+					   (shaLX>=thsLX&&shaLX<=thsRX))&&// thsRX > shaRX > thsLX) and
+					  ((thsRY>=shaRY&&thsRY<=shaLY)|| //(shaRY > thsRY > shaLY or
+					   (thsRY>=shaLY&&thsRY<=shaRY)|| // shaLY > thsRY > shaRY or
+					   (thsLY>=shaRY&&thsLY<=shaLY)|| // shaRY > thsLY > shaLY or
+					   (thsLY>=shaLY&&thsLY<=shaRY)|| // shaLY > thsLY > shaRY or
+					   (shaRY>=thsRY&&shaRY<=thsLY)|| // thsLY > shaLY > thsRY or
+					   (shaRY>=thsLY&&shaRY<=thsRY)|| // thsRY > shaLY > thsLY or
+					   (shaLY>=thsRY&&shaLY<=thsLY)|| // thsLY > shaRY > thsRY or
+					   (shaLY>=thsLY&&shaLY<=thsRY))  // thsRY > shaRY > thsLY)
+					)) continue; // the outlines of these two lines do not overlap (or touch)
+
+				if (shaRX==shaLX) {//for a vertical line |
+					/* all info for sha is reset, and tell the earlier
+					 * vertical line catcher to fix both, then try both
+					 * again.
+					 * (this is _really_ hard to test, but it basically acts
+					 * like a goto)
+					 */
+					//console.info("Inner Vertical!");
+					innerR=true;
+					break;
+				}
+
+				var thsM=(thsRY-thsLY)/(thsRX-thsLX),//find slope of thsSegment
+					thsB=thsRY-(thsM*thsRX),//find y intercept of thsSegment
+					//find slope of shaSegment //sham mate
+					shaM=(shaRY-shaLY)/(shaRX-shaLX);
+					shaB=shaRY-(shaM*shaRX);//find y intercept of shaSegment
+
+				/*check for lines that share the same equation,
+					but have different bounds*/
+				if (thsB==shaB&&thsM==shaM)
+					return retVal;
+				if (thsM==shaM)
+					continue;//lines are paralell (never touch)
+				var x=(shaB-thsB)/(thsM-shaM);
+					//get the x position of the x,y intercept
+				if (!(((x>=shaRX && x<=shaLX)|| //(shaRX > x > shaLX or
+					   (x>=shaLX && x<=shaRX))&&// shaLX > x > shaRX) and
+					  ((x>=thsRX && x<=thsLX)|| //(thsRX > x > thsLX or
+					   (x>=thsLX && x<=thsRX))  // thsLX > x > thsRX)
+						)) continue;
+				//if it is outside of bounds, it's not a collision
+
+				//var y=(thsM*x)+thsB;
+				//if (!(((y>=shaRY&&y<=shaLY)|| //(shaRY > y > shaLY or
+				//	   (y>=shaLY&&y<=shaRY))&&// shaLY > y > shaRY) and
+				//	  ((y>=thsRY&&y<=thsLY)|| //(thsRY > y > thsLY or
+				//	   (y>=thsLY&&y<=thsRY))  // thsLY > y > thsRY)
+				//	 )) continue;//if it is outside of bounds, it's not a collision
+
+				//it's a collision
+				return retVal;
+
+				/* mathematically found calculation using
+				 * https://www.desmos.com/calculator/pkdnismmhs algorithm
+				 * (made by myself, but followed a few different tutorials)
+				 */
+			}
+		}
+		return [];
+	};
+	out.collisionDetectors["polygon"]["circle"]=function(sh) {
+		//input: another Shape instance
+		var ths=this.makeDup(),//make sure that the original ones aren't altered
+			sha=sh.makeDup();
+		//Sha is Circle, ths is Line
+		//iterate through each segment on ths
+		for (var thsPt=0;thsPt<ths.segments.length;thsPt++) {
+			var seg=ths.segments[thsPt],//ths's current segment
+				innerR=false,//See usage below for a better comment description
+				thsRX=ths.points[seg[0]][0],
+				thsLX=ths.points[seg[1]][0],
+				thsRY=ths.points[seg[0]][1],
+				thsLY=ths.points[seg[1]][1];
+
+			if (thsRX==thsLX||innerR) {//for a vertical line |
+
+				ths.rotate(0,0,.01);
+				sha.rotate(0,0,.01);
+
+				/*this is so it tries this line (and all after it) again
+					* without any lines with an infinite slope*/
+				thsPt--;//decrement thsPt
+
+				//see vertical line check inside of the below for loop
+				innerR=false;
+				//console.info("Outer Vertical!");
+				continue;
+			}
+
+			for (var shaPt=0;shaPt<sha.segments.length;shaPt++) {
+				var segS=sha.segments[shaPt],/*sha's current segment */
+					shaX=sha.points[segS[1]][0],
+					shaY=sha.points[segS[1]][1],
+					radius=sha.points[segS[0]];
+
+				if(shaX!=0||shaY!=0) {
+					/*Transpose the circle to center (this causes some
+						data curruption later, as this is lossy)*/
+					ths.transpose(-shaX,-shaY);
+					sha.transpose(-shaX,-shaY);
+					thsPt--;
+					break;
+				}
+				/* Below is a complicated equation for circle-line
+					* collsision.
+					*
+					* Quite frankly, I don't think that this is easy to
+					* understand, but good luck.
+					*
+					* (I don't remember exactly, but I got the mathmatical
+					* representation of this off of the internet, then I
+					* adapted their tutorial into the below code)
+					*
+					* Much of this code was cleanly formatted only after
+					* making the unit tests.
+					*/
+				var d_x=thsLX-thsRX,
+					d_y=thsLY-thsRY,
+					D=(thsRX*thsLY)-(thsLX*thsRY),
+					d_r=out.distance(d_x,d_y);
+
+				if ((Math.pow(radius,2)*Math.pow(d_r,2))<
+					Math.pow(D,2)) break;//line doesn't collide.
+
+				var x_p =(((D*d_y)+
+						(Math.sign(d_y)*d_x*Math.sqrt(
+							(Math.pow(radius,2)*Math.pow(d_r,2))
+								-Math.pow(D,2)
+						)))/(Math.pow(d_r,2))),
+					x_p2=(((D*d_y)-
+						(Math.sign(d_y)*d_x*Math.sqrt(
+							(Math.pow(radius,2)*Math.pow(d_r,2))
+								-Math.pow(D,2)
+						)))/(Math.pow(d_r,2)));
+
+				if (!((thsRX <= x_p && x_p <= thsLX)||
+					  (thsLX <= x_p && x_p <= thsRX)||
+
+					  (thsRX <=x_p2 && x_p2<= thsLX)||
+					  (thsLX <=x_p2 && x_p2<= thsRX)))
+					continue; //If outside of bounds, continue
+
+				var y_p =((-D*d_x)+
+							(Math.abs(d_y)*
+								Math.sqrt(
+									(Math.pow(radius,2)
+										*Math.pow(d_r,2))-
+									Math.pow(D,2)
+								)
+							)
+						)/(Math.pow(d_r,2)),
+					y_p2=((-D*d_x)-
+							(Math.abs(d_y)*
+								Math.sqrt(
+									(Math.pow(radius,2)
+										*Math.pow(d_r,2))-
+									Math.pow(D,2)
+								)
+							)
+						)/(Math.pow(d_r,2));
+
+				if (!((thsRY <= y_p && y_p <= thsLY)||
+					  (thsLY <= y_p && y_p <= thsRY)||
+							//or
+					  (thsRY <=y_p2 && y_p2<= thsLY)||
+					  (thsLY <=y_p2 && y_p2<= thsRY)))
+					continue; //If outside of bounds, continue
+
+				return [[this.points[seg [0]],this.points[seg [1]]],
+						[  sh.points[segS[0]],  sh.points[segS[1]]]];
+			}
+		}
+		return [];
+	}
 	out.RightTriangle=function(x,y,w,h) {
 		console.log(arguments)
 		var p=new out.Polygon([x,y],[x+w,y],[x,y+h]);

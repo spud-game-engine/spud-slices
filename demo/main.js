@@ -102,49 +102,34 @@
 	claim("The return of drawFacesOn",a.drawFacesOn(ctx),a);
 	a.transpose(-40*3,0).scale(1/2);
 	var b=a.makeDup();
-	claim("The result of identical collisionWith (0) (square,square)",
-		ss.Polygon.apply(ss,a.collisionWith(b)[0]).roundPoints().points,
-		[[10,20],[10,10]],recursivelyCheck);
-	claim("The result of identical collisionWith (1) (square,square)",
-	ss.Polygon.apply(ss,a.collisionWith(b)[0]).roundPoints().points,
-		[[10,20],[10,10]],recursivelyCheck);
+	claim("The result of identical collisionWith (square,square)",
+		a.collisionWith(b),
+		[[[10,20],[10,10]],[[10,20],[10,10]]],recursivelyCheck);
 	b.transpose(5,5);
-	claim("The result of good collisionWith (0) (square,square)",
-		ss.Polygon.apply(ss,a.collisionWith(b)[0]).roundPoints().points,
-		[[20,10],[20,20]],recursivelyCheck);
-	claim("The result of good collisionWith (1) (square,square)",
-	ss.Polygon.apply(ss,a.collisionWith(b)[0]).roundPoints().points,
-		[[20,10],[20,20]],recursivelyCheck);
+	claim("The result of good collisionWith (square,square)",
+		a.collisionWith(b),
+		[[[20,10],[20,20]],[[15,15],[25,15]]],recursivelyCheck);
 	b.transpose(10,10);
 	claim("The result of failed collisionWith (square,square)",
-		a.collisionWith(b),[],recursivelyCheck);
+		[a.collisionWith(b)],[[]],recursivelyCheck);
 	b=new ss.Circle(20,20,10);
-	claim("The result of good collisionWith (0) (circle,square)",
-		ss.Polygon.apply(ss,a.collisionWith(b)[0]).roundPoints().points,
-		[[-10,0],[-10,-10]],recursivelyCheck);
-	claim("The result of good collisionWith (1) (circle,square)",
-	ss.Polygon.apply(ss,a.collisionWith(b)[0]).roundPoints().points,
-		[[-10,0],[-10,-10]],recursivelyCheck);
+	claim("The result of good collisionWith (circle,square)",
+		a.collisionWith(b),
+		[[[10,20],[10,10]],[10,[20,20]]],recursivelyCheck);
 	b.transpose(10,10);
 	claim("The result of failed collisionWith (circle,square)",
-		a.collisionWith(b),[],recursivelyCheck);
+		[a.collisionWith(b)],[[]],recursivelyCheck);
 	a=b.makeDup();
-	claim("The result of identical collisionWith (0) (circle,circle)",
-		ss.Polygon.apply(ss,a.collisionWith(b)[0]).roundPoints().points,
-		[10,[30,30]],recursivelyCheck);
-	claim("The result of identical collisionWith (1) (circle,circle)",
-	ss.Polygon.apply(ss,a.collisionWith(b)[0]).roundPoints().points,
-		[10,[30,30]],recursivelyCheck);
+	claim("The result of identical collisionWith (circle,circle)",
+		a.collisionWith(b),
+		[[10,[30,30]],[10,[30,30]]],recursivelyCheck);
 	b.transpose(5,5);
-	claim("The result of good collisionWith (0) (circle,circle)",
-		ss.Polygon.apply(ss,a.collisionWith(b)[0]).roundPoints().points,
-		[10,[30,30]],recursivelyCheck);
-	claim("The result of good collisionWith (1) (circle,circle)",
-	ss.Polygon.apply(ss,a.collisionWith(b)[0]).roundPoints().points,
-		[10,[30,30]],recursivelyCheck);
+	claim("The result of good collisionWith (circle,circle)",
+		a.collisionWith(b),
+		[[10,[30,30]],[10,[35,35]]],recursivelyCheck);
 	b.transpose(10,100);
 	claim("The result of failed collisionWith (circle,circle)",
-		a.collisionWith(b),[],recursivelyCheck);
+		[a.collisionWith(b)],[[]],recursivelyCheck);
 
 	var grade=(tested-failed)/tested*100,gradeL=gradeLetter(grade);
 	console.info("Got a(n)",gradeL,"(",Math.round(grade),
