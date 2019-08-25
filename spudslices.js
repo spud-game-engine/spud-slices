@@ -487,13 +487,11 @@
 		for (var thsPt=0;thsPt<ths.segments.length;thsPt++) {
 			//variables must be declared here so they are properly global
 			var seg=ths.segments[thsPt],//ths's current segment
-				thsPts=[ths.points[seg[0]],ths.points[seg[1]]],/*ths's current
-					points as defined by `seg`*/
 				innerR=false,//See usage below for a better comment description
-				thsRX=thsPts[0][0],
-				thsLX=thsPts[1][0],
-				thsRY=thsPts[0][1],
-				thsLY=thsPts[1][1];
+				thsRX=ths.points[seg[0]][0],
+				thsLX=ths.points[seg[1]][0],
+				thsRY=ths.points[seg[0]][1],
+				thsLY=ths.points[seg[1]][1];
 
 			if (thsRX==thsLX||innerR) {//for a vertical line |
 
@@ -512,15 +510,13 @@
 			//iterate through each segment on sha
 			for (var shaPt=0;shaPt<sha.segments.length;shaPt++) {
 				var segS=sha.segments[shaPt],/*sha's current segment */
-					shaPts=[sha.points[segS[0]],sha.points[segS[1]]],/* sha's
-						current points as determined by `segS`*/
 					//The value we return
 					retVal=[[this.points[seg [0]],this.points[seg [1]]],
 							[  sh.points[segS[0]],  sh.points[segS[1]]]],
-					shaRX=shaPts[0][0],
-					shaLX=shaPts[1][0],
-					shaRY=shaPts[0][1],
-					shaLY=shaPts[1][1];
+					shaRX=sha.points[segS[0]][0],
+					shaLX=sha.points[segS[1]][0],
+					shaRY=sha.points[segS[0]][1],
+					shaLY=sha.points[segS[1]][1];
 				
 				if   (shaRX==thsRX
 					&&shaRY==thsRY
