@@ -212,6 +212,44 @@
 		}
 		return s;
 	}
+	//An object that follows the template below in structure. Handles all cases.
+	out.collisionDetectors={
+		/*"shape name":{
+			/*A function that returns [] on no collision, or the information for
+				the line segments, this one in [0] and the other in [1]* /
+			"shape name":function() { ... },
+			"a different shape name":function() { ... }
+		},
+		"a different shape name":{
+			"a different shape name":function() { ... }
+		}
+		*/
+	};
+	out.Shape.prototype.collisionWith=function(sh) {
+		/* 
+		 * Search for the shape category `Shape.category` of both, then run the 
+		 * other's function if it can be found. If not, run this one's.
+		 * 
+		 * Why? Because I want it to be possible to override one if you really
+		 * wanted to. This should make it easier.
+		 */
+		//input: another Shape instance
+		var ths=this.makeDup(),//make sure that the original ones aren't altered
+		sha=sh.makeDup(),countOfRotateTimes=0;
+		if (typeof out.collisionDetectors[sha.category]!=="undefined"&&
+			typeof out.collisionDetectors[sha.category][ths.category]
+				!=="undefined") {
+			var tmp=out.collisionDetectors[sha.category][ths.category](sha,ths);
+			if (tmp.length===0) return [];
+			else return [tmp[1],tmp[0]];
+		}else if (typeof out.collisionDetectors[ths.category]!=="undefined"&&
+			typeof out.collisionDetectors[ths.category][sha.category]
+				!=="undefined") {
+			return out.collisionDetectors[ths.category][sha.category](ths,sha);
+		}else throw "Could not find shape collision detector for a \""+
+			ths.category+"\"-\""+sha.category+"\" collision.";
+	};
+	/*
 	out.Shape.prototype.collisionWith=function(sh) {
 		//input: another Shape instance
 		var ths=this.makeDup(),//make sure that the original ones aren't altered
@@ -226,14 +264,14 @@
 
 		/* TODO:
 		 * make return actualy return the original data
-		 */
+		 *
 
 		//iterate through each segment on ths
 		for (var thsPt=0;thsPt<ths.segments.length;thsPt++) {
 			//variables must be declared here so they are properly global
 			var seg=ths.segments[thsPt],//ths's current segment
 				thsPts=[ths.points[seg[0]],ths.points[seg[1]]],/*ths's current
-					points as defined by `seg`*/
+					points as defined by `seg`*
 				thsM,//Slope of ths's segment
 				thsB,//Y-intercept of ths's segment
 				innerR=false,//See usage below for a better comment description
@@ -241,10 +279,10 @@
 				//thsL="";//I don't know what this is.
 			if (typeof thsPts[0]=="number") {
 				thsType="s";/*indicate to later part of script that the first
-					shape is a circle*/
+					shape is a circle*
 			}else{
 				thsType="l";/*indicate to later part of script that the first
-				shape is a line*/
+				shape is a line*
 				//find slope of thsSegment
 				thsM=(thsPts[0][1]-thsPts[1][1])/(thsPts[0][0]-thsPts[1][0]);
 				if (thsPts[0][0]==thsPts[1][0]||innerR) {//for a vertical line |
@@ -253,7 +291,7 @@
 					countOfRotateTimes++;
 
 					/*this is so it tries this line (and all after it) again
-					 * without any lines with an infinite slope*/
+					 * without any lines with an infinite slope*
 					thsPt--;//decrement thsPt
 
 					//see vertical line check inside of the below for loop
@@ -266,16 +304,16 @@
 			}
 			//iterate through each segment on sha
 			for (var shaPt=0;shaPt<sha.segments.length;shaPt++) {
-				var segS=sha.segments[shaPt],/*sha's current segment */
+				var segS=sha.segments[shaPt],/*sha's current segment *
 					shaPts=[sha.points[segS[0]],sha.points[segS[1]]],/* sha's
-						current points as determined by `segS`*/
+						current points as determined by `segS`*
 					shaM,//Slope of sha's segment
 					shaB;//Y-intercept of sha's segment
 				if (typeof shaPts[0]=="number") {
 					if (thsType=="l") {//Sha is Circle, ths is Line
 						if(shaPts[1][0]!=0||shaPts[1][1]!=0) {
 							/*Transpose the circle to center (this causes some
-								data curruption later, as this is lossy)*/
+								data curruption later, as this is lossy)*
 							ths.transpose(-shaPts[1][0],-shaPts[1][1]);
 							sha.transpose(-shaPts[1][0],-shaPts[1][1]);
 							thsPt--;
@@ -293,7 +331,7 @@
 						 *
 						 * Much of this code was cleanly formatted only after
 						 * making the unit tests.
-						 */
+						 *
 						var d_x=thsPts[1][0]-thsPts[0][0],
 							d_y=thsPts[1][1]-thsPts[0][1],
 							D=(thsPts[0][0]*thsPts[1][1])-
@@ -352,7 +390,7 @@
 						&&((out.distance(
 								thsPts[1][0]-shaPts[1][0],
 								thsPts[1][1]-shaPts[1][1]
-							)-Math.abs(thsPts[0]) /* Circle-Circle */
+							)-Math.abs(thsPts[0]) /* Circle-Circle *
 							)-Math.abs(shaPts[0]<=0))) return [thsPts,shaPts];
 				}else{
 
@@ -363,7 +401,7 @@
 						return [];
 					}//also preserves any rotation involving verticall lines
 
-					/* Line-Line */
+					/* Line-Line *
 
 					if   (shaPts[0][0]==thsPts[0][0]
 						&&shaPts[0][1]==thsPts[0][1]
@@ -381,7 +419,7 @@
 						 * again.
 						 * (this is _really_ hard to test, but it basically acts
 						 * like a goto)
-						 */
+						 *
 						//console.info("Inner Vertical!");
 						innerR=true;
 						break;
@@ -404,7 +442,7 @@
 					 * (also, I didn't handle for both borders of one being
 					 * inside of both of the other, but according to testing,
 					 * this situation would be handled for elsewere)
-					 */
+					 *
 					if (!(((thsPts[0][0]>=shaPts[0][0]&&thsPts[0][0]<=shaPts[1][0])|| //(shaRX > thsLX > shaLX or
 						   (thsPts[0][0]>=shaPts[1][0]&&thsPts[0][0]<=shaPts[0][0])|| // shaLX > thsLX > shaRX or
 						   (thsPts[1][0]>=shaPts[0][0]&&thsPts[1][0]<=shaPts[1][0])|| // shaRX > thsRX > shaLX or
@@ -425,7 +463,7 @@
 					// the outlines of these two lines do not overlap (or touch)
 
 					/*check for lines that share the same equation,
-						but have different bounds*/
+						but have different bounds*
 					if (thsB==shaB&&thsM==shaM)
 						return [thsPts,shaPts];
 					if (thsM==shaM)
@@ -450,14 +488,15 @@
 					/* mathematically found calculation using
 					 * https://www.desmos.com/calculator/pkdnismmhs algorithm
 					 * (made by myself, but followed a few different tutorials)
-					 */
+					 *
 				}
 			}
 		}
 		return [];
-	}
+	}*/
 	out.Circle=function(x,y,r) {
-		var s=new out.Shape()
+		var s=new out.Shape();
+		s.category="circle";
 		s.points[0]=r;
 		s.points[1]=[x,y];
 		s.segments[0]=[0,1];
@@ -468,7 +507,8 @@
 		return s;
 	}
 	out.Polygon=function() {
-		var s=new out.Shape()
+		var s=new out.Shape();
+		s.category="polygon";
 		s.faces[0]=[];
 		for (var i=0; i<arguments.length; i++) {
 			s.points.push(arguments[i]);
@@ -523,6 +563,10 @@
 			return center;
 		};
 		return s;
+	};
+	out.collisionDetectors["polygon"]={};
+	out.collisionDetectors["polygon"]["polygon"]=function() {
+		return [];
 	};
 	out.RightTriangle=function(x,y,w,h) {
 		console.log(arguments)
