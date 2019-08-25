@@ -120,19 +120,13 @@
 	claim("The result of failed collisionWith (circle,square)",
 		[a.collisionWith(b)],[[]],recursivelyCheck);
 	a=b.makeDup();
-	claim("The result of identical collisionWith (0) (circle,circle)",
-		ss.Polygon.apply(ss,a.collisionWith(b)[0]).roundPoints().points,
-		[10,[30,30]],recursivelyCheck);
-	claim("The result of identical collisionWith (1) (circle,circle)",
-	ss.Polygon.apply(ss,a.collisionWith(b)[0]).roundPoints().points,
-		[10,[30,30]],recursivelyCheck);
+	claim("The result of identical collisionWith (circle,circle)",
+		a.collisionWith(b),
+		[[10,[30,30]],[10,[30,30]]],recursivelyCheck);
 	b.transpose(5,5);
-	claim("The result of good collisionWith (0) (circle,circle)",
-		ss.Polygon.apply(ss,a.collisionWith(b)[0]).roundPoints().points,
-		[10,[30,30]],recursivelyCheck);
-	claim("The result of good collisionWith (1) (circle,circle)",
-	ss.Polygon.apply(ss,a.collisionWith(b)[0]).roundPoints().points,
-		[10,[30,30]],recursivelyCheck);
+	claim("The result of good collisionWith (circle,circle)",
+		a.collisionWith(b),
+		[[10,[30,30]],[10,[35,35]]],recursivelyCheck);
 	b.transpose(10,100);
 	claim("The result of failed collisionWith (circle,circle)",
 		[a.collisionWith(b)],[[]],recursivelyCheck);
