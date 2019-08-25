@@ -394,15 +394,6 @@
 							)-Math.abs(shaPts[0]<=0))) return [thsPts,shaPts];
 				}else{
 
-					//avoid circle line, only do line circle
-					if (typeof thsM=="undefined"){
-						var a=sha.collisionWith(ths);
-						if (a.length>0) return [a[1],a[0]];
-						return [];
-					}//also preserves any rotation involving verticall lines
-
-					/* Line-Line *
-
 					// done
 				}
 			}
@@ -421,6 +412,7 @@
 		}
 		return s;
 	}
+	//out.collisionDetectors["circle"]
 	out.Polygon=function() {
 		var s=new out.Shape();
 		s.category="polygon";
@@ -583,10 +575,10 @@
 					continue;//lines are paralell (never touch)
 				var x=(shaB-thsB)/(thsM-shaM);
 					//get the x position of the x,y intercept
-				if (!(((x>=shaRX&&x<=shaLX)|| //(shaRX > x > shaLX or
-					  (x>=shaLX&&x<=shaRX))&&// shaLX > x > shaRX) and
-					  ((x>=thsRX&&x<=thsLX)|| //(thsRX > x > thsLX or
-					  (x>=thsLX&&x<=thsRX))  // thsLX > x > thsRX)
+				if (!(((x>=shaRX && x<=shaLX)|| //(shaRX > x > shaLX or
+					   (x>=shaLX && x<=shaRX))&&// shaLX > x > shaRX) and
+					  ((x>=thsRX && x<=thsLX)|| //(thsRX > x > thsLX or
+					   (x>=thsLX && x<=thsRX))  // thsLX > x > thsRX)
 						)) continue;
 				//if it is outside of bounds, it's not a collision
 
@@ -608,6 +600,120 @@
 		}
 		return [];
 	};
+	out.collisionDetectors["polygon"]["circle"]=function(sh) {
+		//input: another Shape instance
+		var ths=this.makeDup(),//make sure that the original ones aren't altered
+			sha=sh.makeDup();
+		//Sha is Circle, ths is Line
+		//iterate through each segment on ths
+		for (var thsPt=0;thsPt<ths.segments.length;thsPt++) {
+			var seg=ths.segments[thsPt],//ths's current segment
+				innerR=false,//See usage below for a better comment description
+				thsRX=ths.points[seg[0]][0],
+				thsLX=ths.points[seg[1]][0],
+				thsRY=ths.points[seg[0]][1],
+				thsLY=ths.points[seg[1]][1];
+			
+			if (thsRX==thsLX||innerR) {//for a vertical line |
+
+				ths.rotate(0,0,.01);
+				sha.rotate(0,0,.01);
+
+				/*this is so it tries this line (and all after it) again
+					* without any lines with an infinite slope*/
+				thsPt--;//decrement thsPt
+
+				//see vertical line check inside of the below for loop
+				innerR=false;
+				//console.info("Outer Vertical!");
+				continue;
+			}
+
+			for (var shaPt=0;shaPt<sha.segments.length;shaPt++) {
+				var segS=sha.segments[shaPt],/*sha's current segment */
+					shaX=sha.points[segS[1]][0],
+					shaY=sha.points[segS[1]][1],
+					radius=sha.points[segS[0]];
+				if(shaX!=0||shaY!=0) {
+					/*Transpose the circle to center (this causes some
+						data curruption later, as this is lossy)*/
+					ths.transpose(-shaX,-shaY);
+					sha.transpose(-shaX,-shaY);
+					thsPt--;
+					break;
+				}
+				/* Below is a complicated equation for circle-line
+					* collsision.
+					*
+					* Quite frankly, I don't think that this is easy to
+					* understand, but good luck.
+					*
+					* (I don't remember exactly, but I got the mathmatical
+					* representation of this off of the internet, then I
+					* adapted their tutorial into the below code)
+					*
+					* Much of this code was cleanly formatted only after
+					* making the unit tests.
+					*/
+				var d_x=thsLX-thsRX,
+					d_y=thsLY-thsRY,
+					D=(thsRX*thsLY)-
+						(thsLX*thsRY),
+					d_r=Math.sqrt(Math.pow(d_x,2)+Math.pow(d_y,2));
+
+				if (((Math.pow(radius,2)*Math.pow(d_r,2))-
+					Math.pow(D,2))<0) break;//line doesn't collide.
+
+				var x_p =(((D*d_y)+
+						(Math.sign(d_y)*d_x*Math.sqrt(
+							(Math.pow(radius,2)*Math.pow(d_r,2))
+								-Math.pow(D,2)
+						)))/(Math.pow(d_r,2))),
+					x_p2=(((D*d_y)-
+						(Math.sign(d_y)*d_x*Math.sqrt(
+							(Math.pow(radius,2)*Math.pow(d_r,2))
+								-Math.pow(D,2)
+						)))/(Math.pow(d_r,2)));
+
+				if (!((x_p>=thsRX&&x_p<=thsLX)||
+						//(shaRX > x > shaLX or
+						(x_p>=thsLX&&x_p<=thsRX)||
+							//or
+						(x_p2>=thsRX&&x_p2<=thsLX)||
+						//(shaRX > x > shaLX or
+						(x_p2>=thsLX&&x_p2<=thsRX)))
+					continue; //If outside of bounds, continue
+
+				var y_p =((-D*d_x)+
+							(Math.abs(d_y)*
+								Math.sqrt(
+									(Math.pow(radius,2)
+										*Math.pow(d_r,2))-
+									Math.pow(D,2)
+								)
+							)
+						)/(Math.pow(d_r,2)),
+					y_p2=((-D*d_x)-
+							(Math.abs(d_y)*
+								Math.sqrt(
+									(Math.pow(radius,2)
+										*Math.pow(d_r,2))-
+									Math.pow(D,2)
+								)
+							)
+						)/(Math.pow(d_r,2));
+				if (!((y_p>=thsRY&&y_p<=thsLY)||
+						(y_p>=thsLY&&y_p<=thsRY)||
+							//or
+						(y_p2>=thsRY&&y_p2<=thsLY)||
+						(y_p2>=thsLY&&y_p2<=thsRY)))
+					continue; //If outside of bounds, continue
+				return [[this.points[seg [0]],this.points[seg [1]]],
+						[  sh.points[segS[0]],  sh.points[segS[1]]]];
+			}
+		}
+		return [];
+	}
 	out.RightTriangle=function(x,y,w,h) {
 		console.log(arguments)
 		var p=new out.Polygon([x,y],[x+w,y],[x,y+h]);
