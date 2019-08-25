@@ -226,28 +226,28 @@
 		*/
 	};
 	out.Shape.prototype.collisionWith=function(sh) {
-		/* 
-		 * Search for the shape category `Shape.category` of both, then run the 
+		/*
+		 * Search for the shape category `Shape.category` of both, then run the
 		 * other's function if it can be found. If not, run this one's.
-		 * 
+		 *
 		 * Why? Because I want it to be possible to override one if you really
 		 * wanted to. This should make it easier.
 		 */
 		//input: another Shape instance
-		var ths=this.makeDup(),//make sure that the original ones aren't altered
-		sha=sh.makeDup(),countOfRotateTimes=0;
-		if (typeof out.collisionDetectors[sha.category]!=="undefined"&&
-			typeof out.collisionDetectors[sha.category][ths.category]
+		if (typeof out.collisionDetectors[this.category]!=="undefined"&&
+			typeof out.collisionDetectors[this.category][sh.category]
 				!=="undefined") {
-			var tmp=out.collisionDetectors[sha.category][ths.category](sha,ths);
+			return out.collisionDetectors[this.category]
+				[sh.category].call(this,sh);
+		}else if (typeof out.collisionDetectors[sh.category]!=="undefined"&&
+			typeof out.collisionDetectors[sh.category][this.category]
+				!=="undefined") {
+			var tmp=out.collisionDetectors[sh.category]
+				[this.category].call(sh,this);
 			if (tmp.length===0) return [];
 			else return [tmp[1],tmp[0]];
-		}else if (typeof out.collisionDetectors[ths.category]!=="undefined"&&
-			typeof out.collisionDetectors[ths.category][sha.category]
-				!=="undefined") {
-			return out.collisionDetectors[ths.category][sha.category](ths,sha);
 		}else throw "Could not find shape collision detector for a \""+
-			ths.category+"\"-\""+sha.category+"\" collision.";
+			this.category+"\"-\""+sh.category+"\" collision.";
 	};
 	/*
 	out.Shape.prototype.collisionWith=function(sh) {
@@ -403,92 +403,7 @@
 
 					/* Line-Line *
 
-					if   (shaPts[0][0]==thsPts[0][0]
-						&&shaPts[0][1]==thsPts[0][1]
-						&&shaPts[1][0]==thsPts[1][0]
-						&&shaPts[1][1]==thsPts[1][1])
-							return [thsPts,shaPts];//lines are identical
-
-					//find slope of shaSegment //sham mate
-					shaM=(shaPts[0][1]-shaPts[1][1])/
-						 (shaPts[0][0]-shaPts[1][0]);
-
-					if (shaPts[0][0]==shaPts[1][0]) {//for a vertical line |
-						/* all info for sha is reset, and tell the earlier
-						 * vertical line catcher to fix both, then try both
-						 * again.
-						 * (this is _really_ hard to test, but it basically acts
-						 * like a goto)
-						 *
-						//console.info("Inner Vertical!");
-						innerR=true;
-						break;
-					}
-
-					//find y intercept of shaSegment
-					shaB=shaPts[0][1]-(shaM*shaPts[0][0]);
-					
-					/* Below in this very hard to read code, I compare each end 
-					 * of ths to see if it is in both bounds of sha.
-					 * 
-					 * I then swap their roles and repeat everything.
-					 * 
-					 * _then_, I swap x for y, and repeat everying (including
-					 * repeats) thus handling for all 64 combinations (8^2)
-					 * 
-					 * (note that the outlines for the lines must overlap in
-					 * both x and y)
-					 * 
-					 * (also, I didn't handle for both borders of one being
-					 * inside of both of the other, but according to testing,
-					 * this situation would be handled for elsewere)
-					 *
-					if (!(((thsPts[0][0]>=shaPts[0][0]&&thsPts[0][0]<=shaPts[1][0])|| //(shaRX > thsLX > shaLX or
-						   (thsPts[0][0]>=shaPts[1][0]&&thsPts[0][0]<=shaPts[0][0])|| // shaLX > thsLX > shaRX or
-						   (thsPts[1][0]>=shaPts[0][0]&&thsPts[1][0]<=shaPts[1][0])|| // shaRX > thsRX > shaLX or
-						   (thsPts[1][0]>=shaPts[1][0]&&thsPts[1][0]<=shaPts[0][0])|| // shaLX > thsRX > shaRX or
-						   (shaPts[0][0]>=thsPts[0][0]&&shaPts[0][0]<=thsPts[1][0])|| // thsRX > shaLX > thsLX or
-						   (shaPts[0][0]>=thsPts[1][0]&&shaPts[0][0]<=thsPts[0][0])|| // thsLX > shaLX > thsRX or
-						   (shaPts[1][0]>=thsPts[0][0]&&shaPts[1][0]<=thsPts[1][0])|| // thsRX > shaRX > thsLX or
-						   (shaPts[1][0]>=thsPts[1][0]&&shaPts[1][0]<=thsPts[0][0]))&&// thsLX > shaRX > thsRX) and
-						  ((thsPts[0][1]>=shaPts[0][1]&&thsPts[0][1]<=shaPts[1][1])|| //(shaRY > thsLY > shaLY or
-						   (thsPts[0][1]>=shaPts[1][1]&&thsPts[0][1]<=shaPts[0][1])|| // shaLY > thsLY > shaRY or
-						   (thsPts[1][1]>=shaPts[0][1]&&thsPts[1][1]<=shaPts[1][1])|| // shaRY > thsRY > shaLY or
-						   (thsPts[1][1]>=shaPts[1][1]&&thsPts[1][1]<=shaPts[0][1])|| // shaLY > thsRY > shaRY or
-						   (shaPts[0][1]>=thsPts[0][1]&&shaPts[0][1]<=thsPts[1][1])|| // thsRY > shaLY > thsLY or
-						   (shaPts[0][1]>=thsPts[1][1]&&shaPts[0][1]<=thsPts[0][1])|| // thsLY > shaLY > thsRY or
-						   (shaPts[1][1]>=thsPts[0][1]&&shaPts[1][1]<=thsPts[1][1])|| // thsRY > shaRY > thsLY or
-						   (shaPts[1][1]>=thsPts[1][1]&&shaPts[1][1]<=thsPts[0][1]))  // thsLY > shaRY > thsRY)
-						  )) continue;
-					// the outlines of these two lines do not overlap (or touch)
-
-					/*check for lines that share the same equation,
-						but have different bounds*
-					if (thsB==shaB&&thsM==shaM)
-						return [thsPts,shaPts];
-					if (thsM==shaM)
-						continue;//lines are either paralell or identical
-					var x=(shaB-thsB)/(thsM-shaM);
-						//get the x position of the x,y intercept
-					if (!(((x>=shaPts[0][0]&&x<=shaPts[1][0])|| //(shaRX > x > shaLX or
-						   (x>=shaPts[1][0]&&x<=shaPts[0][0]))&&// shaLX > x > shaRX) and
-						  ((x>=thsPts[0][0]&&x<=thsPts[1][0])|| //(thsRX > x > thsLX or
-						   (x>=thsPts[1][0]&&x<=thsPts[0][0]))  // thsLX > x > thsRX)
-							   )) continue;
-					//if it is outside of bounds, it's not a collision
-					
-					//var y=(thsM*x)+thsB;
-					//if (!(((y>=shaPts[0][1]&&y<=shaPts[1][1])|| //(shaRY > y > shaLY or
-					//	   (y>=shaPts[1][1]&&y<=shaPts[0][1]))&&// shaLY > y > shaRY) and
-					//	  ((y>=thsPts[0][1]&&y<=thsPts[1][1])|| //(thsRY > y > thsLY or
-					//	   (y>=thsPts[1][1]&&y<=thsPts[0][1]))  // thsLY > y > thsRY)
-					//	 )) continue;//if it is outside of bounds, it's not a collision
-					
-					return [thsPts,shaPts];//it's a collision
-					/* mathematically found calculation using
-					 * https://www.desmos.com/calculator/pkdnismmhs algorithm
-					 * (made by myself, but followed a few different tutorials)
-					 *
+					// done
 				}
 			}
 		}
@@ -565,7 +480,136 @@
 		return s;
 	};
 	out.collisionDetectors["polygon"]={};
-	out.collisionDetectors["polygon"]["polygon"]=function() {
+	out.collisionDetectors["polygon"]["polygon"]=function(sh) {
+		var ths=this.makeDup(),//make sure that the original ones aren't altered
+		sha=sh.makeDup();
+		//iterate through each segment on ths
+		for (var thsPt=0;thsPt<ths.segments.length;thsPt++) {
+			//variables must be declared here so they are properly global
+			var seg=ths.segments[thsPt],//ths's current segment
+				thsPts=[ths.points[seg[0]],ths.points[seg[1]]],/*ths's current
+					points as defined by `seg`*/
+				innerR=false,//See usage below for a better comment description
+				thsRX=thsPts[0][0],
+				thsLX=thsPts[1][0],
+				thsRY=thsPts[0][1],
+				thsLY=thsPts[1][1];
+
+			if (thsRX==thsLX||innerR) {//for a vertical line |
+
+				ths.rotate(0,0,.01);
+				sha.rotate(0,0,.01);
+
+				/*this is so it tries this line (and all after it) again
+				 * without any lines with an infinite slope*/
+				thsPt--;//decrement thsPt
+
+				//see vertical line check inside of the below for loop
+				innerR=false;
+				//console.info("Outer Vertical!");
+				continue;
+			}
+			//iterate through each segment on sha
+			for (var shaPt=0;shaPt<sha.segments.length;shaPt++) {
+				var segS=sha.segments[shaPt],/*sha's current segment */
+					shaPts=[sha.points[segS[0]],sha.points[segS[1]]],/* sha's
+						current points as determined by `segS`*/
+					//The value we return
+					retVal=[[this.points[seg [0]],this.points[seg [1]]],
+							[  sh.points[segS[0]],  sh.points[segS[1]]]],
+					shaRX=shaPts[0][0],
+					shaLX=shaPts[1][0],
+					shaRY=shaPts[0][1],
+					shaLY=shaPts[1][1];
+				
+				if   (shaRX==thsRX
+					&&shaRY==thsRY
+					&&shaLX==thsLX
+					&&shaLY==thsLY)//lines are identical
+						return retVal;
+
+				/* Below in this very hard to read code, I compare each end
+				 * of ths to see if it is in both bounds of sha.
+				 *
+				 * I then swap their roles and repeat everything.
+				 *
+				 * _then_, I swap x for y, and repeat everying (including
+				 * repeats) thus handling for all 64 combinations (8^2)
+				 *
+				 * (note that the outlines for the lines must overlap in
+				 * both x and y)
+				 *
+				 * (also, I didn't handle for both borders of one being
+				 * inside of both of the other, but according to testing,
+				 * this situation would be handled for elsewere)
+				 */
+				if (!(((thsRX>=shaRX&&thsRX<=shaLX)|| //(shaRX > thsRX > shaLX or
+					   (thsRX>=shaLX&&thsRX<=shaRX)|| // shaLX > thsRX > shaRX or
+					   (thsLX>=shaRX&&thsLX<=shaLX)|| // shaRX > thsLX > shaLX or
+					   (thsLX>=shaLX&&thsLX<=shaRX)|| // shaLX > thsLX > shaRX or
+					   (shaRX>=thsRX&&shaRX<=thsLX)|| // thsLX > shaLX > thsRX or
+					   (shaRX>=thsLX&&shaRX<=thsRX)|| // thsRX > shaLX > thsLX or
+					   (shaLX>=thsRX&&shaLX<=thsLX)|| // thsLX > shaRX > thsRX or
+					   (shaLX>=thsLX&&shaLX<=thsRX))&&// thsRX > shaRX > thsLX) and
+					  ((thsRY>=shaRY&&thsRY<=shaLY)|| //(shaRY > thsRY > shaLY or
+					   (thsRY>=shaLY&&thsRY<=shaRY)|| // shaLY > thsRY > shaRY or
+					   (thsLY>=shaRY&&thsLY<=shaLY)|| // shaRY > thsLY > shaLY or
+					   (thsLY>=shaLY&&thsLY<=shaRY)|| // shaLY > thsLY > shaRY or
+					   (shaRY>=thsRY&&shaRY<=thsLY)|| // thsLY > shaLY > thsRY or
+					   (shaRY>=thsLY&&shaRY<=thsRY)|| // thsRY > shaLY > thsLY or
+					   (shaLY>=thsRY&&shaLY<=thsLY)|| // thsLY > shaRY > thsRY or
+					   (shaLY>=thsLY&&shaLY<=thsRY))  // thsRY > shaRY > thsLY)
+					)) continue; // the outlines of these two lines do not overlap (or touch)
+
+				if (shaRX==shaLX) {//for a vertical line |
+					/* all info for sha is reset, and tell the earlier
+					 * vertical line catcher to fix both, then try both
+					 * again.
+					 * (this is _really_ hard to test, but it basically acts
+					 * like a goto)
+					 */
+					//console.info("Inner Vertical!");
+					innerR=true;
+					break;
+				}
+
+				var thsM=(thsRY-thsLY)/(thsRX-thsLX),//find slope of thsSegment
+					thsB=thsRY-(thsM*thsRX),//find y intercept of thsSegment
+					//find slope of shaSegment //sham mate
+					shaM=(shaRY-shaLY)/(shaRX-shaLX);
+					shaB=shaRY-(shaM*shaRX);//find y intercept of shaSegment
+
+				/*check for lines that share the same equation,
+					but have different bounds*/
+				if (thsB==shaB&&thsM==shaM)
+					return retVal;
+				if (thsM==shaM)
+					continue;//lines are paralell (never touch)
+				var x=(shaB-thsB)/(thsM-shaM);
+					//get the x position of the x,y intercept
+				if (!(((x>=shaRX&&x<=shaLX)|| //(shaRX > x > shaLX or
+					  (x>=shaLX&&x<=shaRX))&&// shaLX > x > shaRX) and
+					  ((x>=thsRX&&x<=thsLX)|| //(thsRX > x > thsLX or
+					  (x>=thsLX&&x<=thsRX))  // thsLX > x > thsRX)
+						)) continue;
+				//if it is outside of bounds, it's not a collision
+
+				//var y=(thsM*x)+thsB;
+				//if (!(((y>=shaRY&&y<=shaLY)|| //(shaRY > y > shaLY or
+				//	   (y>=shaLY&&y<=shaRY))&&// shaLY > y > shaRY) and
+				//	  ((y>=thsRY&&y<=thsLY)|| //(thsRY > y > thsLY or
+				//	   (y>=thsLY&&y<=thsRY))  // thsLY > y > thsRY)
+				//	 )) continue;//if it is outside of bounds, it's not a collision
+
+				//it's a collision
+				return retVal;
+
+				/* mathematically found calculation using
+				 * https://www.desmos.com/calculator/pkdnismmhs algorithm
+				 * (made by myself, but followed a few different tutorials)
+				 */
+			}
+		}
 		return [];
 	};
 	out.RightTriangle=function(x,y,w,h) {

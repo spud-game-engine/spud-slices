@@ -102,19 +102,13 @@
 	claim("The return of drawFacesOn",a.drawFacesOn(ctx),a);
 	a.transpose(-40*3,0).scale(1/2);
 	var b=a.makeDup();
-	claim("The result of identical collisionWith (0) (square,square)",
-		ss.Polygon.apply(ss,a.collisionWith(b)[0]).roundPoints().points,
-		[[10,20],[10,10]],recursivelyCheck);
-	claim("The result of identical collisionWith (1) (square,square)",
-	ss.Polygon.apply(ss,a.collisionWith(b)[0]).roundPoints().points,
-		[[10,20],[10,10]],recursivelyCheck);
+	claim("The result of identical collisionWith (square,square)",
+		a.collisionWith(b),
+		[[[10,20],[10,10]],[[10,20],[10,10]]],recursivelyCheck);
 	b.transpose(5,5);
-	claim("The result of good collisionWith (0) (square,square)",
-		ss.Polygon.apply(ss,a.collisionWith(b)[0]).roundPoints().points,
-		[[20,10],[20,20]],recursivelyCheck);
-	claim("The result of good collisionWith (1) (square,square)",
-	ss.Polygon.apply(ss,a.collisionWith(b)[0]).roundPoints().points,
-		[[20,10],[20,20]],recursivelyCheck);
+	claim("The result of good collisionWith (square,square)",
+		a.collisionWith(b),
+		[[[20,10],[20,20]],[[15,15],[25,15]]],recursivelyCheck);
 	b.transpose(10,10);
 	claim("The result of failed collisionWith (square,square)",
 		a.collisionWith(b),[],recursivelyCheck);
