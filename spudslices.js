@@ -289,7 +289,7 @@
 		}
 		return [];
 	}
-	out.Polygon=function() {
+	out.Polygon=function r() {
 		var s=new out.Shape();
 		s.category="polygon";
 		s.faces[0]=[];
@@ -309,9 +309,8 @@
 			var out=[],
 				center=this.findCenter();
 			for (var i=0; i<this.segments.length; i++) {
-				out[i]=new out.Polygon(this.points[this.segments[i][0]],
-					this.points[this.segments[i][1]],
-					center);
+				out[i]=new r(this.points[this.segments[i][0]],
+					this.points[this.segments[i][1]],center);
 			}
 			return out;
 		};

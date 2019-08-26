@@ -77,8 +77,24 @@
 	claimArray("newShape.facesColors",new ss.Shape().faceColors);
 	claim("The constructor for shape",ss.Shape,
 		ss.Shape.prototype.constructor);
+	var a=new ss.Polygon(10,20,93);
+	claim("polygon.category",a.category,"polygon");
+	claim("polygon.faces",a.faces,[[0,1,2]],recursivelyCheck);
+	claim("polygon.segments",a.segments,[[2,0],[0,1],[1,2]],recursivelyCheck);
+	claim("polygon.points",a.points,[10,20,93],recursivelyCheck);
+	a=new ss.Polygon([0,0],[0,10],[10,10],[10,0]);
+	claim("polygon.faces",a.faces,[[0,1,2,3]],recursivelyCheck);
+	claim("polygon.segments",a.segments,[[3,0],[0,1],[1,2],[2,3]],recursivelyCheck);
+	claim("polygon.points",a.points,[[0,0],[0,10],[10,10],[10,0]],recursivelyCheck);
+	claim("The result of polygon.convertToTriangles",
+		a.convertToTriangles(),[
+			new ss.Polygon([10,0],[0,0],[5,5]),
+			new ss.Polygon([0,0],[0,10],[5,5]),
+			new ss.Polygon([0,10],[10,10],[5,5]),
+			new ss.Polygon([10,10],[10,0],[5,5]),
+		],recursivelyCheck);
 	
-	var a=new ss.Square(0,10,10);
+	/*a=new ss.Square(0,10,10);
 	claim("The return of makeDup",a.makeDup(),a,recursivelyCheck);
 	claim("The return of transpose",a.transpose(10,0),a);
 	claim("The result of transpose",a.points[0],[10,10],recursivelyCheck);
@@ -113,6 +129,11 @@
 	claim("The result of failed collisionWith (square,square)",
 		[a.collisionWith(b)],[[]],recursivelyCheck);
 	b=new ss.Circle(20,20,10);
+	claim("circle.category",b.category,"circle");
+	claim("circle radius (points[0])",b.points[0],10);
+	claim("circle center (points[1])",b.points[1],[20,20],recursivelyCheck);
+	claim("circle segment (segments[0])",b.segments[0],[0,1],recursivelyCheck);
+	claim("circle.faces",b.faces,[[0]],recursivelyCheck);
 	claim("The result of good collisionWith (circle,square)",
 		a.collisionWith(b),
 		[[[10,20],[10,10]],[10,[20,20]]],recursivelyCheck);
@@ -129,7 +150,7 @@
 		[[10,[30,30]],[10,[35,35]]],recursivelyCheck);
 	b.transpose(10,100);
 	claim("The result of failed collisionWith (circle,circle)",
-		[a.collisionWith(b)],[[]],recursivelyCheck);
+		[a.collisionWith(b)],[[]],recursivelyCheck);//*/
 
 	var grade=(tested-failed)/tested*100,gradeL=gradeLetter(grade);
 	console.info("Got a(n)",gradeL,"(",Math.round(grade),
@@ -151,5 +172,4 @@
 	console.groupEnd();
 	if (gradeL==="F") console.error("Failed unit test!");
 	else if (grade<100) console.warn("Imperfect score in unit test");
-	window.a=a;
 })()
