@@ -86,14 +86,20 @@
 	claim("polygon.faces",a.faces,[[0,1,2,3]],recursivelyCheck);
 	claim("polygon.segments",a.segments,[[3,0],[0,1],[1,2],[2,3]],recursivelyCheck);
 	claim("polygon.points",a.points,[[0,0],[0,10],[10,10],[10,0]],recursivelyCheck);
-	claim("The result of polygon.convertToTriangles",
+	claim("The return of polygon.convertToTriangles",
 		a.convertToTriangles(),[
 			new ss.Polygon([10,0],[0,0],[5,5]),
 			new ss.Polygon([0,0],[0,10],[5,5]),
 			new ss.Polygon([0,10],[10,10],[5,5]),
 			new ss.Polygon([10,10],[10,0],[5,5]),
 		],recursivelyCheck);
-	
+	claim("The return of polygon.joinSegments",a.joinSegments(1,2),a);
+	claim("The result of polygon.joinSegments",a,
+		new ss.Polygon([0,0],[10,10],[10,0]),recursivelyCheck);
+	claim("The return of polygon.splitSegment",a.splitSegment(1),a);
+	claim("The (modified) result of polygon.splitSegment",a.faces,
+		new ss.Polygon([5,5],[0,0],[10,10],[10,0]).scale(3).drawOn(ctx).faces,recursivelyCheck);
+	a.transpose(20,20).scale(3).drawOn(ctx);
 	/*a=new ss.Square(0,10,10);
 	claim("The return of makeDup",a.makeDup(),a,recursivelyCheck);
 	claim("The return of transpose",a.transpose(10,0),a);

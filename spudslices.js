@@ -314,8 +314,39 @@
 			}
 			return out;
 		};
-		s.__proto__.joinSegments=function(sega,segb) {//lol sega
-
+		s.__proto__.joinSegments=function(segA,segB) {//lol sega
+			if (typeof this.segments[segA]==="undefined"||
+				typeof this.segments[segB]==="undefined") {
+				console.warn("Segments not found!");
+				return this;
+			}
+			var a=this.segments[segA],
+				b=this.segments[segB];
+			if (a[1]!==b[0]) {
+				console.log("Segments not joinable! (or at least not with the current algorithim.)");
+			}
+			this.points=this.points.slice(0,a[1]).concat(this.points.slice(a[1]+1));
+			for(var i=0;i<this.segments.length;i++) {
+				if(i===segA) this.segments[i]=[a[0],b[1]];
+				if(this.segments[i][0]>a[1]) this.segments[i][0]--;
+				if(this.segments[i][1]>a[1]) this.segments[i][1]--;
+			}
+			this.segments=this.segments.slice(0,segB).concat(this.segments.slice(segB+1));
+			var rm=-1;
+			for(i=0;i<this.faces.length;i++) {
+				for (var ii=0;ii<this.faces[i].length;ii++) {
+					if (this.faces[i][ii]===segB) rm=ii;
+					else if (this.faces[i][ii]>segB) this.faces[i][ii]--;
+				}
+				if (rm>=0) {
+					this.faces[i]=this.faces[i].slice(0,rm).concat(this.faces[i].slice(rm+1));
+					rm=-1;
+				}
+				//if (this.faces[i].length===0) rm=i;
+				//else rm=-1;
+			}
+			//if (rm>=0) this.faces=this.faces.slice(0,rm).concat(this.faces.slice(rm+1));
+			return this;
 		};
 		s.__proto__.splitSegment=function(segNum,sugP,color) {
 			var npoint=(typeof sugP!="undefined"&&typeof sugP.length=="number")?sugP:new out.Polygon(this.points[this.segments[segNum][0]],this.points[this.segments[segNum][1]]).findCenter(),
