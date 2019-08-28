@@ -21,6 +21,7 @@
 		return out.rawRotate(x,y,rad+out.findRot(x,y));
 	}
 	out.Shape=function() {
+		this.category="shape";//used for collisions
 		this.dimensions=2;
 		this.points=[];
 		this.pointColor="#ff0000";
@@ -143,10 +144,11 @@
 		return this.rotate(pos[0],pos[1],rad);
 	}
 	out.Shape.prototype.makeDup=function() {
-		var s=new out.Shape();
+		var s=new this.__proto__.constructor();
 		for (var i in this) {
 			s[i]=this[i];
 		}
+		s.category=this.category;
 		s.points=[];
 		for (i=0; i<this.points.length;i++) {
 			if (typeof this.points[i]=="number") s.points[i]=this.points[i];
@@ -637,7 +639,6 @@
 		return [];
 	}
 	out.RightTriangle=function(x,y,w,h) {
-		console.log(arguments)
 		var p=new out.Polygon([x,y],[x+w,y],[x,y+h]);
 		p.__proto__.constructor=out.RightTriangle;
 		return p;
