@@ -97,9 +97,8 @@
 	claim("The result of polygon.joinSegments",a,
 		new ss.Polygon([0,0],[10,10],[10,0]),recursivelyCheck);
 	claim("The return of polygon.splitSegment",a.splitSegment(1),a);
-	claim("The (modified) result of polygon.splitSegment",a.faces,
-		new ss.Polygon([5,5],[0,0],[10,10],[10,0]).scale(3).drawOn(ctx).faces,recursivelyCheck);
-	a.transpose(20,20).scale(3).drawOn(ctx);
+	claim("The (modified) result of polygon.splitSegment",a,
+		new ss.Polygon([0,0],[5,5],[10,10],[10,0]),recursivelyCheck);
 	/*a=new ss.Square(0,10,10);
 	claim("The return of makeDup",a.makeDup(),a,recursivelyCheck);
 	claim("The return of transpose",a.transpose(10,0),a);

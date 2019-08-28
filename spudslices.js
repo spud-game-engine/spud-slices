@@ -348,13 +348,22 @@
 			//if (rm>=0) this.faces=this.faces.slice(0,rm).concat(this.faces.slice(rm+1));
 			return this;
 		};
-		s.__proto__.splitSegment=function(segNum,sugP,color) {
-			var npoint=(typeof sugP!="undefined"&&typeof sugP.length=="number")?sugP:new out.Polygon(this.points[this.segments[segNum][0]],this.points[this.segments[segNum][1]]).findCenter(),
-				pointL=Math.floor((this.segments[segNum][0]+this.segments[segNum][1])/2);
+		s.__proto__.splitSegment=function(
+				segNum,//Index of segment to be replaced
+				sugP,//(optional) location of new point
+				color) {
+			var npoint=(typeof sugP!="undefined"&&typeof sugP.length=="number")
+					?sugP
+					:new out.Polygon(
+						this.points[this.segments[segNum][0]],
+						this.points[this.segments[segNum][1]]
+					).findCenter(),
+				pointL=this.segments[segNum][0]+1;
 			this.points.splice(pointL,0,npoint);
 			if (typeof color !="undefined") {
+				console.warn("Color feature may not be implemented");
 				if (color===true) {
-
+					
 				}
 			}
 			for (var i=0;i<this.segments.length;i++) {//increase the reference indexes for those that are now off by one because of the point spliced in the middle
@@ -363,6 +372,13 @@
 			}
 			this.segments.splice(segNum+1,0,[pointL,this.segments[segNum][1]]);
 			this.segments[segNum]=[this.segments[segNum][0],pointL];
+			/*for(i=0;i<this.faces.length;i++) {
+				for (var ii=0;ii<this.faces[i].length;ii++) {
+					if (this.faces[i][ii]>=segNum) this.faces[i][ii]++;
+				}
+			}
+			this.faces.splice(segNum+1,0,segNum);*/
+			this.faces[0].push(this.faces[0].length);
 			return this;
 		};
 		s.__proto__.findCenter=function() {
