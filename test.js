@@ -15,12 +15,12 @@ function claim(name,val,boolOverride) {
 		//if a test fails, and you can see this, then make it into a real test before going on
 	});
 }
-function claimTypeof(name,actual,shouldbe,boolOverride) {
-	claim("The type of "+name,t => {return [typeof actual,shouldbe]},boolOverride);
+function claimTypeof(name,actual,shouldbe) {
+	claim("The type of "+name,t => {return [typeof actual,shouldbe]});
 }
-function claimArray(name,actual,boolOverride) {
-	claimTypeof(name,actual,"object",boolOverride);
-	claimTypeof(name+".length",actual.length,"number",boolOverride);
+function claimArray(name,actual) {
+	claimTypeof(name,actual,"object");
+	claimTypeof(name+".length",actual.length,"number");
 }
 function recursivelyCheck(a,s,hasCheckedBefore) {
 	for (var i in a) {
