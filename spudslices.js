@@ -672,5 +672,7 @@
 	if (typeof window!=="undefined") {
 		if (typeof window.ss=="undefined") window.ss=out;
 		if (typeof window.spudslices=="undefined") window.spudslices=out;
-	}else console.warn("NOT READY YET...");
+	}else{
+		module.exports=out;
+	}
 })();
