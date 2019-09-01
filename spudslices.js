@@ -150,7 +150,8 @@
 		}
 		s.category=this.category;
 		s.points=[];
-		for (i=0,ii; i<this.points.length;i++) {
+		var ii;//I hate this (sortof), but it does make it a bit faster.
+		for (i=0; i<this.points.length;i++) {
 			if (typeof this.points[i]=="number") s.points[i]=this.points[i];
 			else {
 				s.points.push([]);
