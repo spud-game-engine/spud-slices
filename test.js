@@ -1,14 +1,11 @@
 import test from 'ava';
 var ss=require('./spudslices');
-function claimTypeof(name,val) {
-	test.todo("Make \""+name+"\" into a real test.");
-	test("The type of "+name,val);
-}
 function claimArray(name,actual) {
-	claimTypeof(name,t => {
+	test.todo("Make \""+name+"\" into a real test.");
+	test("The type of "+name,t => {
 		t.is(typeof actual,"object");
 	});
-	claimTypeof(name+".length",t => {
+	test("The type of "+name+".length",t => {
 		t.is(typeof actual.length,"number");
 	});
 }
@@ -27,30 +24,30 @@ test("The x-position of the raw rotation of the point (0,1) pi radians",t => {
 test("The x-position of .rotate on the point (0,1) pi radians",t => {
 	t.is(ss.rotate(-1,0,Math.PI)[0],1);
 });
-claimTypeof("newShape.dimensions",t => {
+test("The type of newShape.dimensions",t => {
 	t.is(typeof new ss.Shape().dimensions,"number");
 });
-claimTypeof("newShape.category",t => {
+test("The type of newShape.category",t => {
 	t.is(typeof new ss.Shape().category,"string");
 });
 claimArray("newShape.points",new ss.Shape().points);
-claimTypeof("newShape.pointColor",t => {
+test("The type of newShape.pointColor",t => {
 	t.is(typeof new ss.Shape().pointColor,"string");
 });
 claimArray("newShape.pointColors",[new ss.Shape().pointColors]);
-claimTypeof("newShape.pointSize",t => {
+test("The type of newShape.pointSize",t => {
 	t.is(typeof new ss.Shape().pointSize,"number");
 });
 claimArray("newShape.segments",[new ss.Shape().segments]);
-claimTypeof("newShape.segmentColor",t => {
+test("The type of newShape.segmentColor",t => {
 	t.is(typeof new ss.Shape().segmentColor,"string");
 });
 claimArray("newShape.segmentColors",new ss.Shape().segmentColors);
-claimTypeof("newShape.segmentSize",t => {
+test("The type of newShape.segmentSize",t => {
 	t.is(typeof new ss.Shape().segmentSize,"number");
 });
 claimArray("newShape.faces",new ss.Shape().faces);
-claimTypeof("newShape.faceColor",t => {
+test("The type of newShape.faceColor",t => {
 	t.is(typeof new ss.Shape().faceColor,"string");
 });
 claimArray("newShape.facesColors",new ss.Shape().faceColors);
@@ -179,25 +176,25 @@ test.todo("The return of drawFacesOn");
 //claimT("The return of drawOn",[a.drawOn(ctx),a]);
 //a.transpose(-40*3,0).scale(1/2);
 //var b=a.makeDup();
-claimTypeof("The value of collisionDetecors",t => {
+test("The type of the value of collisionDetecors",t => {
 	t.is(typeof ss.collisionDetectors,"object");
 });
-claimTypeof("The value of collisionDetecors.circle",t => {
+test("The type of the value of collisionDetecors.circle",t => {
 	t.is(typeof ss.collisionDetectors.circle,"object");
 });
-claimTypeof("The value of collisionDetecors.circle.circle",t => {
+test("The type of the value of collisionDetecors.circle.circle",t => {
 	t.is(typeof ss.collisionDetectors.circle.circle,"function");
 });
-claimTypeof("The value of collisionDetecors.circle.polygon",t => {
+test("The type of the value of collisionDetecors.circle.polygon",t => {
 	t.is(typeof ss.collisionDetectors.circle.polygon,"undefined");
 });
-claimTypeof("The value of collisionDetecors.polygon",t => {
+test("The type of the value of collisionDetecors.polygon",t => {
 	t.is(typeof ss.collisionDetectors.polygon,"object");
 });
-claimTypeof("The value of collisionDetecors.polygon.circle",t => {
+test("The type of the value of collisionDetecors.polygon.circle",t => {
 	t.is(typeof ss.collisionDetectors.polygon.circle,"function");
 });
-claimTypeof("The value of collisionDetecors.polygon.polygon",t => {
+test("The type of the value of collisionDetecors.polygon.polygon",t => {
 	t.is(typeof ss.collisionDetectors.polygon.polygon,"function");
 });
 test("The result of identical collisionWith (square,square)",t => {
