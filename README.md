@@ -12,3 +12,6 @@ in 3d.
 If you open index.html in a web-browser, it automatically does a complete unit
 test of the library. If you would like to contribute to the unit testing, for
 now, the tests are held in `main.js`.
+
+> NOTE: Now moving unit testing to ava unit testing. Old stuff is now just for
+> reference so I can make the new stuff.

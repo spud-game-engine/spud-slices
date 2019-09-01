@@ -669,6 +669,8 @@
 		}
 		return out.Polygon.apply(this,points).transpose(x,y);
 	};
-	if (typeof window.ss=="undefined") window.ss=out;
-	if (typeof window.spudslices=="undefined") window.spudslices=out;
+	if (typeof window!=="undefined") {
+		if (typeof window.ss=="undefined") window.ss=out;
+		if (typeof window.spudslices=="undefined") window.spudslices=out;
+	}else console.warn("NOT READY YET...");
 })();
