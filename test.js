@@ -87,76 +87,76 @@ claim("The constructor for shape",t => {
 });
 var a=new ss.Polygon(10,20,93);
 claim("The return of makeDup",t => {
-	t.is(a.makeDup(),a);
-},recursivelyCheck);
+	t.deepEqual(a.makeDup(),a);
+});
 claim("polygon.category",t => {
 	t.is(a.category,"polygon");
 });
 claim("polygon.faces",t => {
-	t.is(a.faces,[[0,1,2]]);
-},recursivelyCheck);
+	t.deepEqual(a.faces,[[0,1,2]]);
+});
 claim("polygon.segments",t => {
-	t.is(a.segments,[[2,0],[0,1],[1,2]]);
-},recursivelyCheck);
+	t.deepEqual(a.segments,[[2,0],[0,1],[1,2]]);
+});
 claim("polygon.points",t => {
-	t.is(a.points,[10,20,93]);
-},recursivelyCheck);
+	t.deepEqual(a.points,[10,20,93]);
+});
 a=new ss.Polygon([0,0],[0,10],[10,10],[10,0]);
 claim("(more) polygon.faces",t => {
-	t.is(a.faces,[[0,1,2,3]]);
-},recursivelyCheck);
+	t.deepEqual(a.faces,[[0,1,2,3]]);
+});
 claim("(more) polygon.segments",t => {
-	t.is(a.segments,[[3,0],[0,1],[1,2],[2,3]]);
-},recursivelyCheck);
+	t.deepEqual(a.segments,[[3,0],[0,1],[1,2],[2,3]]);
+});
 claim("(more) polygon.points",t => {
-	t.is(a.points,[[0,0],[0,10],[10,10],[10,0]]);
-},recursivelyCheck);
+	t.deepEqual(a.points,[[0,0],[0,10],[10,10],[10,0]]);
+});
 claim("The return of polygon.convertToTriangles",t => {
-	t.is(a.convertToTriangles(),[
+	t.deepEqual(a.convertToTriangles(),[
 		new ss.Polygon([10,0],[0,0],[5,5]),
 		new ss.Polygon([0,0],[0,10],[5,5]),
 		new ss.Polygon([0,10],[10,10],[5,5]),
 		new ss.Polygon([10,10],[10,0],[5,5]),
 	]);
-},recursivelyCheck);
+});
 claim("The return of polygon.joinSegments",t => {
 	t.is(a.joinSegments(1,2),a);
 });
 claim("The result of polygon.joinSegments",t => {
-	t.is(a,new ss.Polygon([0,0],[10,10],[10,0]));
-},recursivelyCheck);
+	t.deepEqual(a,new ss.Polygon([0,0],[10,10],[10,0]));
+});
 claim("The return of polygon.findCenter",t => {
-	t.is(a.makeDup().scale(3/10).findCenter(),[2,1]);
-},recursivelyCheck);
+	t.deepEqual(a.makeDup().scale(3/10).findCenter(),[2,1]);
+});
 claim("The return of polygon.splitSegment",t => {
 	t.is(a.splitSegment(1),a);
 });
 claim("The result of polygon.splitSegment",t => {
-	t.is(a,new ss.Polygon([0,0],[5,5],[10,10],[10,0]));
-},recursivelyCheck);
+	t.deepEqual(a,new ss.Polygon([0,0],[5,5],[10,10],[10,0]));
+});
 claim("The result of polygon.splitSegment (manual point)",t => {
-	t.is(a.splitSegment(1,[0,10]),
+	t.deepEqual(a.splitSegment(1,[0,10]),
 	new ss.Polygon([0,0],[0,10],[5,5],[10,10],[10,0]));
-},recursivelyCheck);
+});
 claim("The result of righttriangle",t => {
-	t.is(new ss.RightTriangle(1,2,3,4),new ss.Polygon([1,2],[4,2],[1,6]));
-},recursivelyCheck);
+	t.deepEqual(new ss.RightTriangle(1,2,3,4),new ss.Polygon([1,2],[4,2],[1,6]));
+});
 claim("The result of IsosolesRightTriangle",t => {
-	t.is(new ss.IsosolesRightTriangle(2,3,4),new ss.Polygon([2,3],[6,3],[2,7]));
-},recursivelyCheck);
+	t.deepEqual(new ss.IsosolesRightTriangle(2,3,4),new ss.Polygon([2,3],[6,3],[2,7]));
+});
 claim("The result of Rectagle",t => {
-	t.is(new ss.Rectagle(1,2,3,4),new ss.Polygon([1,2],[4,2],[4,6],[1,6]));
-},recursivelyCheck);
+	t.deepEqual(new ss.Rectagle(1,2,3,4),new ss.Polygon([1,2],[4,2],[4,6],[1,6]));
+});
 claim("The result of Square",t => {
-	t.is(new ss.Square(2,3,4),new ss.Polygon([2,3],[6,3],[6,7],[2,7]));
-},recursivelyCheck);
+	t.deepEqual(new ss.Square(2,3,4),new ss.Polygon([2,3],[6,3],[6,7],[2,7]));
+});
 a=new ss.Square(0,10,10);
 claim("The return of transpose",t => {
 	t.is(a.transpose(10,0),a);
 });
 claim("The result of transpose",t => {
-	t.is(a.points[0],[10,10]);
-},recursivelyCheck);
+	t.deepEqual(a.points[0],[10,10]);
+});
 //Rotate it around itself
 claim("The return of rotate shape",t => {
 	t.is(a.rotate(15,15,Math.PI),a);
@@ -165,31 +165,31 @@ claim("The return of roundpoints",t => {
 	t.is(a.roundPoints(),a);
 });//round the points
 claim("The result of rotate",t => {
-	t.is(a.points[1],[10,20]);
-},recursivelyCheck);
+	t.deepEqual(a.points[1],[10,20]);
+});
 claim("The result of EqualDistShape",t => {
-	t.is(new ss.EqualDistShape(0,0,4,1).roundPoints(),
+	t.deepEqual(new ss.EqualDistShape(0,0,4,1).roundPoints(),
 		new ss.Polygon([1,0],[0,1],[-1,0],[0,-1]));
-},recursivelyCheck);
+});
 claim("The return of rotCenter",t => {
 	t.is(a.rotCenter(-Math.PI),a);
 });//undo said rotation
 claim("The result of rotCenter",t => {
-	t.is(a.points[0],[10,10]);
-},recursivelyCheck);
+	t.deepEqual(a.points[0],[10,10]);
+});
 a.roundPoints();
 claim("The return of scale (one argument)",t => {
 	t.is(a.scale(4),a);
 });
 claim("The result of scale",t => {
-	t.is(a.points[1],[80,40]);
-},recursivelyCheck);
+	t.deepEqual(a.points[1],[80,40]);
+});
 claim("The return of scale (two arguments)",t => {
 	t.is(a.scale(1/2,1/2),a);
 });
 claim("The result of another scale",t => {
-	t.is(a.points[1],[40,20]);
-},recursivelyCheck);
+	t.deepEqual(a.points[1],[40,20]);
+});
 //claimT("The return of drawPointsOn",[a.drawPointsOn(ctx),a]);
 test.todo("The return of drawPointsOn");
 a.transpose(40,0);
@@ -224,16 +224,16 @@ claimTypeof("The value of collisionDetecors.polygon.polygon",t => {
 	return [ss.collisionDetectors.polygon.polygon,"function"];
 });
 claim("The result of identical collisionWith (square,square)",t => {
-	t.is(a.collisionWith(b),[[[10,20],[10,10]],[[10,20],[10,10]]]);
-},recursivelyCheck);
+	t.deepEqual(a.collisionWith(b),[[[10,20],[10,10]],[[10,20],[10,10]]]);
+});
 b.transpose(5,5);
 claim("The result of good collisionWith (square,square)",t => {
-	t.is(a.collisionWith(b),[[[20,10],[20,20]],[[15,15],[25,15]]]);
-},recursivelyCheck);
+	t.deepEqual(a.collisionWith(b),[[[20,10],[20,20]],[[15,15],[25,15]]]);
+});
 b.transpose(10,10);
 claim("The result of failed collisionWith (square,square)",t => {
-	t.is([a.collisionWith(b)],[[]]);
-},recursivelyCheck);
+	t.deepEqual([a.collisionWith(b)],[[]]);
+});
 b=new ss.Circle(20,20,10);
 claim("circle.category",t=> {
 	t.is(b.category,"circle");
@@ -242,26 +242,30 @@ claim("circle radius (points[0])",t=>{
 	t.is(b.points[0],10);
 });
 claim("circle center (points[1])",t=>{
-	t.is(b.points[1],[20,20]);
-},recursivelyCheck);
-claim("circle segment (segments[0])",[b.segments[0],[0,1]],recursivelyCheck);
-claim("circle.faces",[b.faces,[[0]]],recursivelyCheck);
+	t.deepEqual(b.points[1],[20,20]);
+});
+claim("circle segment (segments[0])",t=>{
+	t.deepEqual(b.segments[0],[0,1]);
+});
+claim("circle.faces",t=>{
+	t.deepEqual(b.faces,[[0]]);
+});
 claim("The result of good collisionWith (circle,square)",t => {
-	t.is(a.collisionWith(b),[[[10,20],[10,10]],[10,[20,20]]]);
-},recursivelyCheck);
+	t.deepEqual(a.collisionWith(b),[[[10,20],[10,10]],[10,[20,20]]]);
+});
 b.transpose(10,10);
 claim("The result of failed collisionWith (circle,square)",t => {
-	t.is([a.collisionWith(b)],[[]]);
-},recursivelyCheck);
+	t.deepEqual([a.collisionWith(b)],[[]]);
+});
 a=b.makeDup();
 claim("The result of identical collisionWith (circle,circle)",t => {
-	t.is(a.collisionWith(b),[[10,[30,30]],[10,[30,30]]]);
-},recursivelyCheck);
+	t.deepEqual(a.collisionWith(b),[[10,[30,30]],[10,[30,30]]]);
+});
 b.transpose(5,5);
 claim("The result of good collisionWith (circle,circle)",t => {
-	t.is(a.collisionWith(b),[[10,[30,30]],[10,[35,35]]]);
-},recursivelyCheck);
+	t.deepEqual(a.collisionWith(b),[[10,[30,30]],[10,[35,35]]]);
+});
 b.transpose(10,100);
 claim("The result of failed collisionWith (circle,circle)",t => {
-	t.is([a.collisionWith(b)],[[]]);
-},recursivelyCheck);//*/
+	t.deepEqual([a.collisionWith(b)],[[]]);
+});//*/
