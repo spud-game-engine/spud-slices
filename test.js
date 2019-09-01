@@ -4,16 +4,16 @@ function claimTypeof(name,val) {
 	test.todo("Make \""+name+"\" into a real test.");
 	test("The type of "+name,t => {
 		var outP=val(t);
-		t.is(typeof outP[0],outP[1]);
+		t.is(outP[0],outP[1]);
 		//if you can see this, remove claimTypeof
 	});
 }
 function claimArray(name,actual) {
 	claimTypeof(name,t => {
-		return [actual,"object"];
+		return [typeof actual,"object"];
 	});
 	claimTypeof(name+".length",t => {
-		return [actual.length,"number"];
+		return [typeof actual.length,"number"];
 	});
 }
 test("The distance of (0,1) from the origin",t => {
@@ -32,30 +32,30 @@ test("The x-position of .rotate on the point (0,1) pi radians",t => {
 	t.is(ss.rotate(-1,0,Math.PI)[0],1);
 });
 claimTypeof("newShape.dimensions",t => {
-	return [new ss.Shape().dimensions,"number"];
+	return [typeof new ss.Shape().dimensions,"number"];
 });
 claimTypeof("newShape.category",t => {
-	return [new ss.Shape().category,"string"];
+	return [typeof new ss.Shape().category,"string"];
 });
 claimArray("newShape.points",new ss.Shape().points);
 claimTypeof("newShape.pointColor",t => {
-	return [new ss.Shape().pointColor,"string"];
+	return [typeof new ss.Shape().pointColor,"string"];
 });
 claimArray("newShape.pointColors",[new ss.Shape().pointColors]);
 claimTypeof("newShape.pointSize",t => {
-	return [new ss.Shape().pointSize,"number"];
+	return [typeof new ss.Shape().pointSize,"number"];
 });
 claimArray("newShape.segments",[new ss.Shape().segments]);
 claimTypeof("newShape.segmentColor",t => {
-	return [new ss.Shape().segmentColor,"string"];
+	return [typeof new ss.Shape().segmentColor,"string"];
 });
 claimArray("newShape.segmentColors",new ss.Shape().segmentColors);
 claimTypeof("newShape.segmentSize",t => {
-	return [new ss.Shape().segmentSize,"number"];
+	return [typeof new ss.Shape().segmentSize,"number"];
 });
 claimArray("newShape.faces",new ss.Shape().faces);
 claimTypeof("newShape.faceColor",t => {
-	return [new ss.Shape().faceColor,"string"];
+	return [typeof new ss.Shape().faceColor,"string"];
 });
 claimArray("newShape.facesColors",new ss.Shape().faceColors);
 test.skip("The constructor for shape",t => {
@@ -184,25 +184,25 @@ test.todo("The return of drawFacesOn");
 //a.transpose(-40*3,0).scale(1/2);
 //var b=a.makeDup();
 claimTypeof("The value of collisionDetecors",t => {
-	return [ss.collisionDetectors,"object"];
+	return [typeof ss.collisionDetectors,"object"];
 });
 claimTypeof("The value of collisionDetecors.circle",t => {
-	return [ss.collisionDetectors.circle,"object"];
+	return [typeof ss.collisionDetectors.circle,"object"];
 });
 claimTypeof("The value of collisionDetecors.circle.circle",t => {
-	return [ss.collisionDetectors.circle.circle,"function"];
+	return [typeof ss.collisionDetectors.circle.circle,"function"];
 });
 claimTypeof("The value of collisionDetecors.circle.polygon",t => {
-	return [ss.collisionDetectors.circle.polygon,"undefined"];
+	return [typeof ss.collisionDetectors.circle.polygon,"undefined"];
 });
 claimTypeof("The value of collisionDetecors.polygon",t => {
-	return [ss.collisionDetectors.polygon,"object"];
+	return [typeof ss.collisionDetectors.polygon,"object"];
 });
 claimTypeof("The value of collisionDetecors.polygon.circle",t => {
-	return [ss.collisionDetectors.polygon.circle,"function"];
+	return [typeof ss.collisionDetectors.polygon.circle,"function"];
 });
 claimTypeof("The value of collisionDetecors.polygon.polygon",t => {
-	return [ss.collisionDetectors.polygon.polygon,"function"];
+	return [typeof ss.collisionDetectors.polygon.polygon,"function"];
 });
 test("The result of identical collisionWith (square,square)",t => {
 	var a=new ss.Square(10,10,10),
