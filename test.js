@@ -5,6 +5,7 @@ function claim(name,val,boolOverride) {
 	//When doing so, the old testing system must still get a 100%
 	test(name,t => {
 		var outP=val(t);
+		return;
 		var actual=outP[0],
 		shouldbe=outP[1];
 		if (typeof boolOverride!=="undefined") {
@@ -18,7 +19,7 @@ function claim(name,val,boolOverride) {
 function claimTypeof(name,val) {
 	claim("The type of "+name,t => {
 		var outP=val(t);
-		return [typeof outP[0],outP[1]];
+		t.is(typeof outP[0],outP[1]);
 	});
 }
 function claimArray(name,actual) {
@@ -40,19 +41,19 @@ function recursivelyCheck(a,s,hasCheckedBefore) {
 	return true;
 }
 claim("The distance of (0,1) from the origin",t => {
-	return [ss.distance(0,1),1];
+	t.is(ss.distance(0,1),1);
 });
 claim("The the radian rotation of (0,1) from (1,0)",t => {
-	return [ss.findRot(0,1),Math.PI/2];
+	t.is(ss.findRot(0,1),Math.PI/2);
 });
 claim("The the radian rotation of (0,-1) from (1,0)",t => {
-	return [ss.findRot(0,-1),3*Math.PI/2];
+	t.is(ss.findRot(0,-1),3*Math.PI/2);
 });
 claim("The x-position of the raw rotation of the point (0,1) pi radians",t => {
-	return [ss.rawRotate(-1,0,Math.PI)[0],-1];
+	t.is(ss.rawRotate(-1,0,Math.PI)[0],-1);
 });
 claim("The x-position of .rotate on the point (0,1) pi radians",t => {
-	return [ss.rotate(-1,0,Math.PI)[0],1];
+	t.is(ss.rotate(-1,0,Math.PI)[0],1);
 });
 claimTypeof("newShape.dimensions",t => {
 	return [new ss.Shape().dimensions,"number"];
@@ -82,112 +83,112 @@ claimTypeof("newShape.faceColor",t => {
 });
 claimArray("newShape.facesColors",new ss.Shape().faceColors);
 claim("The constructor for shape",t => {
-	return [ss.Shape,ss.Shape.prototype.constructor];
+	t.is(ss.Shape,ss.Shape.prototype.constructor);
 });
 var a=new ss.Polygon(10,20,93);
 claim("The return of makeDup",t => {
-	return [a.makeDup(),a];
+	t.is(a.makeDup(),a);
 },recursivelyCheck);
 claim("polygon.category",t => {
-	return [a.category,"polygon"];
+	t.is(a.category,"polygon");
 });
 claim("polygon.faces",t => {
-	return [a.faces,[[0,1,2]]];
+	t.is(a.faces,[[0,1,2]]);
 },recursivelyCheck);
 claim("polygon.segments",t => {
-	return [a.segments,[[2,0],[0,1],[1,2]]];
+	t.is(a.segments,[[2,0],[0,1],[1,2]]);
 },recursivelyCheck);
 claim("polygon.points",t => {
-	return [a.points,[10,20,93]];
+	t.is(a.points,[10,20,93]);
 },recursivelyCheck);
 a=new ss.Polygon([0,0],[0,10],[10,10],[10,0]);
 claim("(more) polygon.faces",t => {
-	return [a.faces,[[0,1,2,3]]];
+	t.is(a.faces,[[0,1,2,3]]);
 },recursivelyCheck);
 claim("(more) polygon.segments",t => {
-	return [a.segments,[[3,0],[0,1],[1,2],[2,3]]];
+	t.is(a.segments,[[3,0],[0,1],[1,2],[2,3]]);
 },recursivelyCheck);
 claim("(more) polygon.points",t => {
-	return [a.points,[[0,0],[0,10],[10,10],[10,0]]];
+	t.is(a.points,[[0,0],[0,10],[10,10],[10,0]]);
 },recursivelyCheck);
 claim("The return of polygon.convertToTriangles",t => {
-	return [a.convertToTriangles(),[
+	t.is(a.convertToTriangles(),[
 		new ss.Polygon([10,0],[0,0],[5,5]),
 		new ss.Polygon([0,0],[0,10],[5,5]),
 		new ss.Polygon([0,10],[10,10],[5,5]),
 		new ss.Polygon([10,10],[10,0],[5,5]),
-	]];
+	]);
 },recursivelyCheck);
 claim("The return of polygon.joinSegments",t => {
-	return [a.joinSegments(1,2),a];
+	t.is(a.joinSegments(1,2),a);
 });
 claim("The result of polygon.joinSegments",t => {
-	return [a,new ss.Polygon([0,0],[10,10],[10,0])];
+	t.is(a,new ss.Polygon([0,0],[10,10],[10,0]));
 },recursivelyCheck);
 claim("The return of polygon.findCenter",t => {
-	return [a.makeDup().scale(3/10).findCenter(),[2,1]];
+	t.is(a.makeDup().scale(3/10).findCenter(),[2,1]);
 },recursivelyCheck);
 claim("The return of polygon.splitSegment",t => {
-	return [a.splitSegment(1),a];
+	t.is(a.splitSegment(1),a);
 });
 claim("The result of polygon.splitSegment",t => {
-	return [a,new ss.Polygon([0,0],[5,5],[10,10],[10,0])];
+	t.is(a,new ss.Polygon([0,0],[5,5],[10,10],[10,0]));
 },recursivelyCheck);
 claim("The result of polygon.splitSegment (manual point)",t => {
-	return [a.splitSegment(1,[0,10]),
-	new ss.Polygon([0,0],[0,10],[5,5],[10,10],[10,0])];
+	t.is(a.splitSegment(1,[0,10]),
+	new ss.Polygon([0,0],[0,10],[5,5],[10,10],[10,0]));
 },recursivelyCheck);
 claim("The result of righttriangle",t => {
-	return [new ss.RightTriangle(1,2,3,4),new ss.Polygon([1,2],[4,2],[1,6])];
+	t.is(new ss.RightTriangle(1,2,3,4),new ss.Polygon([1,2],[4,2],[1,6]));
 },recursivelyCheck);
 claim("The result of IsosolesRightTriangle",t => {
-	return [new ss.IsosolesRightTriangle(2,3,4),new ss.Polygon([2,3],[6,3],[2,7])];
+	t.is(new ss.IsosolesRightTriangle(2,3,4),new ss.Polygon([2,3],[6,3],[2,7]));
 },recursivelyCheck);
 claim("The result of Rectagle",t => {
-	return [new ss.Rectagle(1,2,3,4),new ss.Polygon([1,2],[4,2],[4,6],[1,6])];
+	t.is(new ss.Rectagle(1,2,3,4),new ss.Polygon([1,2],[4,2],[4,6],[1,6]));
 },recursivelyCheck);
 claim("The result of Square",t => {
-	return [new ss.Square(2,3,4),new ss.Polygon([2,3],[6,3],[6,7],[2,7])];
+	t.is(new ss.Square(2,3,4),new ss.Polygon([2,3],[6,3],[6,7],[2,7]));
 },recursivelyCheck);
 a=new ss.Square(0,10,10);
 claim("The return of transpose",t => {
-	return [a.transpose(10,0),a];
+	t.is(a.transpose(10,0),a);
 });
 claim("The result of transpose",t => {
-	return [a.points[0],[10,10]];
+	t.is(a.points[0],[10,10]);
 },recursivelyCheck);
 //Rotate it around itself
 claim("The return of rotate shape",t => {
-	return [a.rotate(15,15,Math.PI),a];
+	t.is(a.rotate(15,15,Math.PI),a);
 });
 claim("The return of roundpoints",t => {
-	return [a.roundPoints(),a];
+	t.is(a.roundPoints(),a);
 });//round the points
 claim("The result of rotate",t => {
-	return [a.points[1],[10,20]];
+	t.is(a.points[1],[10,20]);
 },recursivelyCheck);
 claim("The result of EqualDistShape",t => {
-	return [new ss.EqualDistShape(0,0,4,1).roundPoints(),
-		new ss.Polygon([1,0],[0,1],[-1,0],[0,-1])];
+	t.is(new ss.EqualDistShape(0,0,4,1).roundPoints(),
+		new ss.Polygon([1,0],[0,1],[-1,0],[0,-1]));
 },recursivelyCheck);
 claim("The return of rotCenter",t => {
-	return [a.rotCenter(-Math.PI),a];
+	t.is(a.rotCenter(-Math.PI),a);
 });//undo said rotation
 claim("The result of rotCenter",t => {
-	return [a.points[0],[10,10]];
+	t.is(a.points[0],[10,10]);
 },recursivelyCheck);
 a.roundPoints();
 claim("The return of scale (one argument)",t => {
-	return [a.scale(4),a];
+	t.is(a.scale(4),a);
 });
 claim("The result of scale",t => {
-	return [a.points[1],[80,40]];
+	t.is(a.points[1],[80,40]);
 },recursivelyCheck);
 claim("The return of scale (two arguments)",t => {
-	return [a.scale(1/2,1/2),a];
+	t.is(a.scale(1/2,1/2),a);
 });
 claim("The result of another scale",t => {
-	return [a.points[1],[40,20]];
+	t.is(a.points[1],[40,20]);
 },recursivelyCheck);
 //claimT("The return of drawPointsOn",[a.drawPointsOn(ctx),a]);
 test.todo("The return of drawPointsOn");
@@ -223,38 +224,44 @@ claimTypeof("The value of collisionDetecors.polygon.polygon",t => {
 	return [ss.collisionDetectors.polygon.polygon,"function"];
 });
 claim("The result of identical collisionWith (square,square)",t => {
-	return [a.collisionWith(b),[[[10,20],[10,10]],[[10,20],[10,10]]]];
+	t.is(a.collisionWith(b),[[[10,20],[10,10]],[[10,20],[10,10]]]);
 },recursivelyCheck);
 b.transpose(5,5);
 claim("The result of good collisionWith (square,square)",t => {
-	return [a.collisionWith(b),[[[20,10],[20,20]],[[15,15],[25,15]]]];
+	t.is(a.collisionWith(b),[[[20,10],[20,20]],[[15,15],[25,15]]]);
 },recursivelyCheck);
 b.transpose(10,10);
 claim("The result of failed collisionWith (square,square)",t => {
-	return [[a.collisionWith(b)],[[]]];
+	t.is([a.collisionWith(b)],[[]]);
 },recursivelyCheck);
 b=new ss.Circle(20,20,10);
-claim("circle.category",b.category,"circle");
-claim("circle radius (points[0])",[b.points[0],10]);
-claim("circle center (points[1])",[b.points[1],[20,20]],recursivelyCheck);
+claim("circle.category",t=> {
+	t.is(b.category,"circle");
+});
+claim("circle radius (points[0])",t=>{
+	t.is(b.points[0],10);
+});
+claim("circle center (points[1])",t=>{
+	t.is(b.points[1],[20,20]);
+},recursivelyCheck);
 claim("circle segment (segments[0])",[b.segments[0],[0,1]],recursivelyCheck);
 claim("circle.faces",[b.faces,[[0]]],recursivelyCheck);
 claim("The result of good collisionWith (circle,square)",t => {
-	return [a.collisionWith(b),[[[10,20],[10,10]],[10,[20,20]]]];
+	t.is(a.collisionWith(b),[[[10,20],[10,10]],[10,[20,20]]]);
 },recursivelyCheck);
 b.transpose(10,10);
 claim("The result of failed collisionWith (circle,square)",t => {
-	return [[a.collisionWith(b)],[[]]];
+	t.is([a.collisionWith(b)],[[]]);
 },recursivelyCheck);
 a=b.makeDup();
 claim("The result of identical collisionWith (circle,circle)",t => {
-	return [a.collisionWith(b),[[10,[30,30]],[10,[30,30]]]];
+	t.is(a.collisionWith(b),[[10,[30,30]],[10,[30,30]]]);
 },recursivelyCheck);
 b.transpose(5,5);
 claim("The result of good collisionWith (circle,circle)",t => {
-	return [a.collisionWith(b),[[10,[30,30]],[10,[35,35]]]];
+	t.is(a.collisionWith(b),[[10,[30,30]],[10,[35,35]]]);
 },recursivelyCheck);
 b.transpose(10,100);
 claim("The result of failed collisionWith (circle,circle)",t => {
-	return [[a.collisionWith(b)],[[]]];
+	t.is([a.collisionWith(b)],[[]]);
 },recursivelyCheck);//*/
