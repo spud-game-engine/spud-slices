@@ -22,8 +22,12 @@ function claimTypeof(name,val) {
 	});
 }
 function claimArray(name,actual) {
-	claimTypeof(name,t => [actual,"object"]);
-	claimTypeof(name+".length",t => [actual.length,"number"]);
+	claimTypeof(name,t => {
+		return [actual,"object"];
+	});
+	claimTypeof(name+".length",t => {
+		return [actual.length,"number"];
+	});
 }
 function recursivelyCheck(a,s,hasCheckedBefore) {
 	for (var i in a) {
@@ -35,27 +39,37 @@ function recursivelyCheck(a,s,hasCheckedBefore) {
 	if (!hasCheckedBefore) return recursivelyCheck(s,a,true);
 	return true;
 }
-claim("The distance of (0,1) from the origin",t => {return [ss.distance(0,1),1]});
-claim("The the radian rotation of (0,1) from (1,0)",
-	t => {return [ss.findRot(0,1),Math.PI/2]});
-claim("The the radian rotation of (0,-1) from (1,0)",
-	t => {return [ss.findRot(0,-1),3*Math.PI/2]});
-claim("The x-position of the raw rotation of the point (0,1) pi radians",
-	t => {return [ss.rawRotate(-1,0,Math.PI)[0],-1]});
-claim("The x-position of .rotate on the point (0,1) pi radians",
-	t => {return [ss.rotate(-1,0,Math.PI)[0],1]});
-claimTypeof("newShape.dimensions",t => [new ss.Shape().dimensions,"number"]);
-claimTypeof("newShape.category",t => [new ss.Shape().category,"string"]);
+claim("The distance of (0,1) from the origin",t => {
+	return [ss.distance(0,1),1];
+});
+claim("The the radian rotation of (0,1) from (1,0)",t => {
+	return [ss.findRot(0,1),Math.PI/2];
+});
+claim("The the radian rotation of (0,-1) from (1,0)",t => {
+	return [ss.findRot(0,-1),3*Math.PI/2];
+});
+claim("The x-position of the raw rotation of the point (0,1) pi radians",t => {
+	return [ss.rawRotate(-1,0,Math.PI)[0],-1];
+});
+claim("The x-position of .rotate on the point (0,1) pi radians",t => {
+	return [ss.rotate(-1,0,Math.PI)[0],1];
+});
+claimTypeof("newShape.dimensions",t => {
+	return [new ss.Shape().dimensions,"number"];
+});
+claimTypeof("newShape.category",t => {
+	return [new ss.Shape().category,"string"];
+});
 claimArray("newShape.points",new ss.Shape().points);
-claimTypeof("newShape.pointColor",t => [new ss.Shape().pointColor,"string"]);
+claimTypeof("newShape.pointColor",t => {return [new ss.Shape().pointColor,"string"]});
 claimArray("newShape.pointColors",[new ss.Shape().pointColors]);
-claimTypeof("newShape.pointSize",t => [new ss.Shape().pointSize,"number"]);
+claimTypeof("newShape.pointSize",t => {return [new ss.Shape().pointSize,"number"]});
 claimArray("newShape.segments",[new ss.Shape().segments]);
-claimTypeof("newShape.segmentColor",t => [new ss.Shape().segmentColor,"string"]);
+claimTypeof("newShape.segmentColor",t => {return [new ss.Shape().segmentColor,"string"]});
 claimArray("newShape.segmentColors",new ss.Shape().segmentColors);
-claimTypeof("newShape.segmentSize",t => [new ss.Shape().segmentSize,"number"]);
+claimTypeof("newShape.segmentSize",t => {return [new ss.Shape().segmentSize,"number"]});
 claimArray("newShape.faces",new ss.Shape().faces);
-claimTypeof("newShape.faceColor",t => [new ss.Shape().faceColor,"string"]);
+claimTypeof("newShape.faceColor",t => {return [new ss.Shape().faceColor,"string"]});
 claimArray("newShape.facesColors",new ss.Shape().faceColors);
 claim("The constructor for shape",t => {return [ss.Shape,
 	ss.Shape.prototype.constructor]});
@@ -123,19 +137,19 @@ a.transpose(40,0);
 //claimT("The return of drawOn",[a.drawOn(ctx),a]);
 a.transpose(-40*3,0).scale(1/2);
 var b=a.makeDup();
-claimTypeof("The value of collisionDetecors",t => [ss.collisionDetectors,"object"]);
+claimTypeof("The value of collisionDetecors",t => {return [ss.collisionDetectors,"object"]});
 claimTypeof("The value of collisionDetecors.circle",
-	t => [ss.collisionDetectors.circle,"object"]);
+	t => {return [ss.collisionDetectors.circle,"object"]});
 claimTypeof("The value of collisionDetecors.circle.circle",
-	t => [ss.collisionDetectors.circle.circle,"function"]);
+	t => {return [ss.collisionDetectors.circle.circle,"function"]});
 claimTypeof("The value of collisionDetecors.circle.polygon",
-	t => [ss.collisionDetectors.circle.polygon,"undefined"]);
+	t => {return [ss.collisionDetectors.circle.polygon,"undefined"]});
 claimTypeof("The value of collisionDetecors.polygon",
-	t => [ss.collisionDetectors.polygon,"object"]);
+	t => {return [ss.collisionDetectors.polygon,"object"]});
 claimTypeof("The value of collisionDetecors.polygon.circle",
-	t => [ss.collisionDetectors.polygon.circle,"function"]);
+	t => {return [ss.collisionDetectors.polygon.circle,"function"]});
 claimTypeof("The value of collisionDetecors.polygon.polygon",
-	t => [ss.collisionDetectors.polygon.polygon,"function"]);
+	t => {return [ss.collisionDetectors.polygon.polygon,"function"]});
 claim("The result of identical collisionWith (square,square)",
 	t => {return [a.collisionWith(b),
 	[[[10,20],[10,10]],[[10,20],[10,10]]]]},recursivelyCheck);
