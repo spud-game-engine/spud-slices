@@ -7,5 +7,10 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Lazerbeak12345",
-  "license": "GPL-3.0"
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "ava": "^2.3.0",
+    "jshint": "^2.10.2",
+    "typescript": "^3.6.2"
+  }
 }
