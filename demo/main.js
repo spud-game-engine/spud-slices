@@ -4,7 +4,7 @@
 	window.onresize = function () {
 		cnvs.width = window.innerWidth;
 		cnvs.height = window.innerHeight;
-	}
+	};
 	window.onresize();
 
 	var tested=0,
@@ -204,8 +204,8 @@
 			Count:failed,
 			Percent:failed/tested*100+"%",
 		}
-	})
+	});
 	console.groupEnd();
 	if (gradeL==="F") console.error("Failed unit test!");
 	else if (grade<100) console.warn("Imperfect score in unit test");
-})()
+})();

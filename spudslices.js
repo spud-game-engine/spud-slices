@@ -2,24 +2,24 @@
 	var out={};
 	out.distance=function(x,y) {
 		return Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
-	}
+	};
 	out.findRot=function(x,y) {
 		var dist=out.distance(x,y),
 			pos=[x/dist,
 				y/dist];
 		if(pos[1]<0) return(2*Math.PI)-Math.acos(pos[0]);//if it is > pi radians
 		return Math.acos(pos[0]);
-	}
+	};
 	out.rawRotate=function(x,y,rad) {
 		var dist=out.distance(x,y);
 		return [
 			dist*(Math.cos(rad)),
 			dist*(Math.sin(rad)),
 		];
-	}
+	};
 	out.rotate=function(x,y,rad) {
 		return out.rawRotate(x,y,rad+out.findRot(x,y));
-	}
+	};
 	out.Shape=function() {
 		this.category="shape";//used for collisions
 		this.dimensions=2;
@@ -41,7 +41,7 @@
 		this.drawSegmentsOn(ctx);
 		this.drawPointsOn(ctx);
 		return this;
-	}
+	};
 	out.Shape.prototype.drawPointsOn=function(ctx) {
 		ctx.fillStyle=this.pointColor;
 		ctx.beginPath();
@@ -55,7 +55,7 @@
 		}
 		//ctx.closePath();
 		return this;
-	}
+	};
 	out.Shape.prototype.drawSegmentsOn=function(ctx) {
 		ctx.strokeStyle=this.segmentColor;
 		ctx.lineWidth=this.segmentSize;
@@ -76,7 +76,7 @@
 		ctx.stroke();
 		//ctx.closePath();
 		return this;
-	}
+	};
 	out.Shape.prototype.drawFacesOn=function(ctx) {
 		ctx.fillStyle=this.faceColor;
 		ctx.beginPath();
@@ -97,7 +97,7 @@
 		ctx.fill();
 		//ctx.closePath();
 		return this;
-	}
+	};
 	out.Shape.prototype.transpose=function(x,y) {
 		for (var i=0; i<this.points.length; i++) {
 			if (typeof this.points[i]=="number") continue;
@@ -105,7 +105,7 @@
 			this.points[i][1]+=y;
 		}
 		return this;
-	}
+	};
 	out.Shape.prototype.scale=function(x,y) {
 		if(typeof y==="undefined") y=x;
 		for(var i=0;i<this.points.length;i++) {
@@ -117,7 +117,7 @@
 			this.points[i][1]*=y;
 		}
 		return this;
-	}
+	};
 	out.Shape.prototype.rotate=function(x,y,rad) {
 		this.transpose(-x,-y);//to Center
 		for (var i=0;i<this.points.length;i++) {
@@ -126,7 +126,7 @@
 		}
 		this.transpose(x,y);//from Center
 		return this;
-	}
+	};
 	out.Shape.prototype.roundPoints=function(otherF) {
 		if (typeof otherF==="undefined") {
 			otherF=Math.round;
@@ -138,11 +138,11 @@
 				this.points[i][ii]=otherF(this.points[i][ii]);
 		}
 		return this;
-	}
+	};
 	out.Shape.prototype.rotCenter=function(rad) {
 		var pos=this.findCenter();
 		return this.rotate(pos[0],pos[1],rad);
-	}
+	};
 	out.Shape.prototype.makeDup=function() {
 		var s=new this.__proto__.constructor();
 		for (var i in this) {
@@ -150,11 +150,11 @@
 		}
 		s.category=this.category;
 		s.points=[];
-		for (i=0; i<this.points.length;i++) {
+		for (i=0,ii; i<this.points.length;i++) {
 			if (typeof this.points[i]=="number") s.points[i]=this.points[i];
 			else {
 				s.points.push([]);
-				for (var ii=0; ii<this.points[i].length; ii++) {
+				for (ii=0; ii<this.points[i].length; ii++) {
 					s.points[i][ii]=this.points[i][ii];
 				}
 			}
@@ -165,7 +165,7 @@
 			if (typeof this.pointColors[i]=="number") s.pointColors[i]=this.pointColors[i];
 			else {
 				s.pointColors.push([]);
-				for (var ii=0;ii< this.pointColors[i].length; ii++) {
+				for (ii=0;ii< this.pointColors[i].length; ii++) {
 					s.pointColors[i][ii]=this.pointColors[i][ii];
 				}
 			}
@@ -175,7 +175,7 @@
 			if (typeof this.segments[i]=="number") s.segments[i]=this.segments[i];
 			else {
 				s.segments.push([]);
-				for (var ii=0;ii< this.segments[i].length; ii++) {
+				for (ii=0;ii< this.segments[i].length; ii++) {
 					s.segments[i][ii]=this.segments[i][ii];
 				}
 			}
@@ -186,7 +186,7 @@
 			if (typeof this.segmentColors[i]=="number") s.segmentColors[i]=this.segmentColors[i];
 			else {
 				s.segmentColors.push([]);
-				for (var ii=0;ii< this.segmentColors[i].length; ii++) {
+				for (ii=0;ii< this.segmentColors[i].length; ii++) {
 					s.segmentColors[i][ii]=this.segmentColors[i][ii];
 				}
 			}
@@ -196,7 +196,7 @@
 			if (typeof this.faces[i]=="number") s.faces[i]=this.faces[i];
 			else{
 				s.faces.push([]);
-				for (var ii=0;ii< this.faces[i].length; ii++) {
+				for (ii=0;ii< this.faces[i].length; ii++) {
 					s.faces[i][ii]=this.faces[i][ii];
 				}
 			}
@@ -207,13 +207,13 @@
 			if (typeof this.faceColors[i]=="number") s.faceColors[i]=this.faceColors[i];
 			else {
 				s.faceColors.push([]);
-				for (var ii=0;ii< this.faceColors[i].length; ii++) {
+				for (ii=0;ii< this.faceColors[i].length; ii++) {
 					s.faceColors[i][ii]=this.faceColors[i][ii];
 				}
 			}
 		}
 		return s;
-	}
+	};
 	//An object that follows the template below in structure. Handles all cases.
 	out.collisionDetectors={
 		/*"shape name":{
@@ -237,13 +237,13 @@
 		 */
 		//input: another Shape instance
 		if (typeof out.collisionDetectors[this.category]!=="undefined"&&
-			typeof out.collisionDetectors[this.category][sh.category]
-				!=="undefined") {
+			typeof out.collisionDetectors[this.category][sh.category]!==
+				"undefined") {
 			return out.collisionDetectors[this.category]
 				[sh.category].call(this,sh);
 		}else if (typeof out.collisionDetectors[sh.category]!=="undefined"&&
-			typeof out.collisionDetectors[sh.category][this.category]
-				!=="undefined") {
+			typeof out.collisionDetectors[sh.category][this.category]!==
+				"undefined") {
 			var tmp=out.collisionDetectors[sh.category]
 				[this.category].call(sh,this);
 			if (tmp.length===0) return [];
@@ -260,11 +260,11 @@
 		s.faces[0]=[0];
 		s.findCenter=function() {
 			return this.points[1];
-		}
+		};
 		return s;
-	}
-	out.collisionDetectors["circle"]={};
-	out.collisionDetectors["circle"]["circle"]=function(sh) {
+	};
+	out.collisionDetectors.circle={};
+	out.collisionDetectors.circle.circle=function(sh) {
 		var ths=this.makeDup(),//make sure that the original ones aren't altered
 		sha=sh.makeDup();
 		//iterate through each segment on ths
@@ -290,7 +290,7 @@
 			}
 		}
 		return [];
-	}
+	};
 	out.Polygon=function r() {
 		var s=new out.Shape();
 		s.category="polygon";
@@ -354,9 +354,9 @@
 				segNum,//Index of segment to be replaced
 				sugP,//(optional) location of new point
 				color) {
-			var npoint=(typeof sugP!="undefined"&&typeof sugP.length=="number")
-					?sugP
-					:new out.Polygon(
+			var npoint=(typeof sugP!="undefined"&&typeof sugP.length=="number")?
+					sugP:
+					new out.Polygon(
 						this.points[this.segments[segNum][0]],
 						this.points[this.segments[segNum][1]]
 					).findCenter(),
@@ -395,8 +395,8 @@
 		};
 		return s;
 	};
-	out.collisionDetectors["polygon"]={};
-	out.collisionDetectors["polygon"]["polygon"]=function(sh) {
+	out.collisionDetectors.polygon={};
+	out.collisionDetectors.polygon.polygon=function(sh) {
 		var ths=this.makeDup(),//make sure that the original ones aren't altered
 		sha=sh.makeDup();
 		//iterate through each segment on ths
@@ -411,8 +411,8 @@
 
 			if (thsRX==thsLX||innerR) {//for a vertical line |
 
-				ths.rotate(0,0,.01);
-				sha.rotate(0,0,.01);
+				ths.rotate(0,0,0.01);
+				sha.rotate(0,0,0.01);
 
 				/*this is so it tries this line (and all after it) again
 				 * without any lines with an infinite slope*/
@@ -434,10 +434,10 @@
 					shaRY=sha.points[segS[0]][1],
 					shaLY=sha.points[segS[1]][1];
 
-				if   (shaRX==thsRX
-					&&shaRY==thsRY
-					&&shaLX==thsLX
-					&&shaLY==thsLY)//lines are identical
+				if (shaRX==thsRX&&
+					shaRY==thsRY&&
+					shaLX==thsLX&&
+					shaLY==thsLY)//lines are identical
 						return retVal;
 
 				/* Below in this very hard to read code, I compare each end
@@ -524,7 +524,7 @@
 		}
 		return [];
 	};
-	out.collisionDetectors["polygon"]["circle"]=function(sh) {
+	out.collisionDetectors.polygon.circle=function(sh) {
 		//input: another Shape instance
 		var ths=this.makeDup(),//make sure that the original ones aren't altered
 			sha=sh.makeDup();
@@ -540,8 +540,8 @@
 
 			if (thsRX==thsLX||innerR) {//for a vertical line |
 
-				ths.rotate(0,0,.01);
-				sha.rotate(0,0,.01);
+				ths.rotate(0,0,0.01);
+				sha.rotate(0,0,0.01);
 
 				/*this is so it tries this line (and all after it) again
 					* without any lines with an infinite slope*/
@@ -590,13 +590,13 @@
 
 				var x_p =(((D*d_y)+
 						(Math.sign(d_y)*d_x*Math.sqrt(
-							(Math.pow(radius,2)*Math.pow(d_r,2))
-								-Math.pow(D,2)
+							(Math.pow(radius,2)*Math.pow(d_r,2))-
+								Math.pow(D,2)
 						)))/(Math.pow(d_r,2))),
 					x_p2=(((D*d_y)-
 						(Math.sign(d_y)*d_x*Math.sqrt(
-							(Math.pow(radius,2)*Math.pow(d_r,2))
-								-Math.pow(D,2)
+							(Math.pow(radius,2)*Math.pow(d_r,2))-
+								Math.pow(D,2)
 						)))/(Math.pow(d_r,2)));
 
 				if (!((thsRX <= x_p && x_p <= thsLX)||
@@ -609,8 +609,8 @@
 				var y_p =((-D*d_x)+
 							(Math.abs(d_y)*
 								Math.sqrt(
-									(Math.pow(radius,2)
-										*Math.pow(d_r,2))-
+									(Math.pow(radius,2)*
+										Math.pow(d_r,2))-
 									Math.pow(D,2)
 								)
 							)
@@ -618,8 +618,8 @@
 					y_p2=((-D*d_x)-
 							(Math.abs(d_y)*
 								Math.sqrt(
-									(Math.pow(radius,2)
-										*Math.pow(d_r,2))-
+									(Math.pow(radius,2)*
+										Math.pow(d_r,2))-
 									Math.pow(D,2)
 								)
 							)
@@ -637,24 +637,24 @@
 			}
 		}
 		return [];
-	}
+	};
 	out.RightTriangle=function(x,y,w,h) {
 		var p=new out.Polygon([x,y],[x+w,y],[x,y+h]);
 		p.__proto__.constructor=out.RightTriangle;
 		return p;
-	}
+	};
 	out.IsosolesRightTriangle=function(x,y,w) {
 		var r=new out.RightTriangle(x,y,w,w);
 		r.__proto__.constructor=out.IsosolesRightTriangle;
 		return r;
-	}
+	};
 	out.Rectagle=function(x,y,w,h) {
-		var p=new out.Polygon([x,y],[x+w,y],[x+w,y+h],[x,y+h])
+		var p=new out.Polygon([x,y],[x+w,y],[x+w,y+h],[x,y+h]);
 		p.__proto__.constructor=out.Rectagle;
 		return p;
 	};
 	out.Square=function(x,y,w) {
-		var r=new out.Rectagle(x,y,w,w)
+		var r=new out.Rectagle(x,y,w,w);
 		r.__proto__.constructor=out.Square;
 		return r;
 	};
@@ -667,7 +667,7 @@
 			thusFar++;
 		}
 		return out.Polygon.apply(this,points).transpose(x,y);
-	}
+	};
 	if (typeof window.ss=="undefined") window.ss=out;
 	if (typeof window.spudslices=="undefined") window.spudslices=out;
-})()
+})();
