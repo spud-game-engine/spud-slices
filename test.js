@@ -4,8 +4,6 @@ function claimArray(name,actual) {
 	test.todo("Make \""+name+"\" into a real test.");
 	test("The type of "+name,t => {
 		t.is(typeof actual,"object");
-	});
-	test("The type of "+name+".length",t => {
 		t.is(typeof actual.length,"number");
 	});
 }
@@ -34,11 +32,11 @@ claimArray("newShape.points",new ss.Shape().points);
 test("The type of newShape.pointColor",t => {
 	t.is(typeof new ss.Shape().pointColor,"string");
 });
-claimArray("newShape.pointColors",[new ss.Shape().pointColors]);
+claimArray("newShape.pointColors",new ss.Shape().pointColors);
 test("The type of newShape.pointSize",t => {
 	t.is(typeof new ss.Shape().pointSize,"number");
 });
-claimArray("newShape.segments",[new ss.Shape().segments]);
+claimArray("newShape.segments",new ss.Shape().segments);
 test("The type of newShape.segmentColor",t => {
 	t.is(typeof new ss.Shape().segmentColor,"string");
 });
