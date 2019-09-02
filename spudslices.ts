@@ -18,224 +18,257 @@ export function rawRotate(x:number,y:number,rad:number) {
 export function rotate (x: number,y: number,rad: number) {
 	return rawRotate(x,y,rad+findRot(x,y));
 };
-export function Shape() {
-	this.category="shape";//used for collisions
-	this.dimensions=2;
-	this.points=[];
-	this.pointColor="#ff0000";
-	this.pointColors=[];
-	this.pointSize=5;
-	this.segments=[];//points to points
-	this.segmentColor="#00ff00";
-	this.segmentColors=[];
-	this.segmentSize=3;
-	this.faces=[];//points to segments
-	this.faceColor="#0000ff";
-	this.faceColors=[];
-};
-Shape.prototype.constructor=Shape;
-Shape.prototype.drawOn=function(ctx: {
-	fillStyle: string;
-	beginPath: () => void;
-	arc: (arg0: number, arg1: number, arg2: number, arg3: number, arg4: number) => void;
-	fill: () => void;
-}) {
-	this.drawFacesOn(ctx);
-	this.drawSegmentsOn(ctx);
-	this.drawPointsOn(ctx);
-	return this;
-};
-Shape.prototype.drawPointsOn=function(ctx: {
-	fillStyle: string;
-	beginPath: () => void;
-	arc: (arg0: number, arg1: number, arg2: number, arg3: number, arg4: number) => void;
-	fill: () => void;
-}) {
-	ctx.fillStyle=this.pointColor;
-	ctx.beginPath();
-	for (var i=0; i<this.points.length; i++) {
-		if (typeof this.pointColors[i]=="string")
-			ctx.fillStyle=this.pointColors[i];
+class Shape {
+	category="shape";//used for collisions
+	dimensions=2;
+	points=[];
+	pointColor="#ff0000";
+	pointColors=[];
+	pointSize=5;
+	segments=[];//points to points
+	segmentColor="#00ff00";
+	segmentColors=[];
+	segmentSize=3;
+	faces=[];//points to segments
+	faceColor="#0000ff";
+	faceColors=[];
+	drawOn=function(ctx: {
+		fillStyle: string;
+		beginPath: () => void;
+		arc: (arg0: number, arg1: number, arg2: number, arg3: number, arg4: number) => void;
+		fill: () => void;
+	}) {
+		this.drawFacesOn(ctx);
+		this.drawSegmentsOn(ctx);
+		this.drawPointsOn(ctx);
+		return this;
+	};
+	drawPointsOn=function(ctx: {
+		fillStyle: string;
+		beginPath: () => void;
+		arc: (arg0: number, arg1: number, arg2: number, arg3: number, arg4: number) => void;
+		fill: () => void;
+	}) {
+		ctx.fillStyle=this.pointColor;
 		ctx.beginPath();
-		ctx.arc(this.points[i][0], this.points[i][1],
-			this.pointSize, 0, 2 * Math.PI);
-		ctx.fill();
-	}
-	//ctx.closePath();
-	return this;
-};
-Shape.prototype.drawSegmentsOn=function(ctx: {
-	strokeStyle: string;
-	lineWidth: number;
-	beginPath: () => void;
-	arc: (arg0: number, arg1: number, arg2: number, arg3: number, arg4: number) => void;
-	moveTo: { apply: (arg0: any, arg1: number) => void; };
-	lineTo: { apply: (arg0: any, arg1: number) => void; };
-	stroke: () => void;
-}) {
-	ctx.strokeStyle=this.segmentColor;
-	ctx.lineWidth=this.segmentSize;
-	ctx.beginPath();
-	for (var i=0; i<this.segments.length; i++) {
-		var seg=this.segments[i];
-		if (typeof this.segmentColors[i]=="string")
-			ctx.strokeStyle=this.segmentColors[i];
-		if (typeof this.points[seg[0]]=="number") {
-			ctx.arc(this.points[seg[1]][0], this.points[seg[1]][1],
-				this.points[seg[0]], 0, 2 * Math.PI);
-		}else{
-			ctx.moveTo.apply(ctx,this.points[seg[0]]);
-			ctx.lineTo.apply(ctx,this.points[seg[1]]);
+		for (var i=0; i<this.points.length; i++) {
+			if (typeof this.pointColors[i]=="string")
+				ctx.fillStyle=this.pointColors[i];
+			ctx.beginPath();
+			ctx.arc(this.points[i][0], this.points[i][1],
+				this.pointSize, 0, 2 * Math.PI);
+			ctx.fill();
 		}
-	}
-	//ctx.lineTo.apply(ctx,this.points[this.segments[0][1]]);
-	ctx.stroke();
-	//ctx.closePath();
-	return this;
-};
-Shape.prototype.drawFacesOn=function(ctx: {
-	fillStyle: string;
-	beginPath: () => void;
-	arc: (arg0: number, arg1: number, arg2: number, arg3: number, arg4: number) => void;
-	moveTo: { apply: (arg0: any, arg1: any) => void; };
-	lineTo: { apply: (arg0: any, arg1: any) => void; };
-	fill: () => void;
-}) {
-	ctx.fillStyle=this.faceColor;
-	ctx.beginPath();
-	for (var fac=0; fac<this.faces.length; fac++) {
-		for (var i=0; i<this.faces[fac].length; i++) {
-			if (typeof this.faceColors[fac]=="string")
-				ctx.fillStyle=this.faceColors[i];
-			var seg=this.segments[this.faces[fac][i]];
+		//ctx.closePath();
+		return this;
+	};
+	drawSegmentsOn=function(ctx: {
+		strokeStyle: string;
+		lineWidth: number;
+		beginPath: () => void;
+		arc: (arg0: number, arg1: number, arg2: number, arg3: number, arg4: number) => void;
+		moveTo: { apply: (arg0: any, arg1: number) => void; };
+		lineTo: { apply: (arg0: any, arg1: number) => void; };
+		stroke: () => void;
+	}) {
+		ctx.strokeStyle=this.segmentColor;
+		ctx.lineWidth=this.segmentSize;
+		ctx.beginPath();
+		for (var i=0; i<this.segments.length; i++) {
+			var seg=this.segments[i];
+			if (typeof this.segmentColors[i]=="string")
+				ctx.strokeStyle=this.segmentColors[i];
 			if (typeof this.points[seg[0]]=="number") {
 				ctx.arc(this.points[seg[1]][0], this.points[seg[1]][1],
 					this.points[seg[0]], 0, 2 * Math.PI);
 			}else{
-				if (i===0) ctx.moveTo.apply(ctx,this.points[seg[0]]);
+				ctx.moveTo.apply(ctx,this.points[seg[0]]);
 				ctx.lineTo.apply(ctx,this.points[seg[1]]);
 			}
 		}
-	}
-	ctx.fill();
-	//ctx.closePath();
-	return this;
-};
-Shape.prototype.transpose=function(x: number,y: number) {
-	for (var i=0; i<this.points.length; i++) {
-		if (typeof this.points[i]=="number") continue;
-		this.points[i][0]+=x;
-		this.points[i][1]+=y;
-	}
-	return this;
-};
-Shape.prototype.scale=function(x: number,y: number) {
-	if(typeof y==="undefined") y=x;
-	for(var i=0;i<this.points.length;i++) {
-		if (typeof this.points[i]=="number") {
-			this.points[i]*=((x+y)/2);
-			continue;
-		}
-		this.points[i][0]*=x;
-		this.points[i][1]*=y;
-	}
-	return this;
-};
-Shape.prototype.rotate=function(x: number,y: number,rad: number) {
-	this.transpose(-x,-y);//to Center
-	for (var i=0;i<this.points.length;i++) {
-		if (typeof this.points[i]=="number") continue;
-		this.points[i]=rotate(this.points[i][0],this.points[i][1],rad);
-	}
-	this.transpose(x,y);//from Center
-	return this;
-};
-Shape.prototype.roundPoints=function(otherF: {(x: number): number}) {
-	if (typeof otherF==="undefined") {
-		otherF=Math.round;
-	}
-	for (var i=0;i<this.points.length;i++) {
-		if (typeof this.points[i]=="number")
-			this.points[i]=otherF(this.points[i]);
-		for (var ii=0;ii<this.points[i].length;ii++)
-			this.points[i][ii]=otherF(this.points[i][ii]);
-	}
-	return this;
-};
-Shape.prototype.rotCenter=function(rad: number) {
-	var pos=this.findCenter();
-	return this.rotate(pos[0],pos[1],rad);
-};
-Shape.prototype.makeDup=function() {
-	var s=new this.__proto__.constructor();
-	for (var i in this) {
-		s[i]=this[i];
-	}
-	s.category=this.category;
-	s.points=[];
-	for (var iterator=0,ii: number; iterator<this.points.length;iterator++) {
-		if (typeof this.points[iterator]=="number") s.points[iterator]=this.points[iterator];
-		else {
-			s.points.push([]);
-			for (ii=0; ii<this.points[iterator].length; ii++) {
-				s.points[iterator][ii]=this.points[iterator][ii];
+		//ctx.lineTo.apply(ctx,this.points[this.segments[0][1]]);
+		ctx.stroke();
+		//ctx.closePath();
+		return this;
+	};
+	drawFacesOn=function(ctx: {
+		fillStyle: string;
+		beginPath: () => void;
+		arc: (arg0: number, arg1: number, arg2: number, arg3: number, arg4: number) => void;
+		moveTo: { apply: (arg0: any, arg1: any) => void; };
+		lineTo: { apply: (arg0: any, arg1: any) => void; };
+		fill: () => void;
+	}) {
+		ctx.fillStyle=this.faceColor;
+		ctx.beginPath();
+		for (var fac=0; fac<this.faces.length; fac++) {
+			for (var i=0; i<this.faces[fac].length; i++) {
+				if (typeof this.faceColors[fac]=="string")
+					ctx.fillStyle=this.faceColors[i];
+				var seg=this.segments[this.faces[fac][i]];
+				if (typeof this.points[seg[0]]=="number") {
+					ctx.arc(this.points[seg[1]][0], this.points[seg[1]][1],
+						this.points[seg[0]], 0, 2 * Math.PI);
+				}else{
+					if (i===0) ctx.moveTo.apply(ctx,this.points[seg[0]]);
+					ctx.lineTo.apply(ctx,this.points[seg[1]]);
+				}
 			}
 		}
-	}
-	s.pointColor=this.pointColor+"";
-	s.pointColors=[];
-	for (iterator=0; iterator<this.pointColors.length;iterator++) {
-		if (typeof this.pointColors[iterator]=="number") s.pointColors[iterator]=this.pointColors[iterator];
-		else {
-			s.pointColors.push([]);
-			for (ii=0;ii< this.pointColors[iterator].length; ii++) {
-				s.pointColors[iterator][ii]=this.pointColors[iterator][ii];
+		ctx.fill();
+		//ctx.closePath();
+		return this;
+	};
+	transpose=function(x: number,y: number) {
+		for (var i=0; i<this.points.length; i++) {
+			if (typeof this.points[i]=="number") continue;
+			this.points[i][0]+=x;
+			this.points[i][1]+=y;
+		}
+		return this;
+	};
+	scale=function(x: number,y: number) {
+		if(typeof y==="undefined") y=x;
+		for(var i=0;i<this.points.length;i++) {
+			if (typeof this.points[i]=="number") {
+				this.points[i]*=((x+y)/2);
+				continue;
+			}
+			this.points[i][0]*=x;
+			this.points[i][1]*=y;
+		}
+		return this;
+	};
+	rotate=function(x: number,y: number,rad: number) {
+		this.transpose(-x,-y);//to Center
+		for (var i=0;i<this.points.length;i++) {
+			if (typeof this.points[i]=="number") continue;
+			this.points[i]=rotate(this.points[i][0],this.points[i][1],rad);
+		}
+		this.transpose(x,y);//from Center
+		return this;
+	};
+	roundPoints=function(otherF: {(x: number): number}) {
+		if (typeof otherF==="undefined") {
+			otherF=Math.round;
+		}
+		for (var i=0;i<this.points.length;i++) {
+			if (typeof this.points[i]=="number")
+				this.points[i]=otherF(this.points[i]);
+			for (var ii=0;ii<this.points[i].length;ii++)
+				this.points[i][ii]=otherF(this.points[i][ii]);
+		}
+		return this;
+	};
+	rotCenter=function(rad: number) {
+		var pos=this.findCenter();
+		return this.rotate(pos[0],pos[1],rad);
+	};
+	makeDup=function() {
+		var s=new this.__proto__.constructor();
+		for (var i in this) {
+			s[i]=this[i];
+		}
+		s.category=this.category;
+		s.points=[];
+		for (var iterator=0,ii: number; iterator<this.points.length;iterator++) {
+			if (typeof this.points[iterator]=="number") s.points[iterator]=this.points[iterator];
+			else {
+				s.points.push([]);
+				for (ii=0; ii<this.points[iterator].length; ii++) {
+					s.points[iterator][ii]=this.points[iterator][ii];
+				}
 			}
 		}
-	}
-	s.segments=[];
-	for (iterator=0; iterator<this.segments.length;iterator++) {
-		if (typeof this.segments[iterator]=="number") s.segments[iterator]=this.segments[iterator];
-		else {
-			s.segments.push([]);
-			for (ii=0;ii< this.segments[iterator].length; ii++) {
-				s.segments[iterator][ii]=this.segments[iterator][ii];
+		s.pointColor=this.pointColor+"";
+		s.pointColors=[];
+		for (iterator=0; iterator<this.pointColors.length;iterator++) {
+			if (typeof this.pointColors[iterator]=="number") s.pointColors[iterator]=this.pointColors[iterator];
+			else {
+				s.pointColors.push([]);
+				for (ii=0;ii< this.pointColors[iterator].length; ii++) {
+					s.pointColors[iterator][ii]=this.pointColors[iterator][ii];
+				}
 			}
 		}
-	}
-	s.segmentColor=this.segmentColor+"";
-	s.segmentColors=[];
-	for (iterator=0; iterator<this.segmentColors.length;iterator++) {
-		if (typeof this.segmentColors[iterator]=="number") s.segmentColors[iterator]=this.segmentColors[iterator];
-		else {
-			s.segmentColors.push([]);
-			for (ii=0;ii< this.segmentColors[iterator].length; ii++) {
-				s.segmentColors[iterator][ii]=this.segmentColors[iterator][ii];
+		s.segments=[];
+		for (iterator=0; iterator<this.segments.length;iterator++) {
+			if (typeof this.segments[iterator]=="number") s.segments[iterator]=this.segments[iterator];
+			else {
+				s.segments.push([]);
+				for (ii=0;ii< this.segments[iterator].length; ii++) {
+					s.segments[iterator][ii]=this.segments[iterator][ii];
+				}
 			}
 		}
-	}
-	s.faces=[];
-	for (iterator=0; iterator<this.faces.length;iterator++) {
-		if (typeof this.faces[iterator]=="number") s.faces[iterator]=this.faces[iterator];
-		else{
-			s.faces.push([]);
-			for (ii=0;ii< this.faces[iterator].length; ii++) {
-				s.faces[iterator][ii]=this.faces[iterator][ii];
+		s.segmentColor=this.segmentColor+"";
+		s.segmentColors=[];
+		for (iterator=0; iterator<this.segmentColors.length;iterator++) {
+			if (typeof this.segmentColors[iterator]=="number") s.segmentColors[iterator]=this.segmentColors[iterator];
+			else {
+				s.segmentColors.push([]);
+				for (ii=0;ii< this.segmentColors[iterator].length; ii++) {
+					s.segmentColors[iterator][ii]=this.segmentColors[iterator][ii];
+				}
 			}
 		}
-	}
-	s.faceColor=this.faceColor+"";
-	s.faceColors=[];
-	for (iterator=0; iterator<this.faceColors.length;iterator++) {
-		if (typeof this.faceColors[iterator]=="number") s.faceColors[iterator]=this.faceColors[iterator];
-		else {
-			s.faceColors.push([]);
-			for (ii=0;ii< this.faceColors[iterator].length; ii++) {
-				s.faceColors[iterator][ii]=this.faceColors[iterator][ii];
+		s.faces=[];
+		for (iterator=0; iterator<this.faces.length;iterator++) {
+			if (typeof this.faces[iterator]=="number") s.faces[iterator]=this.faces[iterator];
+			else{
+				s.faces.push([]);
+				for (ii=0;ii< this.faces[iterator].length; ii++) {
+					s.faces[iterator][ii]=this.faces[iterator][ii];
+				}
 			}
 		}
-	}
-	return s;
+		s.faceColor=this.faceColor+"";
+		s.faceColors=[];
+		for (iterator=0; iterator<this.faceColors.length;iterator++) {
+			if (typeof this.faceColors[iterator]=="number") s.faceColors[iterator]=this.faceColors[iterator];
+			else {
+				s.faceColors.push([]);
+				for (ii=0;ii< this.faceColors[iterator].length; ii++) {
+					s.faceColors[iterator][ii]=this.faceColors[iterator][ii];
+				}
+			}
+		}
+		return s;
+	};
+	collisionWith=function(sh: { category: string; }) {
+		/*
+		 * Search for the shape category `Shape.category` of both, then run the
+		 * other's function if it can be found. If not, run this one's.
+		 *
+		 * Why? Because I want it to be possible to override one if you really
+		 * wanted to. This should make it easier.  -- NOTE: NOT ACTUALY HAPPENING RN!
+		 */
+		//input: another Shape instance
+		if (typeof collisionDetectors[this.category]!=="undefined"&&
+			typeof collisionDetectors[this.category][sh.category]!==
+				"undefined") {
+			return collisionDetectors[this.category]
+				[sh.category].call(this,sh);
+		}else if (typeof collisionDetectors[sh.category]!=="undefined"&&
+			typeof collisionDetectors[sh.category][this.category]!==
+				"undefined") {
+			var tmp=collisionDetectors[sh.category]
+				[this.category].call(sh,this);
+			if (tmp.length===0) return [];
+			else return [tmp[1],tmp[0]];
+		}else throw "Could not find shape collision detector for a \""+
+			this.category+"\"-\""+sh.category+"\" collision.";
+	};
+	findCenter=function() {
+		var center=new Array(this.dimensions);
+		for (var dem=0;dem<this.dimensions;dem++) {
+			for (var pointi=0,avrge=0;pointi<this.points.length;pointi++) {
+				avrge+=this.points[pointi][dem];
+			}
+			center[dem]=avrge/this.points.length;
+		}
+		return center;
+	};
 };
 //An object that follows the template below in structure. Handles all cases.
 export var collisionDetectors = {
@@ -250,46 +283,23 @@ export var collisionDetectors = {
 	}
 	*/
 };
-Shape.prototype.collisionWith=function(sh: { category: string; }) {
-	/*
-	 * Search for the shape category `Shape.category` of both, then run the
-	 * other's function if it can be found. If not, run this one's.
-	 *
-	 * Why? Because I want it to be possible to override one if you really
-	 * wanted to. This should make it easier.  -- NOTE: NOT ACTUALY HAPPENING RN!
-	 */
-	//input: another Shape instance
-	if (typeof collisionDetectors[this.category]!=="undefined"&&
-		typeof collisionDetectors[this.category][sh.category]!==
-			"undefined") {
-		return collisionDetectors[this.category]
-			[sh.category].call(this,sh);
-	}else if (typeof collisionDetectors[sh.category]!=="undefined"&&
-		typeof collisionDetectors[sh.category][this.category]!==
-			"undefined") {
-		var tmp=collisionDetectors[sh.category]
-			[this.category].call(sh,this);
-		if (tmp.length===0) return [];
-		else return [tmp[1],tmp[0]];
-	}else throw "Could not find shape collision detector for a \""+
-		this.category+"\"-\""+sh.category+"\" collision.";
-};
-export function Circle(x: number,y: number,r: number) {
-	var s=new Shape();
-	s.category="circle";
-	s.points[0]=r;
-	s.points[1]=[x,y];
-	s.segments[0]=[0,1];
-	s.faces[0]=[0];
-	s.findCenter=function() {
+export class Circle extends Shape{
+	constructor(public x:number,public y:number,public r:number) {
+		super();
+		this.category="circle";
+		this.points[0]=r;
+		this.points[1]=[x,y];
+		this.segments[0]=[0,1];
+		this.faces[0]=[0];
+	}
+	findCenter=function() {
 		return this.points[1];
 	};
-	return s;
-};
+}
 collisionDetectors["circle"]={};
-collisionDetectors["circle"].circle=function(sh: { makeDup: () => void; points: { [x: string]: any; }; }) {
-	let ths=this.makeDup(),//make sure that the original ones aren't altered
-	sha:any=sh.makeDup();
+collisionDetectors["circle"].circle=function(sh: Circle) {
+	let ths:Circle=this.makeDup(),//make sure that the original ones aren't altered
+		sha:Circle=sh.makeDup();
 	//iterate through each segment on ths
 	for (var thsPt=0;thsPt<ths.segments.length;thsPt++) {
 		//variables must be declared here so they are properly global
@@ -314,19 +324,20 @@ collisionDetectors["circle"].circle=function(sh: { makeDup: () => void; points: 
 	}
 	return [];
 };
-export function Polygon(...args: any[]) {
-	var s=new Shape();
-	s.category="polygon";
-	s.faces[0]=[];
-	for (var i=0; i<arguments.length; i++) {
-		s.points.push(arguments[i]);
-		if (i>0) {
-			s.segments.push([i-1,i]);
-		}else s.segments.push([arguments.length-1,i]);
-		s.faces[0].push(i);
+export class Polygon extends Shape {
+	constructor(...args: any[]) {
+		super();
+		this.category="polygon";
+		this.faces[0]=[];
+		for (var i=0; i<arguments.length; i++) {
+			this.points.push(arguments[i]);
+			if (i>0) {
+				this.segments.push([i-1,i]);
+			}else this.segments.push([arguments.length-1,i]);
+			this.faces[0].push(i);
+		}
 	}
-	s.__proto__.constructor=Polygon;
-	s.__proto__.convertToTriangles=function() {
+	convertToTriangles=function() {
 		//throw "Doesn't work in typescript.";
 		if (this.points.length==3) {//Don't you just love it when your code is a readable sentence?
 			console.warn(this,"is already a triangle!");
@@ -335,12 +346,12 @@ export function Polygon(...args: any[]) {
 		var out=[],
 			center=this.findCenter();
 		for (var i=0; i<this.segments.length; i++) {
-			out[i]=Polygon(this.points[this.segments[i][0]],
+			out[i]=new Polygon(this.points[this.segments[i][0]],
 				this.points[this.segments[i][1]],center);
 		}
 		return out;
 	};
-	s.__proto__.joinSegments=function(segA: number,segB: number) {//lol sega
+	joinSegments=function(segA: number,segB: number) {//lol sega
 		if (typeof this.segments[segA]==="undefined"||
 			typeof this.segments[segB]==="undefined") {
 			console.warn("Segments not found!");
@@ -374,13 +385,13 @@ export function Polygon(...args: any[]) {
 		//if (rm>=0) this.faces=this.faces.slice(0,rm).concat(this.faces.slice(rm+1));
 		return this;
 	};
-	s.__proto__.splitSegment=function(
-			segNum: number,//Index of segment to be replaced
-			sugP: { length: number; },//(optional) location of new point
-			color: boolean) {
+	splitSegment=function(
+		segNum: number,//Index of segment to be replaced
+		sugP: { length: number; },//(optional) location of new point
+		color: boolean) {
 		var npoint=(typeof sugP!="undefined"&&typeof sugP.length=="number")?
 				sugP:
-				Polygon(
+				new Polygon(
 					this.points[this.segments[segNum][0]],
 					this.points[this.segments[segNum][1]]
 				).findCenter(),
@@ -407,22 +418,11 @@ export function Polygon(...args: any[]) {
 		this.faces[0].push(this.faces[0].length);
 		return this;
 	};
-	s.__proto__.findCenter=function() {
-		var center=new Array(this.dimensions);
-		for (var dem=0;dem<this.dimensions;dem++) {
-			for (var pointi=0,avrge=0;pointi<this.points.length;pointi++) {
-				avrge+=this.points[pointi][dem];
-			}
-			center[dem]=avrge/this.points.length;
-		}
-		return center;
-	};
-	return s;
-};
+}
 collisionDetectors["polygon"]={};
-collisionDetectors["polygon"].polygon=function(sh: {makeDup: () => void; points: { [x: string]: any; }; }) {
-	var ths=this.makeDup(),//make sure that the original ones aren't altered
-	sha:any=sh.makeDup();
+collisionDetectors["polygon"].polygon=function(sh: Polygon) {
+	var ths:Polygon=this.makeDup(),//make sure that the original ones aren't altered
+		sha:Polygon=sh.makeDup();
 	//iterate through each segment on ths
 	for (var thsPt=0;thsPt<ths.segments.length;thsPt++) {
 		//variables must be declared here so they are properly global
@@ -548,10 +548,10 @@ collisionDetectors["polygon"].polygon=function(sh: {makeDup: () => void; points:
 	}
 	return [];
 };
-collisionDetectors["polygon"].circle=function(sh: { makeDup: () => void; points: { [x: string]: any; }; }) {
+collisionDetectors["polygon"].circle=function(sh: Circle) {
 	//input: another Shape instance
-	var ths=this.makeDup(),//make sure that the original ones aren't altered
-		sha:any=sh.makeDup();
+	var ths:Polygon=this.makeDup(),//make sure that the original ones aren't altered
+		sha:Circle=sh.makeDup();
 	//Sha is Circle, ths is Line
 	//iterate through each segment on ths
 	for (var thsPt=0;thsPt<ths.segments.length;thsPt++) {
@@ -662,33 +662,36 @@ collisionDetectors["polygon"].circle=function(sh: { makeDup: () => void; points:
 	}
 	return [];
 };
-export function RightTriangle(x: number,y: number,w: number,h:number) {
-	var p=Polygon([x,y],[x+w,y],[x,y+h]);
-	p.__proto__.constructor=RightTriangle;
-	return p;
-};
-export function IsosolesRightTriangle(x: number,y: number,w: number) {
-	var r=RightTriangle(x,y,w,w);
-	r.__proto__.constructor=IsosolesRightTriangle;
-	return r;
-};
-export function Rectagle(x:number,y:number,w:number,h:number) {
-	var p=Polygon([x,y],[x+w,y],[x+w,y+h],[x,y+h]);
-	p.__proto__.constructor=Rectagle;
-	return p;
-};
-export function Square(x: number,y: number,w: number) {
-	var r=Rectagle(x,y,w,w);
-	r.__proto__.constructor=Square;
-	return r;
-};
-export function EqualDistShape(x: number,y: number,sideCount: number,radius: number) {
-	var points=[],
-		amountPer=(Math.PI*2)/sideCount,
-		thusFar=0;
-	while (thusFar<sideCount) {
-		points.push(rotate(radius,0,thusFar*amountPer));
-		thusFar++;
+export class RightTriangle extends Polygon {
+	constructor(x: number,y: number,w: number,h:number) {
+		super([x,y],[x+w,y],[x,y+h]);
 	}
-	return Polygon.apply(this,points).transpose(x,y);
+}
+export class IsosolesRightTriangle extends RightTriangle{
+	constructor(x: number,y: number,w: number) {
+		super(x,y,w,w);
+	}
+};
+export class Rectagle extends Polygon {
+	constructor(x:number,y:number,w:number,h:number) {
+		super([x,y],[x+w,y],[x+w,y+h],[x,y+h]);
+	}
+};
+export class Square extends Rectagle {
+	constructor(x: number,y: number,w: number) {
+		super(x,y,w,w);
+	}
+};
+export class EqualDistShape extends Polygon {
+	constructor(x: number,y: number,sideCount: number,radius: number) {
+		var points=[],
+			amountPer=(Math.PI*2)/sideCount,
+			thusFar=0;
+		while (thusFar<sideCount) {
+			points.push(rotate(radius,0,thusFar*amountPer));
+			thusFar++;
+		}
+		super(...points);
+		this.transpose(x,y);
+	}
 };
