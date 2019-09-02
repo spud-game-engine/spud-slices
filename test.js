@@ -1,12 +1,5 @@
 import test from 'ava';
 var ss=require('./spudslices');
-function claimArray(name,actual) {
-	test.todo("Make \""+name+"\" into a real test.");
-	test("The type of "+name,t => {
-		t.is(typeof actual,"object");
-		t.is(typeof actual.length,"number");
-	});
-}
 test("The distance of (0,1) from the origin",t => {
 	t.is(ss.distance(0,1),1);
 });
@@ -28,27 +21,45 @@ test("The type of newShape.dimensions",t => {
 test("The type of newShape.category",t => {
 	t.is(typeof new ss.Shape().category,"string");
 });
-claimArray("newShape.points",new ss.Shape().points);
+test("The type of newShape.points",t => {
+	t.is(typeof new ss.Shape().points,"object");
+	t.is(typeof new ss.Shape().points.length,"number");
+});
 test("The type of newShape.pointColor",t => {
 	t.is(typeof new ss.Shape().pointColor,"string");
 });
-claimArray("newShape.pointColors",new ss.Shape().pointColors);
+test("The type of newShape.pointColors",t => {
+	t.is(typeof new ss.Shape().pointColors,"object");
+	t.is(typeof new ss.Shape().pointColors.length,"number");
+});
 test("The type of newShape.pointSize",t => {
 	t.is(typeof new ss.Shape().pointSize,"number");
 });
-claimArray("newShape.segments",new ss.Shape().segments);
+test("The type of newShape.segments",t => {
+	t.is(typeof new ss.Shape().segments,"object");
+	t.is(typeof new ss.Shape().segments.length,"number");
+});
 test("The type of newShape.segmentColor",t => {
 	t.is(typeof new ss.Shape().segmentColor,"string");
 });
-claimArray("newShape.segmentColors",new ss.Shape().segmentColors);
+test("The type of newShape.segmentColors",t => {
+	t.is(typeof new ss.Shape().segmentColors,"object");
+	t.is(typeof new ss.Shape().segmentColors.length,"number");
+});
 test("The type of newShape.segmentSize",t => {
 	t.is(typeof new ss.Shape().segmentSize,"number");
 });
-claimArray("newShape.faces",new ss.Shape().faces);
+test("The type of newShape.faces",t => {
+	t.is(typeof new ss.Shape().faces,"object");
+	t.is(typeof new ss.Shape().faces.length,"number");
+});
 test("The type of newShape.faceColor",t => {
 	t.is(typeof new ss.Shape().faceColor,"string");
 });
-claimArray("newShape.facesColors",new ss.Shape().faceColors);
+test("The type of newShape.faceColors",t => {
+	t.is(typeof new ss.Shape().faceColors,"object");
+	t.is(typeof new ss.Shape().faceColors.length,"number");
+});
 test.skip("The constructor for shape",t => {
 	t.is(ss.Shape,ss.Shape.prototype.constructor);
 });
