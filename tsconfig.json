@@ -5,7 +5,8 @@
     "outDir": "."
   },
   "include": [
-      "spudslices.ts"
+      "spudslices.ts",
+      "test.ts"
   ],
   "exclude":[]
 }

@@ -28,5 +28,6 @@ build/Release
 node_modules
 
 spudslices.js
+test.js
 
 *.swp
