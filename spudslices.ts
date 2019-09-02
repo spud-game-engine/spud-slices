@@ -1,21 +1,21 @@
 export function distance(x:number,y:number) {
 	return Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
 };
-export function findRot(x,y) {
+export function findRot(x:number,y:number) {
 	var dist=distance(x,y),
 		pos=[x/dist,
 			y/dist];
 	if(pos[1]<0) return(2*Math.PI)-Math.acos(pos[0]);//if it is > pi radians
 	return Math.acos(pos[0]);
 };
-export function rawRotate(x,y,rad) {
+export function rawRotate(x:number,y:number,rad:number) {
 	var dist=distance(x,y);
 	return [
 		dist*(Math.cos(rad)),
 		dist*(Math.sin(rad)),
 	];
 };
-export function rotate (x,y,rad) {
+export function rotate (x: number,y: number,rad: number) {
 	return rawRotate(x,y,rad+findRot(x,y));
 };
 export function Shape() {
@@ -34,13 +34,23 @@ export function Shape() {
 	this.faceColors=[];
 };
 Shape.prototype.constructor=Shape;
-Shape.prototype.drawOn=function(ctx) {
+Shape.prototype.drawOn=function(ctx: {
+	fillStyle: string;
+	beginPath: () => void;
+	arc: (arg0: number, arg1: number, arg2: number, arg3: number, arg4: number) => void;
+	fill: () => void;
+}) {
 	this.drawFacesOn(ctx);
 	this.drawSegmentsOn(ctx);
 	this.drawPointsOn(ctx);
 	return this;
 };
-Shape.prototype.drawPointsOn=function(ctx) {
+Shape.prototype.drawPointsOn=function(ctx: {
+	fillStyle: string;
+	beginPath: () => void;
+	arc: (arg0: number, arg1: number, arg2: number, arg3: number, arg4: number) => void;
+	fill: () => void;
+}) {
 	ctx.fillStyle=this.pointColor;
 	ctx.beginPath();
 	for (var i=0; i<this.points.length; i++) {
@@ -54,7 +64,15 @@ Shape.prototype.drawPointsOn=function(ctx) {
 	//ctx.closePath();
 	return this;
 };
-Shape.prototype.drawSegmentsOn=function(ctx) {
+Shape.prototype.drawSegmentsOn=function(ctx: {
+	strokeStyle: string;
+	lineWidth: number;
+	beginPath: () => void;
+	arc: (arg0: number, arg1: number, arg2: number, arg3: number, arg4: number) => void;
+	moveTo: { apply: (arg0: any, arg1: number) => void; };
+	lineTo: { apply: (arg0: any, arg1: number) => void; };
+	stroke: () => void;
+}) {
 	ctx.strokeStyle=this.segmentColor;
 	ctx.lineWidth=this.segmentSize;
 	ctx.beginPath();
@@ -75,7 +93,14 @@ Shape.prototype.drawSegmentsOn=function(ctx) {
 	//ctx.closePath();
 	return this;
 };
-Shape.prototype.drawFacesOn=function(ctx) {
+Shape.prototype.drawFacesOn=function(ctx: {
+	fillStyle: string;
+	beginPath: () => void;
+	arc: (arg0: number, arg1: number, arg2: number, arg3: number, arg4: number) => void;
+	moveTo: { apply: (arg0: any, arg1: any) => void; };
+	lineTo: { apply: (arg0: any, arg1: any) => void; };
+	fill: () => void;
+}) {
 	ctx.fillStyle=this.faceColor;
 	ctx.beginPath();
 	for (var fac=0; fac<this.faces.length; fac++) {
@@ -96,7 +121,7 @@ Shape.prototype.drawFacesOn=function(ctx) {
 	//ctx.closePath();
 	return this;
 };
-Shape.prototype.transpose=function(x,y) {
+Shape.prototype.transpose=function(x: number,y: number) {
 	for (var i=0; i<this.points.length; i++) {
 		if (typeof this.points[i]=="number") continue;
 		this.points[i][0]+=x;
@@ -104,7 +129,7 @@ Shape.prototype.transpose=function(x,y) {
 	}
 	return this;
 };
-Shape.prototype.scale=function(x,y) {
+Shape.prototype.scale=function(x: number,y: number) {
 	if(typeof y==="undefined") y=x;
 	for(var i=0;i<this.points.length;i++) {
 		if (typeof this.points[i]=="number") {
@@ -116,7 +141,7 @@ Shape.prototype.scale=function(x,y) {
 	}
 	return this;
 };
-Shape.prototype.rotate=function(x,y,rad) {
+Shape.prototype.rotate=function(x: number,y: number,rad: number) {
 	this.transpose(-x,-y);//to Center
 	for (var i=0;i<this.points.length;i++) {
 		if (typeof this.points[i]=="number") continue;
@@ -125,7 +150,7 @@ Shape.prototype.rotate=function(x,y,rad) {
 	this.transpose(x,y);//from Center
 	return this;
 };
-Shape.prototype.roundPoints=function(otherF) {
+Shape.prototype.roundPoints=function(otherF: {(x: number): number}) {
 	if (typeof otherF==="undefined") {
 		otherF=Math.round;
 	}
@@ -137,7 +162,7 @@ Shape.prototype.roundPoints=function(otherF) {
 	}
 	return this;
 };
-Shape.prototype.rotCenter=function(rad) {
+Shape.prototype.rotCenter=function(rad: number) {
 	var pos=this.findCenter();
 	return this.rotate(pos[0],pos[1],rad);
 };
@@ -148,7 +173,7 @@ Shape.prototype.makeDup=function() {
 	}
 	s.category=this.category;
 	s.points=[];
-	for (var iterator=0,ii; iterator<this.points.length;iterator++) {
+	for (var iterator=0,ii: number; iterator<this.points.length;iterator++) {
 		if (typeof this.points[iterator]=="number") s.points[iterator]=this.points[iterator];
 		else {
 			s.points.push([]);
@@ -225,7 +250,7 @@ export var collisionDetectors = {
 	}
 	*/
 };
-Shape.prototype.collisionWith=function(sh) {
+Shape.prototype.collisionWith=function(sh: { category: string; }) {
 	/*
 	 * Search for the shape category `Shape.category` of both, then run the
 	 * other's function if it can be found. If not, run this one's.
@@ -249,7 +274,7 @@ Shape.prototype.collisionWith=function(sh) {
 	}else throw "Could not find shape collision detector for a \""+
 		this.category+"\"-\""+sh.category+"\" collision.";
 };
-export function Circle(x,y,r) {
+export function Circle(x: number,y: number,r: number) {
 	var s=new Shape();
 	s.category="circle";
 	s.points[0]=r;
@@ -262,9 +287,9 @@ export function Circle(x,y,r) {
 	return s;
 };
 collisionDetectors["circle"]={};
-collisionDetectors["circle"].circle=function(sh) {
-	var ths=this.makeDup(),//make sure that the original ones aren't altered
-	sha=sh.makeDup();
+collisionDetectors["circle"].circle=function(sh: { makeDup: () => void; points: { [x: string]: any; }; }) {
+	let ths=this.makeDup(),//make sure that the original ones aren't altered
+	sha:any=sh.makeDup();
 	//iterate through each segment on ths
 	for (var thsPt=0;thsPt<ths.segments.length;thsPt++) {
 		//variables must be declared here so they are properly global
@@ -315,7 +340,7 @@ export function Polygon(...args: any[]) {
 		}
 		return out;
 	};
-	s.__proto__.joinSegments=function(segA,segB) {//lol sega
+	s.__proto__.joinSegments=function(segA: number,segB: number) {//lol sega
 		if (typeof this.segments[segA]==="undefined"||
 			typeof this.segments[segB]==="undefined") {
 			console.warn("Segments not found!");
@@ -350,9 +375,9 @@ export function Polygon(...args: any[]) {
 		return this;
 	};
 	s.__proto__.splitSegment=function(
-			segNum,//Index of segment to be replaced
-			sugP,//(optional) location of new point
-			color) {
+			segNum: number,//Index of segment to be replaced
+			sugP: { length: number; },//(optional) location of new point
+			color: boolean) {
 		var npoint=(typeof sugP!="undefined"&&typeof sugP.length=="number")?
 				sugP:
 				Polygon(
@@ -395,9 +420,9 @@ export function Polygon(...args: any[]) {
 	return s;
 };
 collisionDetectors["polygon"]={};
-collisionDetectors["polygon"].polygon=function(sh) {
+collisionDetectors["polygon"].polygon=function(sh: {makeDup: () => void; points: { [x: string]: any; }; }) {
 	var ths=this.makeDup(),//make sure that the original ones aren't altered
-	sha=sh.makeDup();
+	sha:any=sh.makeDup();
 	//iterate through each segment on ths
 	for (var thsPt=0;thsPt<ths.segments.length;thsPt++) {
 		//variables must be declared here so they are properly global
@@ -523,10 +548,10 @@ collisionDetectors["polygon"].polygon=function(sh) {
 	}
 	return [];
 };
-collisionDetectors["polygon"].circle=function(sh) {
+collisionDetectors["polygon"].circle=function(sh: { makeDup: () => void; points: { [x: string]: any; }; }) {
 	//input: another Shape instance
 	var ths=this.makeDup(),//make sure that the original ones aren't altered
-		sha=sh.makeDup();
+		sha:any=sh.makeDup();
 	//Sha is Circle, ths is Line
 	//iterate through each segment on ths
 	for (var thsPt=0;thsPt<ths.segments.length;thsPt++) {
@@ -637,27 +662,27 @@ collisionDetectors["polygon"].circle=function(sh) {
 	}
 	return [];
 };
-export function RightTriangle(x,y,w,h) {
+export function RightTriangle(x: number,y: number,w: number,h:number) {
 	var p=Polygon([x,y],[x+w,y],[x,y+h]);
 	p.__proto__.constructor=RightTriangle;
 	return p;
 };
-export function IsosolesRightTriangle(x,y,w) {
+export function IsosolesRightTriangle(x: number,y: number,w: number) {
 	var r=RightTriangle(x,y,w,w);
 	r.__proto__.constructor=IsosolesRightTriangle;
 	return r;
 };
-export function Rectagle(x,y,w,h) {
+export function Rectagle(x:number,y:number,w:number,h:number) {
 	var p=Polygon([x,y],[x+w,y],[x+w,y+h],[x,y+h]);
 	p.__proto__.constructor=Rectagle;
 	return p;
 };
-export function Square(x,y,w) {
+export function Square(x: number,y: number,w: number) {
 	var r=Rectagle(x,y,w,w);
 	r.__proto__.constructor=Square;
 	return r;
 };
-export function EqualDistShape(x,y,sideCount,radius) {
+export function EqualDistShape(x: number,y: number,sideCount: number,radius: number) {
 	var points=[],
 		amountPer=(Math.PI*2)/sideCount,
 		thusFar=0;
