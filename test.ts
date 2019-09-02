@@ -1,13 +1,13 @@
 import test from 'ava';
 var ss=require('./spudslices');
-function passiveDeepEqual(t) {
-	return function re(a,b,ranAlready,deepnes) {
+function passiveDeepEqual(t:{is:(A:any,B:any)=>any}) {
+	return function re(a:any,b:any,ranAlready?: boolean,deepnes?: number) {
 		var ne={message:"Not equal (type conflict, depth "+deepnes+")"};
 		for(let i in a) {
 			if (typeof a[i]==="function"&&
 				typeof b[i]==="function") continue;
 			if (typeof a[i]!==typeof b[i]) throw ne;
-			if (typeof a[i]==="object") re(a[i],b[i],deepnes+1);
+			if (typeof a[i]==="object") re(a[i],b[i],false,deepnes+1);
 			else t.is(a[i],b[i]);
 		}
 		if (!ranAlready) re(b,a,true,deepnes);
