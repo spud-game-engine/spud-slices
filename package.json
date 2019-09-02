@@ -4,7 +4,8 @@
   "description": "The library that lets you make shapes. Part of the Spud Game Engine.",
   "main": "spudslices.js",
   "scripts": {
-    "test": "ava"
+    "test": "ava",
+    "watch:test": "ava"
   },
   "author": "Lazerbeak12345",
   "license": "GPL-3.0",

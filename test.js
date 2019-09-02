@@ -60,11 +60,16 @@ test("The type of newShape.faceColors",t => {
 	t.is(typeof new ss.Shape().faceColors,"object");
 	t.is(typeof new ss.Shape().faceColors.length,"number");
 });
-test.skip("The constructor for shape",t => {
-	t.is(ss.Shape,ss.Shape.prototype.constructor);
+//Both of these skipped tests relate to how `__proto__` and `prototype` work. It's really a hassle.
+test("The constructor for shape",t => {
+	if (typeof ss.Shape.prototype!=="undefined") {
+		t.is(ss.Shape,ss.Shape.prototype.constructor);
+	}else if (typeof ss.Shape.__proto__!=="undefined") {
+		t.is(ss.Shape,ss.Shape.__proto__.constructor);
+	}else t.is(ss.Shape,ss.Shape.constructor);
 });
 test.skip("The return of makeDup",t => {
-	var a=new ss.Polygon(10,20,93);
+	var a=new ss.Polygon([10,20],[93,23],[23,93]);
 	t.deepEqual(a.makeDup(),a);
 });
 test("polygon.category",t => {
