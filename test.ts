@@ -81,9 +81,9 @@ test("The constructor for shape",t => {
 		t.is(ss.Shape,ss.Shape.__proto__.constructor);
 	}else t.is(ss.Shape,ss.Shape.constructor);
 });
-test.skip("The return of makeDup",t => {
+test("The return of makeDup",t => {
 	var a=new ss.Polygon([10,20],[93,23],[23,93]);
-	t.deepEqual(a.makeDup(),a);
+	passiveDeepEqual(t)(a.makeDup(),a);
 });
 test("polygon.category",t => {
 	var a=new ss.Polygon(10,20,93);
