@@ -1,14 +1,16 @@
-/*{
+{
   "compilerOptions": {
-    "target": "es5",
+    "target": "es3",
     "allowJs": true,
-    "outDir": "./built"
+    "outDir": "."
   },
-  "include": [*/
-      //"./src/**/*"
-	/*]
-	}*/
+  "include": [
+      "spudslices.ts"
+  ],
+  "exclude":[]
+}
 
+/*
 //use interface for {}
 //types are like this: `varname: type`
 /*If you are using modules with commonjs, requirejs or amd, you can use a dummy declaration:
