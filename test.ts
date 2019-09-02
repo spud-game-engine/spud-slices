@@ -1,5 +1,5 @@
 import test from 'ava';
-var ss=require('./spudslices').ss;
+import {ss} from "./spudslices";
 function passiveDeepEqual(t:{is:(A:any,B:any)=>any}) {
 	return function re(a:any,b:any,ranAlready?: boolean,deepnes?: number) {
 		var ne={message:"Not equal (type conflict, depth "+deepnes+")"};
@@ -77,8 +77,6 @@ test("The type of newShape.faceColors",t => {
 test("The constructor for shape",t => {
 	if (typeof ss.Shape.prototype!=="undefined") {
 		t.is(ss.Shape,ss.Shape.prototype.constructor);
-	}else if (typeof ss.Shape.__proto__!=="undefined") {
-		t.is(ss.Shape,ss.Shape.__proto__.constructor);
 	}else t.is(ss.Shape,ss.Shape.constructor);
 });
 test("The return of makeDup",t => {
@@ -207,22 +205,22 @@ test("The type of the value of collisionDetecors",t => {
 	t.is(typeof ss.collisionDetectors,"object");
 });
 test("The type of the value of collisionDetecors.circle",t => {
-	t.is(typeof ss.collisionDetectors.circle,"object");
+	t.is(typeof ss.collisionDetectors["circle"],"object");
 });
 test("The type of the value of collisionDetecors.circle.circle",t => {
-	t.is(typeof ss.collisionDetectors.circle.circle,"function");
+	t.is(typeof ss.collisionDetectors["circle"].circle,"function");
 });
 test("The type of the value of collisionDetecors.circle.polygon",t => {
-	t.is(typeof ss.collisionDetectors.circle.polygon,"undefined");
+	t.is(typeof ss.collisionDetectors["circle"].polygon,"undefined");
 });
 test("The type of the value of collisionDetecors.polygon",t => {
-	t.is(typeof ss.collisionDetectors.polygon,"object");
+	t.is(typeof ss.collisionDetectors["polygon"],"object");
 });
 test("The type of the value of collisionDetecors.polygon.circle",t => {
-	t.is(typeof ss.collisionDetectors.polygon.circle,"function");
+	t.is(typeof ss.collisionDetectors["polygon"].circle,"function");
 });
 test("The type of the value of collisionDetecors.polygon.polygon",t => {
-	t.is(typeof ss.collisionDetectors.polygon.polygon,"function");
+	t.is(typeof ss.collisionDetectors["polygon"].polygon,"function");
 });
 test("The result of identical collisionWith (square,square)",t => {
 	var a=new ss.Square(10,10,10),

@@ -114,7 +114,7 @@ export namespace ss{
 			}
 			return this;
 		};
-		scale=function(x: number,y: number) {
+		scale=function(x: number,y?: number) {
 			if(typeof y==="undefined") y=x;
 			for(var i=0;i<this.points.length;i++) {
 				if (typeof this.points[i]=="number") {
@@ -135,7 +135,7 @@ export namespace ss{
 			this.transpose(x,y);//from Center
 			return this;
 		};
-		roundPoints=function(otherF: {(x: number): number}) {
+		roundPoints=function(otherF?: {(x: number): number}) {
 			if (typeof otherF==="undefined") {
 				otherF=Math.round;
 			}
@@ -374,8 +374,8 @@ export namespace ss{
 		};
 		splitSegment=function(
 			segNum: number,//Index of segment to be replaced
-			sugP: { length: number; },//(optional) location of new point
-			color: boolean) {
+			sugP?: { length: number; },//(optional) location of new point
+			color?: boolean) {
 			var npoint=(typeof sugP!="undefined"&&typeof sugP.length=="number")?
 					sugP:
 					new Polygon(
