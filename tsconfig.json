@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es3",
+    "target": "es5",//GOAL: es6 (not super supported yet, but I need to be ready for it)
     "allowJs": true,
     "outDir": "."
   },

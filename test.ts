@@ -1,5 +1,5 @@
 import test from 'ava';
-var ss=require('./spudslices');
+var ss=require('./spudslices').ss;
 function passiveDeepEqual(t:{is:(A:any,B:any)=>any}) {
 	return function re(a:any,b:any,ranAlready?: boolean,deepnes?: number) {
 		var ne={message:"Not equal (type conflict, depth "+deepnes+")"};
