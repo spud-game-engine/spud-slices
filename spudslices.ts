@@ -18,37 +18,38 @@ export function rawRotate(x:number,y:number,rad:number) {
 export function rotate (x: number,y: number,rad: number) {
 	return rawRotate(x,y,rad+findRot(x,y));
 };
-class Shape {
+interface ctx{
+	fillStyle: string;
+	beginPath: () => void;
+	arc: (arg0: number, arg1: number, arg2: number, arg3: number, arg4: number) => void;
+	fill: () => void;
+	strokeStyle: string;
+	lineWidth: number;
+	moveTo: { apply: (arg0: any, arg1: any) => void; };
+	lineTo: { apply: (arg0: any, arg1: any) => void; };
+	stroke: () => void;
+};
+export class Shape {
 	category="shape";//used for collisions
 	dimensions=2;
 	points=[];
 	pointColor="#ff0000";
-	pointColors=[];
+	pointColors:string[]=[];
 	pointSize=5;
-	segments=[];//points to points
+	segments:number[][]=[];//points toSh points
 	segmentColor="#00ff00";
-	segmentColors=[];
+	segmentColors:string[]=[];
 	segmentSize=3;
-	faces=[];//points to segments
+	faces:number[][]=[];//points to segments
 	faceColor="#0000ff";
-	faceColors=[];
-	drawOn=function(ctx: {
-		fillStyle: string;
-		beginPath: () => void;
-		arc: (arg0: number, arg1: number, arg2: number, arg3: number, arg4: number) => void;
-		fill: () => void;
-	}) {
+	faceColors:string[]=[];
+	drawOn=function(ctx: ctx) {
 		this.drawFacesOn(ctx);
 		this.drawSegmentsOn(ctx);
 		this.drawPointsOn(ctx);
 		return this;
 	};
-	drawPointsOn=function(ctx: {
-		fillStyle: string;
-		beginPath: () => void;
-		arc: (arg0: number, arg1: number, arg2: number, arg3: number, arg4: number) => void;
-		fill: () => void;
-	}) {
+	drawPointsOn=function(ctx: ctx) {
 		ctx.fillStyle=this.pointColor;
 		ctx.beginPath();
 		for (var i=0; i<this.points.length; i++) {
@@ -62,15 +63,7 @@ class Shape {
 		//ctx.closePath();
 		return this;
 	};
-	drawSegmentsOn=function(ctx: {
-		strokeStyle: string;
-		lineWidth: number;
-		beginPath: () => void;
-		arc: (arg0: number, arg1: number, arg2: number, arg3: number, arg4: number) => void;
-		moveTo: { apply: (arg0: any, arg1: number) => void; };
-		lineTo: { apply: (arg0: any, arg1: number) => void; };
-		stroke: () => void;
-	}) {
+	drawSegmentsOn=function(ctx: ctx) {
 		ctx.strokeStyle=this.segmentColor;
 		ctx.lineWidth=this.segmentSize;
 		ctx.beginPath();
@@ -91,14 +84,7 @@ class Shape {
 		//ctx.closePath();
 		return this;
 	};
-	drawFacesOn=function(ctx: {
-		fillStyle: string;
-		beginPath: () => void;
-		arc: (arg0: number, arg1: number, arg2: number, arg3: number, arg4: number) => void;
-		moveTo: { apply: (arg0: any, arg1: any) => void; };
-		lineTo: { apply: (arg0: any, arg1: any) => void; };
-		fill: () => void;
-	}) {
+	drawFacesOn=function(ctx: ctx) {
 		ctx.fillStyle=this.faceColor;
 		ctx.beginPath();
 		for (var fac=0; fac<this.faces.length; fac++) {
