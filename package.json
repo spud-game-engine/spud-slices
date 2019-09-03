@@ -8,7 +8,7 @@
     "watch:test": "ava --watch",
     "watch:build":"tsc --watch",
     "watch:all":"npm run watch:test & npm run watch:build",
-    "watch":"watch:all"
+    "watch":"npm run watch:all"
   },
   "author": "Lazerbeak12345",
   "license": "GPL-3.0",
