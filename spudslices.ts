@@ -33,7 +33,7 @@ export namespace ss{
 	export class Shape {
 		category:string="shape";//used for collisions
 		dimensions=2;
-		points:any=[];
+		points:any[]=[];
 		pointColor="#ff0000";
 		pointColors:string[]=[];
 		pointSize=5;
