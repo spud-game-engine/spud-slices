@@ -1,20 +1,20 @@
 {
-  "name": "spud-slices",
-  "version": "1.1.0",
-  "description": "The library that lets you make shapes. Part of the Spud Game Engine.",
-  "main": "spudslices.js",
-  "scripts": {
-    "test": "tsc && ava",
-    "watch:test": "ava --watch",
-    "watch:build":"tsc --watch",
-    "watch:all":"npm run watch:test & npm run watch:build",
-    "watch":"npm run watch:all"
-  },
-  "author": "Lazerbeak12345",
-  "license": "GPL-3.0",
-  "devDependencies": { 
-    "ava": "^2.3.0",
-    "jshint": "^2.10.2",
-    "typescript": "^3.6.2"
-  }
+	"name": "spud-slices",
+	"version": "1.1.0",
+	"description": "The library that lets you make shapes. Part of the Spud Game Engine.",
+	"main": "spudslices.js",
+	"scripts": {
+		"test": "tsc && ava",
+		"watch:test": "ava --watch",
+		"watch:build":"tsc --watch",
+		"watch:all":"npm run watch:test & npm run watch:build",
+		"watch":"npm run watch:all"
+	},
+	"author": "Lazerbeak12345",
+	"license": "GPL-3.0",
+	"devDependencies": { 
+		"ava": "^2.3.0",
+		"jshint": "^2.10.2",
+		"typescript": "^3.6.2"
+	}
 }

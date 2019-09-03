@@ -1,5 +1,5 @@
 import test from 'ava';
-import {ss} from "./spudslices";
+import {ss,spudslices} from "./spudslices";
 function passiveDeepEqual(t:{is:(A:any,B:any)=>any}) {
 	return function re(a:any,b:any,ranAlready?: boolean,deepness?: number) {
 		var ne={message:"Not equal (type conflict, depth "+deepness+")"};
@@ -14,6 +14,7 @@ function passiveDeepEqual(t:{is:(A:any,B:any)=>any}) {
 		if (!ranAlready) re(b,a,true,deepness);
 	};
 };
+test("`spudslices` is equal to ss",t=> t.is(ss,spudslices));
 test("The distance of (0,1) from the origin",t => {
 	t.is(ss.distance(0,1),1);
 });

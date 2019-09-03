@@ -1,4 +1,4 @@
-export namespace ss{
+export namespace spudslices{
 	export function distance(x:number,y:number) {
 		return Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
 	};
@@ -683,3 +683,4 @@ export namespace ss{
 		}
 	};
 }
+export var ss=spudslices;

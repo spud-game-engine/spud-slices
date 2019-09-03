@@ -3,6 +3,8 @@
 		"target": "es5",//GOAL: es6 (not super supported yet, but I need to be ready for it)
 		"allowJs": true,
 		"outDir": ".",
+		"module":"commonjs",//must be: 'none', 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015', 'esnext'
+		//"commonjs" seems to be the only one to work right now.
 
 		"allowUnreachableCode": false,
 		"allowUnusedLabels": false,
