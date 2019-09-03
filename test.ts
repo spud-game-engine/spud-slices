@@ -1,18 +1,19 @@
 import test from 'ava';
 import {ss} from "./spudslices";
 function passiveDeepEqual(t:{is:(A:any,B:any)=>any}) {
-	return function re(a:any,b:any,ranAlready?: boolean,deepnes?: number) {
-		var ne={message:"Not equal (type conflict, depth "+deepnes+")"};
+	return function re(a:any,b:any,ranAlready?: boolean,deepness?: number) {
+		var ne={message:"Not equal (type conflict, depth "+deepness+")"};
+		if (typeof deepness==="undefined") deepness=0;
 		for(let i in a) {
 			if (typeof a[i]==="function"&&
 				typeof b[i]==="function") continue;
 			if (typeof a[i]!==typeof b[i]) throw ne;
-			if (typeof a[i]==="object") re(a[i],b[i],false,deepnes+1);
+			if (typeof a[i]==="object") re(a[i],b[i],false,deepness+1);
 			else t.is(a[i],b[i]);
 		}
-		if (!ranAlready) re(b,a,true,deepnes);
+		if (!ranAlready) re(b,a,true,deepness);
 	};
-}
+};
 test("The distance of (0,1) from the origin",t => {
 	t.is(ss.distance(0,1),1);
 });

@@ -1,56 +1,33 @@
 {
-  "compilerOptions": {
-    "target": "es5",//GOAL: es6 (not super supported yet, but I need to be ready for it)
-    "allowJs": true,
-    "outDir": "."
-  },
-  "include": [
-      "spudslices.ts",
-      "test.ts"
-  ],
-  "exclude":[]
+	"compilerOptions": {
+		"target": "es5",//GOAL: es6 (not super supported yet, but I need to be ready for it)
+		"allowJs": true,
+		"outDir": ".",
+
+		"allowUnreachableCode": false,
+		"allowUnusedLabels": false,
+		"alwaysStrict": true,
+		"noImplicitAny": false,//TODO: swap this later (11 problems on 2sep2019)
+		"noImplicitReturns": true,
+		"noImplicitThis": false,//TODO: swap this later (184 problems on 2sep2019)
+		"noFallthroughCasesInSwitch": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"suppressExcessPropertyErrors": false,
+		"suppressImplicitAnyIndexErrors": false,
+		"strictFunctionTypes": true,
+		"strictNullChecks": true,
+		"strictPropertyInitialization": true,
+		"checkJs": true // If you are still using some js files
+	},
+	"include": [
+		"spudslices.ts",
+		"test.ts"
+	],
+	"exclude":[],
 }
 
 /*
-//use interface for {}
-//types are like this: `varname: type`
-/*If you are using modules with commonjs, requirejs or amd, you can use a dummy declaration:
-
-declare function require(path: string): any;
-declare function define(...args: any[]): any;
-
-However, you should use the TypeScript syntax. This is more convenient and you'll get the typing information. First, change the module option in the tsconfig.json file:
-
-{
-  "compilerOptions": {
-    "module": "commonjs" // Set the kind of module you are using
-  }
-}
-
-Then change your import statements:
-
-// JavaScript
-var math = require("./math");
-
-// TypeScript (one of the following)
-import math = require("./math");
-math.add(1, 2);
-
-import { add } from "./math";
-add(1, 2);
-
-You can also replace the exports with the new syntax
-
-// JavaScript
-module.exports.add = function(a, b) {
-    return a + b;
-}
-
-// TypeScript
-export function add(a, b) {
-    return a + b;
-}
-
 Replace immediately-invoked function expressions with namespace/module
 Use classes when possible
 Replace var with let or const
@@ -62,23 +39,23 @@ Replace property names with nameof equivalent
 Finally, you should change the compiler options to enable more and more checks. This will help you find more errors at compile time. Some of them such as strictNullChecks will generates lots of errors (maybe thousands). So, you should enable these option one by one and fix the new errors. You can check how the vscode team handled this problem in this issue.
 
 {
-    "compilerOptions": {
-        "allowUnreachableCode": false,
-        "allowUnusedLabels": false,
-        "alwaysStrict": true,
-        "noImplicitAny": true,
-        "noImplicitReturns": true,
-        "noImplicitThis": true,
-        "noFallthroughCasesInSwitch": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "suppressExcessPropertyErrors": false,
-        "suppressImplicitAnyIndexErrors": false,
-        "strictFunctionTypes": true,
-        "strictNullChecks": true,
-        "strictPropertyInitialization": true,
-        "checkJs": true // If you are still using some js files
-    }
+	"compilerOptions": {
+		"allowUnreachableCode": false,
+		"allowUnusedLabels": false,
+		"alwaysStrict": true,
+		"noImplicitAny": true,
+		"noImplicitReturns": true,
+		"noImplicitThis": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"suppressExcessPropertyErrors": false,
+		"suppressImplicitAnyIndexErrors": false,
+		"strictFunctionTypes": true,
+		"strictNullChecks": true,
+		"strictPropertyInitialization": true,
+		"checkJs": true // If you are still using some js files
+	}
 }
 
 */

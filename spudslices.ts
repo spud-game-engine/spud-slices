@@ -31,9 +31,9 @@ export namespace ss{
 		stroke: () => void;
 	};
 	export class Shape {
-		category="shape";//used for collisions
+		category:string="shape";//used for collisions
 		dimensions=2;
-		points=[];
+		points:any=[];
 		pointColor="#ff0000";
 		pointColors:string[]=[];
 		pointSize=5;
@@ -316,11 +316,11 @@ export namespace ss{
 			super();
 			this.category="polygon";
 			this.faces[0]=[];
-			for (var i=0; i<arguments.length; i++) {
-				this.points.push(arguments[i]);
+			for (var i=0; i<args.length; i++) {
+				this.points.push(args[i]);
 				if (i>0) {
 					this.segments.push([i-1,i]);
-				}else this.segments.push([arguments.length-1,i]);
+				}else this.segments.push([args.length-1,i]);
 				this.faces[0].push(i);
 			}
 		}
@@ -330,7 +330,7 @@ export namespace ss{
 				console.warn(this,"is already a triangle!");
 				//return [this];//you can do this with any polygon
 			}
-			var out=[],
+			var out:Polygon[]=[],
 				center=this.findCenter();
 			for (var i=0; i<this.segments.length; i++) {
 				out[i]=new Polygon(this.points[this.segments[i][0]],
@@ -671,7 +671,7 @@ export namespace ss{
 	};
 	export class EqualDistShape extends Polygon {
 		constructor(x: number,y: number,sideCount: number,radius: number) {
-			var points=[],
+			var points:number[][]=[],
 				amountPer=(Math.PI*2)/sideCount,
 				thusFar=0;
 			while (thusFar<sideCount) {

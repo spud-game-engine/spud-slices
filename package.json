@@ -5,7 +5,10 @@
   "main": "spudslices.js",
   "scripts": {
     "test": "tsc && ava",
-    "watch:test": "ava --watch"
+    "watch:test": "ava --watch",
+    "watch:build":"tsc --watch",
+    "watch:all":"npm run watch:test & npm run watch:build",
+    "watch":"watch:all"
   },
   "author": "Lazerbeak12345",
   "license": "GPL-3.0",
