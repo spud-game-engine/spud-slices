@@ -18,10 +18,20 @@ test("`spudslices` is equal to ss",t=> t.is(ss,spudslices));
 test("The distance of (0,1) from the origin",t => {
 	t.is(ss.distance(0,1),1);
 });
-test("The the radian rotation of (0,1) from (1,0)",t => {
+test("The distance of (10000,1) from the origin",t => {
+	t.is(ss.distance(10000,1),Math.sqrt(100000001));
+});
+test("The distance of (1,10000) from the origin",t => {
+	t.is(ss.distance(1,10000),Math.sqrt(100000001));
+});
+test("The radian rotation of (0,1) from (1,0)",t => {
 	t.is(ss.findRot(0,1),Math.PI/2);
 });
-test("The the radian rotation of (0,-1) from (1,0)",t => {
+test("The radian rotation of (1,1) from (1,0)",t => {
+	t.deepEqual(ss.findRot(1,1).toString().split("").slice(0,17),//I am trimming off the last didget as it founds different
+			 (Math.PI/4).toString().split("").slice(0,17));
+});
+test("The radian rotation of (0,-1) from (1,0)",t => {
 	t.is(ss.findRot(0,-1),3*Math.PI/2);
 });
 test("The x-position of the raw rotation of the point (0,1) pi radians",t => {
