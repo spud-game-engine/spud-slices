@@ -10,6 +10,10 @@
 		"watch:all":"npm run watch:test & npm run watch:build",
 		"watch":"npm run watch:all"
 	},
+	"repository": {
+		"type": "git",
+		"url": "git@github.com:spud-game-engine/spud-slices.git"
+	},
 	"author": "Lazerbeak12345",
 	"license": "GPL-3.0",
 	"devDependencies": { 
