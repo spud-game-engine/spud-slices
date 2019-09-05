@@ -8,9 +8,12 @@
 	<body>
 		<canvas id="win"></canvas>
 		<script>
-			var exports={};//Just doing this makes it work with typescript files with es3, es5.
+			var exports={};
 		</script>
 		<script src="spudslices.js"></script>
+		<script>
+			var ss=exports.ss;
+		</script>
 		<script src="demo/main.js"></script>
 	</body>
 </html>
