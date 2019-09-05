@@ -1,10 +1,32 @@
 {
 	"compilerOptions": {
-		"target": "es5",//GOAL: es6 (not super supported yet, but I need to be ready for it)
+		"target": "es5",
+		//must be: 'es3', 'es5', 'es6', 'es2015', 'es2016', 'es2017', 'es2018', 'es2019', 'es2020', 'esnext'.
+		"module":"system",//must be: 'none', 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015', 'esnext'
+		
+		/*//The hash of what works (the rest may just be that I don't know how to make it work with them)
+		{//also, I am assuming that es2015+ are identical, as I don't have time to test all of them
+			ts:{
+				es3:`./es5`,
+				es5:`./es6`,
+				es6:"commonjs".split(","),
+			},
+			node_from_ts:{
+				es3:`./es5`,
+				es5:`./es6`,
+				es6:"none,commonjs,umd".split(","),
+			}
+			chrome_from_ts_enhanced:`./firefox_from_ts_enhanced`,
+			firefox_from_ts_enhanced:{
+				es3:`./es5`,
+				es5:`./es6`,
+				es6:"none,commonjs,amd,system,umd".split(","),
+			}
+		}
+		*/
+
 		"allowJs": true,
 		"outDir": ".",
-		"module":"commonjs",//must be: 'none', 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015', 'esnext'
-		//"commonjs" seems to be the only one to work right now.
 
 		"allowUnreachableCode": false,
 		"allowUnusedLabels": false,
