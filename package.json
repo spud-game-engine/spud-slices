@@ -7,6 +7,10 @@
     "test": "ava",
     "watch:test": "ava --watch"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/spud-game-engine/spud-slices.git"
+  },
   "author": "Lazerbeak12345",
   "license": "GPL-3.0",
   "devDependencies": { 
