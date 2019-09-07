@@ -1,12 +1,50 @@
 import test from 'ava';
-var ss=require('./spudslices');
+import {ss,spudslices} from "./spudslices";
+function passiveDeepEqual(t:{is:(A:any,B:any)=>any}) {
+	return function re(a:any,b:any,ranAlready?: boolean,deepness?: number) {
+		var ne={message:"Not equal (type conflict, depth "+deepness+")"};
+		if (typeof deepness==="undefined") deepness=0;
+		for(let i in a) {
+			if (typeof a[i]==="function"&&
+				typeof b[i]==="function") continue;
+			if (typeof a[i]!==typeof b[i]) throw ne;
+			if (typeof a[i]==="object") re(a[i],b[i],false,deepness+1);
+			else t.is(a[i],b[i]);
+		}
+		if (!ranAlready) re(b,a,true,deepness);
+	};
+};
+test("new, untested apis or modules",t => {
+	var   actualList:string[]=[],
+		shouldbeList:string="distance 32500,findRot 30600,rawRotate 40014,rotate 31464,Shape 20999,collisionDetectors 126225,Circle 18492,Polygon 24000,RightTriangle 38130,IsosolesRightTriangle 54093,Rectagle 26650,Square 22908,EqualDistShape 34224";
+	for (var i in ss) {
+		var strData=i+typeof ss[i]+String(JSON.stringify(ss[i])),
+			sum=0;
+		for(var ii=0;ii<strData.length;++ii) {//make checksum
+			sum+=strData.charCodeAt(0)*(ii+1);
+		}
+		actualList.push(i+" "+sum);
+	}
+	t.is(actualList.join(","),shouldbeList);
+});
+test("`spudslices` is equal to ss",t=> t.is(ss,spudslices));
 test("The distance of (0,1) from the origin",t => {
 	t.is(ss.distance(0,1),1);
 });
-test("The the radian rotation of (0,1) from (1,0)",t => {
+test("The distance of (10000,1) from the origin",t => {
+	t.is(ss.distance(10000,1),Math.sqrt(100000001));
+});
+test("The distance of (1,10000) from the origin",t => {
+	t.is(ss.distance(1,10000),Math.sqrt(100000001));
+});
+test("The radian rotation of (0,1) from (1,0)",t => {
 	t.is(ss.findRot(0,1),Math.PI/2);
 });
-test("The the radian rotation of (0,-1) from (1,0)",t => {
+test("The radian rotation of (1,1) from (1,0)",t => {
+	t.deepEqual(ss.findRot(1,1).toString().split("").slice(0,17),//I am trimming off the last didget as it founds different
+			 (Math.PI/4).toString().split("").slice(0,17));
+});
+test("The radian rotation of (0,-1) from (1,0)",t => {
 	t.is(ss.findRot(0,-1),3*Math.PI/2);
 });
 test("The x-position of the raw rotation of the point (0,1) pi radians",t => {
@@ -64,13 +102,11 @@ test("The type of newShape.faceColors",t => {
 test("The constructor for shape",t => {
 	if (typeof ss.Shape.prototype!=="undefined") {
 		t.is(ss.Shape,ss.Shape.prototype.constructor);
-	}else if (typeof ss.Shape.__proto__!=="undefined") {
-		t.is(ss.Shape,ss.Shape.__proto__.constructor);
 	}else t.is(ss.Shape,ss.Shape.constructor);
 });
-test.skip("The return of makeDup",t => {
+test("The return of makeDup",t => {
 	var a=new ss.Polygon([10,20],[93,23],[23,93]);
-	t.deepEqual(a.makeDup(),a);
+	passiveDeepEqual(t)(a.makeDup(),a);
 });
 test("polygon.category",t => {
 	var a=new ss.Polygon(10,20,93);
@@ -102,7 +138,7 @@ test("(more) polygon.points",t => {
 });
 test("The return of polygon.convertToTriangles",t => {
 	var a=new ss.Polygon([0,0],[0,10],[10,10],[10,0]);
-	t.deepEqual(a.convertToTriangles(),[
+	passiveDeepEqual(t)(a.convertToTriangles(),[
 		new ss.Polygon([10,0],[0,0],[5,5]),
 		new ss.Polygon([0,0],[0,10],[5,5]),
 		new ss.Polygon([0,10],[10,10],[5,5]),
@@ -112,7 +148,7 @@ test("The return of polygon.convertToTriangles",t => {
 test("polygon.joinSegments",t => {
 	var a=new ss.Polygon([0,0],[0,10],[10,10],[10,0]);
 	t.is(a.joinSegments(1,2),a);
-	t.deepEqual(a,new ss.Polygon([0,0],[10,10],[10,0]));
+	passiveDeepEqual(t)(a,new ss.Polygon([0,0],[10,10],[10,0]));
 });
 test("The return of polygon.findCenter",t => {
 	var a=new ss.Polygon([0,0],[10,10],[10,0]);
@@ -121,24 +157,24 @@ test("The return of polygon.findCenter",t => {
 test("The return of polygon.splitSegment",t => {
 	var a=new ss.Polygon([0,0],[10,10],[10,0]);
 	t.is(a.splitSegment(1),a);
-	t.deepEqual(a,new ss.Polygon([0,0],[5,5],[10,10],[10,0]));
+	passiveDeepEqual(t)(a,new ss.Polygon([0,0],[5,5],[10,10],[10,0]));
 });
 test("The result of polygon.splitSegment (manual point)",t => {
 	var a=new ss.Polygon([0,0],[5,5],[10,10],[10,0]);
-	t.deepEqual(a.splitSegment(1,[0,10]),
+	passiveDeepEqual(t)(a.splitSegment(1,[0,10]),
 		new ss.Polygon([0,0],[0,10],[5,5],[10,10],[10,0]));
 });
 test("The result of righttriangle",t => {
-	t.deepEqual(new ss.RightTriangle(1,2,3,4),new ss.Polygon([1,2],[4,2],[1,6]));
+	passiveDeepEqual(t)(new ss.RightTriangle(1,2,3,4),new ss.Polygon([1,2],[4,2],[1,6]));
 });
 test("The result of IsosolesRightTriangle",t => {
-	t.deepEqual(new ss.IsosolesRightTriangle(2,3,4),new ss.Polygon([2,3],[6,3],[2,7]));
+	passiveDeepEqual(t)(new ss.IsosolesRightTriangle(2,3,4),new ss.Polygon([2,3],[6,3],[2,7]));
 });
 test("The result of Rectagle",t => {
-	t.deepEqual(new ss.Rectagle(1,2,3,4),new ss.Polygon([1,2],[4,2],[4,6],[1,6]));
+	passiveDeepEqual(t)(new ss.Rectagle(1,2,3,4),new ss.Polygon([1,2],[4,2],[4,6],[1,6]));
 });
 test("The result of Square",t => {
-	t.deepEqual(new ss.Square(2,3,4),new ss.Polygon([2,3],[6,3],[6,7],[2,7]));
+	passiveDeepEqual(t)(new ss.Square(2,3,4),new ss.Polygon([2,3],[6,3],[6,7],[2,7]));
 });
 test("The return of transpose",t => {
 	var a=new ss.Square(0,10,10);
@@ -158,7 +194,7 @@ test("The return of roundpoints",t => {
 	t.is(a.roundPoints(),a);
 });//round the points
 test("The result of EqualDistShape",t => {
-	t.deepEqual(new ss.EqualDistShape(0,0,4,1).roundPoints(),
+	passiveDeepEqual(t)(new ss.EqualDistShape(0,0,4,1).roundPoints(),
 		new ss.Polygon([1,0],[0,1],[-1,0],[-0,-1]));
 });
 test("The return of rotCenter",t => {
@@ -194,22 +230,22 @@ test("The type of the value of collisionDetecors",t => {
 	t.is(typeof ss.collisionDetectors,"object");
 });
 test("The type of the value of collisionDetecors.circle",t => {
-	t.is(typeof ss.collisionDetectors.circle,"object");
+	t.is(typeof ss.collisionDetectors["circle"],"object");
 });
 test("The type of the value of collisionDetecors.circle.circle",t => {
-	t.is(typeof ss.collisionDetectors.circle.circle,"function");
+	t.is(typeof ss.collisionDetectors["circle"].circle,"function");
 });
 test("The type of the value of collisionDetecors.circle.polygon",t => {
-	t.is(typeof ss.collisionDetectors.circle.polygon,"undefined");
+	t.is(typeof ss.collisionDetectors["circle"].polygon,"undefined");
 });
 test("The type of the value of collisionDetecors.polygon",t => {
-	t.is(typeof ss.collisionDetectors.polygon,"object");
+	t.is(typeof ss.collisionDetectors["polygon"],"object");
 });
 test("The type of the value of collisionDetecors.polygon.circle",t => {
-	t.is(typeof ss.collisionDetectors.polygon.circle,"function");
+	t.is(typeof ss.collisionDetectors["polygon"].circle,"function");
 });
 test("The type of the value of collisionDetecors.polygon.polygon",t => {
-	t.is(typeof ss.collisionDetectors.polygon.polygon,"function");
+	t.is(typeof ss.collisionDetectors["polygon"].polygon,"function");
 });
 test("The result of identical collisionWith (square,square)",t => {
 	var a=new ss.Square(10,10,10),
