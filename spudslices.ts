@@ -1,4 +1,5 @@
 export namespace spudslices{
+	export const version:string="1.2.0";
 	export function distance(x:number,y:number) {
 		return Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
 	};

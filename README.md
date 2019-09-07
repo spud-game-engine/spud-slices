@@ -1,4 +1,4 @@
-# Spud-Slices v1.1.0
+# Spud-Slices v1.2.0
 
 The library that lets you make shapes.
 

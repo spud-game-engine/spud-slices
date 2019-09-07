@@ -16,7 +16,7 @@ function passiveDeepEqual(t:{is:(A:any,B:any)=>any}) {
 };
 test("new, untested apis or modules",t => {
 	var   actualList:string[]=[],
-		shouldbeList:string="distance 32500,findRot 30600,rawRotate 40014,rotate 31464,Shape 20999,collisionDetectors 126225,Circle 18492,Polygon 24000,RightTriangle 38130,IsosolesRightTriangle 54093,Rectagle 26650,Square 22908,EqualDistShape 34224";
+		shouldbeList:string="version 24780,distance 32500,findRot 30600,rawRotate 40014,rotate 31464,Shape 20999,collisionDetectors 126225,Circle 18492,Polygon 24000,RightTriangle 38130,IsosolesRightTriangle 54093,Rectagle 26650,Square 22908,EqualDistShape 34224";
 	for (var i in ss) {
 		var strData=i+typeof ss[i]+String(JSON.stringify(ss[i])),
 			sum=0;
