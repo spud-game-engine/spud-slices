@@ -4,12 +4,12 @@
 	"description": "The library that lets you make shapes. Part of the Spud Game Engine.",
 	"main": "spudslices.js",
 	"scripts": {
-		"prepublish":"ava",
+		"prepublish": "ava",
 		"test": "tsc && ava",
 		"watch:test": "ava --watch",
-		"watch:build":"tsc --watch",
-		"watch:all":"npm run watch:test & npm run watch:build",
-		"watch":"npm run watch:all"
+		"watch:build": "tsc --watch",
+		"watch:all": "npm run watch:test & npm run watch:build",
+		"watch": "npm run watch:all"
 	},
 	"repository": {
 		"type": "git",
@@ -17,9 +17,9 @@
 	},
 	"author": "Lazerbeak12345 <nfblaster@live.com>",
 	"license": "GPL-3.0",
-	"devDependencies": { 
-		"jshint": "^2.10.2",
+	"devDependencies": {
 		"ava": "^2.3.0",
 		"typescript": "^3.6.2"
-	}
+	},
+	"dependencies": {}
 }
