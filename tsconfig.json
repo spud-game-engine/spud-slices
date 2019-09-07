@@ -24,9 +24,11 @@
 			}
 		}
 		*/
-
-		"allowJs": true,
-		"outDir": ".",
+		
+		"declaration":true,
+		"allowJs": false,
+		"outDir": "dist",
+		"strict":true,
 
 		"allowUnreachableCode": false,
 		"allowUnusedLabels": false,
@@ -41,14 +43,12 @@
 		"suppressImplicitAnyIndexErrors": false,
 		"strictFunctionTypes": true,
 		"strictNullChecks": true,
-		"strictPropertyInitialization": true,
-		"checkJs": true // If you are still using some js files
+		"strictPropertyInitialization": true
 	},
 	"include": [
-		"spudslices.ts",
-		"test.ts"
+		"lib"
 	],
-	"exclude":[],
+	"exclude":[]
 }
 
 /*

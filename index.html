@@ -4,16 +4,33 @@
 		<title>Spud-Slices - The library that lets you make shapes</title>
 		<meta charset="utf-8">
 		<link rel="stylesheet" href="demo/main.css"/>
+		<style>
+			#win {
+				position:absolute;
+				top:0;
+				left:0;
+			}
+		</style>
 	</head>
 	<body>
 		<canvas id="win"></canvas>
 		<script>
 			var exports={};
 		</script>
-		<script src="spudslices.js"></script>
+		<script src="bin/spudslices.js"></script>
 		<script>
 			var ss= exports.ss;
 		</script>
-		<script src="demo/main.js"></script>
+		<script src="bin/main.js"></script>
+		<script>
+		(function () {
+			var cnvs = document.getElementById("win");
+			window.onresize = function () {
+				cnvs.width = window.innerWidth;
+				cnvs.height = window.innerHeight;
+			};
+			window.onresize();
+		})();
+		</script>
 	</body>
 </html>
