@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import test from 'ava';
 import {ss,spudslices} from "../lib/spudslices";
 function passiveDeepEqual(t:{is:(A:any,B:any)=>any}) {
