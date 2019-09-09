@@ -1,5 +1,11 @@
 # A guide on how versioning works
 
+Right how the files that contain the version are as follows:
+
+* `README.md`
+* `package.json`
+* `spudslices.ts`
+
 > This guide is mostly for me, but if you came here looking for what system I
 > use, I just use semantic versioning.
 

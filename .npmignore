@@ -29,7 +29,7 @@ node_modules
 
 lib/
 
-test/
+test
 
 .nyc_output
 
