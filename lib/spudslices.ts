@@ -31,6 +31,14 @@ export namespace spudslices{
 		lineTo: { apply: (arg0: any, arg1: any) => void; };
 		stroke: () => void;
 	};
+
+	//An object that follows the template below in structure. Handles all cases.
+	export var collisionDetectors:{
+		[index:string]:{//Shape name
+			[index:string]://Another shape name
+				(sh:Shape) => any[]
+		}
+	} = {};
 	export class Shape {
 		category:string="shape";//used for collisions
 		dimensions=2;
@@ -223,7 +231,7 @@ export namespace spudslices{
 			}
 			return s;
 		};
-		collisionWith=function(sh: { category: string; }) {
+		collisionWith:(sh:Shape)=>any = function(sh:Shape) {
 			/*
 			* Search for the shape category `Shape.category` of both, then run the
 			* other's function if it can be found. If not, run this one's.
@@ -258,19 +266,6 @@ export namespace spudslices{
 			return center;
 		};
 	};
-	//An object that follows the template below in structure. Handles all cases.
-	export var collisionDetectors = {
-		/*"shape name":{
-			/*A function that returns [] on no collision, or the information for
-				the line segments, this one in [0] and the other in [1]* /
-			"shape name":function() { ... },
-			"a different shape name":function() { ... }
-		},
-		"a different shape name":{
-			"a different shape name":function() { ... }
-		}
-		*/
-	};
 	export class Circle extends Shape{
 		constructor(public x:number,public y:number,public r:number) {
 			super();
@@ -285,7 +280,7 @@ export namespace spudslices{
 		};
 	}
 	collisionDetectors["circle"]={};
-	collisionDetectors["circle"].circle=function(sh: Circle) {
+	collisionDetectors["circle"].circle=function(sh: Circle|Shape) {
 		let ths:Circle=this.makeDup(),//make sure that the original ones aren't altered
 			sha:Circle=sh.makeDup();
 		//iterate through each segment on ths
@@ -408,7 +403,7 @@ export namespace spudslices{
 		};
 	}
 	collisionDetectors["polygon"]={};
-	collisionDetectors["polygon"].polygon=function(sh: Polygon) {
+	collisionDetectors["polygon"].polygon=function(sh: Polygon|Shape) {
 		var ths:Polygon=this.makeDup(),//make sure that the original ones aren't altered
 			sha:Polygon=sh.makeDup();
 		//iterate through each segment on ths
@@ -536,7 +531,7 @@ export namespace spudslices{
 		}
 		return [];
 	};
-	collisionDetectors["polygon"].circle=function(sh: Circle) {
+	collisionDetectors["polygon"].circle=function(sh: Circle|Shape) {
 		//input: another Shape instance
 		var ths:Polygon=this.makeDup(),//make sure that the original ones aren't altered
 			sha:Circle=sh.makeDup();

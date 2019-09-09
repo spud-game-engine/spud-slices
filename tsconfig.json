@@ -26,14 +26,15 @@
 		*/
 		
 		"declaration":true,
-		"allowJs": false,
+		//"allowJs": true,
 		"outDir": "dist",
 		"strict":true,
+		//"checkJs":true,
 
 		"allowUnreachableCode": false,
 		"allowUnusedLabels": false,
 		"alwaysStrict": true,
-		"noImplicitAny": false,//TODO: swap this later (11 problems on 2sep2019)
+		"noImplicitAny": true,
 		"noImplicitReturns": true,
 		"noImplicitThis": false,//TODO: swap this later (184 problems on 2sep2019)
 		"noFallthroughCasesInSwitch": true,
