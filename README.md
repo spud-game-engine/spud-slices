@@ -22,7 +22,7 @@ learned, all the way back at the end of middle school (and yes, this is
 excluding Scratch), it was hard to see why something that granted such a supurb
 level of creation would be bad.
 
-It wasn't untill I graduated from High School, having learned of the dynamics of
+It wasn't until I graduated from High School, having learned of the dynamics of
 many, many other programming languages, that I braved a language I had internal
 opposition to: "TypeScript."
 
@@ -35,7 +35,7 @@ supposed to be the new JavaScript? It looks completely different!" I had, at the
 time only been using es5, which didn't have many of the dynamics, typeing and
 modulisation that JS would later come to accept, so I stayed away. (I was told
 that this is also what Java code looked like, so I had avoided Java as well
-until I took CS 1410, a cource that was, at the time, on Java. I still hate the
+until I took CS 1410, a course that was, at the time, on Java. I still hate the
 installer(s) though.)
 
 Eventually, I heard word of a language that was basically CoffeScript, but

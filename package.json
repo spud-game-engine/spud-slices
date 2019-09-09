@@ -3,15 +3,15 @@
   "version": "1.2.0",
   "description": "The library that lets you make shapes. Part of the Spud Game Engine.",
   "main": "dist/spudslices.js",
-  "types":"dist/spudslices.js",
+  "types": "dist/spudslices.js",
   "scripts": {
-    "prepublish": "tsc && ava",
+    "prepublish": "npm test",
     "test": "tsc && ava",
     "watch:test": "ava --watch",
     "watch:build": "tsc --watch",
     "watch:all": "npm run watch:test & npm run watch:build",
     "watch": "npm run watch:all",
-    "build":"tsc"
+    "build": "tsc",
   },
   "repository": {
     "type": "git",
@@ -19,21 +19,21 @@
   },
   "author": "Lazerbeak12345 <nfblaster@live.com>",
   "license": "GPL-3.0",
-  "keywords":[],
-  "bugs":{
-    "url":"https://github.com/spud-game-engine/spud-slices/issues"
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/spud-game-engine/spud-slices/issues"
   },
-  "homepage":"https://github.com/spud-game-engine/spud-slices#readme",
+  "homepage": "https://github.com/spud-game-engine/spud-slices#readme",
   "devDependencies": {
     "ava": "^2.3.0",
     "typescript": "^3.6.2"
   },
   "dependencies": {},
-  "bugs": {
-    "url": "https://github.com/spud-game-engine/spud-slices/issues"
-  },
-  "homepage": "https://github.com/spud-game-engine/spud-slices#readme",
   "bin": {
-    "spud-slices": "main.js"
+    "spud-slices": "dist/spudslices.js"
+  },
+  "directories": {
+    "lib": "lib",
+    "test": "test"
   }
 }

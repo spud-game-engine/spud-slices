@@ -46,7 +46,7 @@
 		"strictPropertyInitialization": true
 	},
 	"include": [
-		"lib"
+		"lib","test/*.*"
 	],
 	"exclude":[]
 }
