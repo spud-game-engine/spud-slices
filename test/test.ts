@@ -217,7 +217,10 @@ test("The return of scale (two arguments)",t => {
 	t.deepEqual(a.points[1],[40,20]);
 });
 //claimT("The return of drawPointsOn",[a.drawPointsOn(ctx),a]);
-test.todo("The return of drawPointsOn");
+test.todo("The return of drawPointsOn"/*,t => {
+	var a=Square(0,0,10,10);
+	test.is(a.drawPointsOn(window.))
+}*/);
 //a.transpose(40,0);
 //claimT("The return of drawSegmentsOn",[a.drawSegmentsOn(ctx),a]);
 test.todo("The return of drawSegmentsOn");

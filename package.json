@@ -5,13 +5,14 @@
   "main": "dist/spudslices.js",
   "types": "dist/spudslices.js",
   "scripts": {
-    "prepublish": "npm test",
-    "test": "tsc && ava",
+    "prepublish": "npm test && npm build",
+    "test": "ava",
     "watch:test": "ava --watch",
     "watch:build": "tsc --watch",
     "watch:all": "npm run watch:test & npm run watch:build",
     "watch": "npm run watch:all",
     "build": "tsc",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
     "type": "git",
@@ -26,6 +27,9 @@
   "homepage": "https://github.com/spud-game-engine/spud-slices#readme",
   "devDependencies": {
     "ava": "^2.3.0",
+    "browser-env": "^3.2.6",
+    "eslint": "^6.3.0",
+    "ts-node": "^8.3.0",
     "typescript": "^3.6.2"
   },
   "dependencies": {},
@@ -35,5 +39,15 @@
   "directories": {
     "lib": "lib",
     "test": "test"
+  },
+  "ava": {
+    "compileEnhancements": false,
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register",
+      "./test/_setup-browser-env.js"
+    ]
   }
 }
