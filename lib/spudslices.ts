@@ -53,13 +53,13 @@ export namespace spudslices{
 		faces:number[][]=[];//points to segments
 		faceColor="#0000ff";
 		faceColors:string[]=[];
-		drawOn=function(ctx: ctx) {
+		drawOn(ctx: ctx) {
 			this.drawFacesOn(ctx);
 			this.drawSegmentsOn(ctx);
 			this.drawPointsOn(ctx);
 			return this;
 		};
-		drawPointsOn=function(ctx: ctx) {
+		drawPointsOn(ctx: ctx) {
 			ctx.fillStyle=this.pointColor;
 			ctx.beginPath();
 			for (var i=0; i<this.points.length; i++) {
@@ -73,7 +73,7 @@ export namespace spudslices{
 			//ctx.closePath();
 			return this;
 		};
-		drawSegmentsOn=function(ctx: ctx) {
+		drawSegmentsOn(ctx: ctx) {
 			ctx.strokeStyle=this.segmentColor;
 			ctx.lineWidth=this.segmentSize;
 			ctx.beginPath();
@@ -94,7 +94,7 @@ export namespace spudslices{
 			//ctx.closePath();
 			return this;
 		};
-		drawFacesOn=function(ctx: ctx) {
+		drawFacesOn(ctx: ctx) {
 			ctx.fillStyle=this.faceColor;
 			ctx.beginPath();
 			for (var fac=0; fac<this.faces.length; fac++) {
@@ -115,7 +115,7 @@ export namespace spudslices{
 			//ctx.closePath();
 			return this;
 		};
-		transpose=function(x: number,y: number) {
+		transpose(x: number,y: number) {
 			for (var i=0; i<this.points.length; i++) {
 				if (typeof this.points[i]=="number") continue;
 				this.points[i][0]+=x;
@@ -123,7 +123,7 @@ export namespace spudslices{
 			}
 			return this;
 		};
-		scale=function(x: number,y?: number) {
+		scale(x: number,y?: number) {
 			if(typeof y==="undefined") y=x;
 			for(var i=0;i<this.points.length;i++) {
 				if (typeof this.points[i]=="number") {
@@ -135,7 +135,7 @@ export namespace spudslices{
 			}
 			return this;
 		};
-		rotate=function(x: number,y: number,rad: number) {
+		rotate(x: number,y: number,rad: number) {
 			this.transpose(-x,-y);//to Center
 			for (var i=0;i<this.points.length;i++) {
 				if (typeof this.points[i]=="number") continue;
@@ -144,7 +144,7 @@ export namespace spudslices{
 			this.transpose(x,y);//from Center
 			return this;
 		};
-		roundPoints=function(otherF?: {(x: number): number}) {
+		roundPoints(otherF?: {(x: number): number}) {
 			if (typeof otherF==="undefined") {
 				otherF=Math.round;
 			}
@@ -156,7 +156,7 @@ export namespace spudslices{
 			}
 			return this;
 		};
-		rotCenter=function(rad: number) {
+		rotCenter(rad: number) {
 			var pos=this.findCenter();
 			return this.rotate(pos[0],pos[1],rad);
 		};
@@ -231,7 +231,7 @@ export namespace spudslices{
 			}
 			return s;
 		};
-		collisionWith:(sh:Shape)=>any = function(sh:Shape) {
+		collisionWith(sh:Shape) {
 			/*
 			* Search for the shape category `Shape.category` of both, then run the
 			* other's function if it can be found. If not, run this one's.
@@ -255,7 +255,7 @@ export namespace spudslices{
 			}else throw "Could not find shape collision detector for a \""+
 				this.category+"\"-\""+sh.category+"\" collision.";
 		};
-		findCenter=function() {
+		findCenter() {
 			var center=new Array(this.dimensions);
 			for (var dem=0;dem<this.dimensions;dem++) {
 				for (var pointi=0,avrge=0;pointi<this.points.length;pointi++) {
@@ -275,7 +275,7 @@ export namespace spudslices{
 			this.segments[0]=[0,1];
 			this.faces[0]=[0];
 		}
-		findCenter=function() {
+		findCenter() {
 			return this.points[1];
 		};
 	}
