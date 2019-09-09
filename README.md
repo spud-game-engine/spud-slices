@@ -1,5 +1,7 @@
 # Spud-Slices v1.2.0
 
+[![Coverage Status](https://coveralls.io/repos/github/spud-game-engine/spud-slices/badge.svg?branch=master)](https://coveralls.io/github/spud-game-engine/spud-slices?branch=master) [![Build Status](https://travis-ci.org/spud-game-engine/spud-slices.svg?branch=master)](https://travis-ci.org/spud-game-engine/spud-slices)
+
 The library that lets you make shapes.
 
 This library is a component of Lazerbeak12345's larger, Spud Game Engine (SGE).
