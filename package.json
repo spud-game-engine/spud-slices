@@ -6,13 +6,13 @@
   "types": "dist/spudslices.js",
   "scripts": {
     "prepublish": "npm test && npm build",
-    "test": "ava",
+    "test": "ava --tap | tap-nyc",
     "watch:test": "ava --watch",
     "watch:build": "tsc --watch",
     "watch:all": "npm run watch:test & npm run watch:build",
     "watch": "npm run watch:all",
     "build": "tsc",
-    "coverage": "nyc report --reporter=text-lcov | coveralls"
+    "coverage": "nyc report --reporter=text-lcov | less"
   },
   "repository": {
     "type": "git",
@@ -29,6 +29,8 @@
     "ava": "^2.3.0",
     "browser-env": "^3.2.6",
     "eslint": "^6.3.0",
+    "nyc": "^14.1.1",
+    "tap-nyc": "^1.0.3",
     "ts-node": "^8.3.0",
     "typescript": "^3.6.2"
   },
@@ -48,6 +50,17 @@
     "require": [
       "ts-node/register",
       "./test/_setup-browser-env.js"
+    ]
+  },
+  "nyc": {
+    "extends": "@istanbuljs/nyc-config-typescript",
+    "check-coverage": true,
+    "all": true,
+    "include": [
+      "lib/*.*"
+    ],
+    "exclude": [
+      "dist/*.*"
     ]
   }
 }
