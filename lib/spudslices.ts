@@ -1,8 +1,14 @@
 export namespace spudslices{
 	export const version:string="1.2.0";
+	/**
+	 * Find the distance of (x,y) from the origin (0,0)
+	 */
 	export function distance(x:number,y:number) {
 		return Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
 	};
+	/**
+	 * Find the rotation (in radians) of (x,y) from (0,1)
+	 */
 	export function findRot(x:number,y:number) {
 		var dist=distance(x,y),
 			pos=[x/dist,
@@ -10,6 +16,10 @@ export namespace spudslices{
 		if(pos[1]<0) return(2*Math.PI)-Math.acos(pos[0]);//if it is > pi radians
 		return Math.acos(pos[0]);
 	};
+	/**
+	 * Get the location of the point, given that the distance is (x,y) and the
+	 * rotation to offset it by is `rad`
+	 */
 	export function rawRotate(x:number,y:number,rad:number) {
 		var dist=distance(x,y);
 		return [
@@ -17,9 +27,16 @@ export namespace spudslices{
 			dist*(Math.sin(rad)),
 		];
 	};
+	/**
+	 * Get the location of where a point will be rotated (given `rad`) from it's
+	 * current location (x,y)
+	 */
 	export function rotate (x: number,y: number,rad: number) {
 		return rawRotate(x,y,rad+findRot(x,y));
 	};
+	/**
+	 * A private interface that represents a 2d canvas instance
+	 */
 	interface ctx{
 		fillStyle: string;
 		beginPath: () => void;
@@ -32,33 +49,108 @@ export namespace spudslices{
 		stroke: () => void;
 	};
 
-	//An object that follows the template below in structure. Handles all cases.
+	/**
+	 * An object that follows the template below in structure.
+	 * See [[Shape.collisionWith]] for more info
+	*/
 	export var collisionDetectors:{
 		[index:string]:{//Shape name
 			[index:string]://Another shape name
 				(sh:Shape) => any[]
 		}
 	} = {};
+	/**
+	 * The base class for all shapes.
+	 */
 	export class Shape {
+		/**
+		 * This string is what identifies to `collisionWith` which of the
+		 * `collisionDetectors` to use.
+		 */
 		category:string="shape";//used for collisions
+		/**
+		 * This identifies to internal mechanisims that this is a 2d object.
+		 * 
+		 * These internal mechanisims will expect the length of each
+		 * array inside of `points` to equal this value.
+		 */
 		dimensions=2;
+		/**
+		 * Even though (at time of writing) this is type `any[]` it is one of
+		 *  two things:
+		 * 
+		 *  * `number[][]`, given that it is an ordinary point.
+		 *     (See `dimensions`) for more info.
+		 *  * `number[]`, given that it is the first point, and the class type 
+		 *    is `Circle` (or one of it's children). In this case, this point is
+		 *    the radius, and the next point is the center of the circle.
+		 */
 		points:any[]=[];
+		/**
+		 * The color that points are rendered when calling either [[drawOn]] or 
+		 * `drawPointsOn`. Overrided by [[pointColors]].
+		 */
 		pointColor="#ff0000";
+		/**
+		 * The color that each point is rendered when calling either [[drawOn]] or 
+		 * [[drawPointsOn]]. Defaults to [[pointColor]].
+		 */
 		pointColors:string[]=[];
+		/**
+		 * The radius that points are rendered when calling either [[drawOn]] or 
+		 * [[drawPointsOn]].
+		 */
 		pointSize=5;
-		segments:number[][]=[];//points toSh points
+		/**
+		 * Each item in the array symbolises a segment, where each item within
+		 * is a number referring to the index of its respective point. The
+		 * length of the innermost array should always be `2`.
+		 */
+		segments:number[][]=[];
+		/**
+		 * The color that segments are rendered when calling either [[drawOn]] or 
+		 * [[drawSegmentsOn]]. Overrided by [[segmentColors]].
+		 */
 		segmentColor="#00ff00";
+		/**
+		 * The color that each segment is rendered when calling either [[drawOn]] or 
+		 * [[drawSegmentsOn]]. Defaults to [[segmentColor]].
+		 */
 		segmentColors:string[]=[];
+		/**
+		 * The with that segments are rendered when calling either [[drawOn]] or 
+		 * [[drawPointsOn]].
+		 */
 		segmentSize=3;
+		/**
+		 * Each item in the array symbolises a face, where each item within is a
+		 * number referring to the index of its respective segment.
+		 */
 		faces:number[][]=[];//points to segments
+		/**
+		 * The color that faces are rendered when calling either [[drawOn]] or 
+		 * [[drawFacesOn]]. Overrided by [[faceColors]].
+		 */
 		faceColor="#0000ff";
+		/**
+		 * The color that each face is rendered when calling either [[drawOn]] or 
+		 * [[drawFacesOn]]. Defaults to [[faceColor]].
+		 */
 		faceColors:string[]=[];
+		/**
+		 * Draws this [[Shape]] instance on this [[ctx]] instance.
+		 * @param ctx see the [[ctx]] interface
+		 */
 		drawOn(ctx: ctx) {
 			this.drawFacesOn(ctx);
 			this.drawSegmentsOn(ctx);
 			this.drawPointsOn(ctx);
 			return this;
 		};
+		/**
+		 * Draws the points of this [[Shape]] instance on this [[ctx]] instance.
+		 * @param ctx see the [[ctx]] interface
+		 */
 		drawPointsOn(ctx: ctx) {
 			ctx.fillStyle=this.pointColor;
 			ctx.beginPath();
@@ -73,6 +165,10 @@ export namespace spudslices{
 			//ctx.closePath();
 			return this;
 		};
+		/**
+		 * Draws the segments of this [[Shape]] instance on this [[ctx]] instance.
+		 * @param ctx see the [[ctx]] interface
+		 */
 		drawSegmentsOn(ctx: ctx) {
 			ctx.strokeStyle=this.segmentColor;
 			ctx.lineWidth=this.segmentSize;
@@ -94,6 +190,10 @@ export namespace spudslices{
 			//ctx.closePath();
 			return this;
 		};
+		/**
+		 * Draws the faces of this [[Shape]] instance on this [[ctx]] instance.
+		 * @param ctx see the [[ctx]] interface
+		 */
 		drawFacesOn(ctx: ctx) {
 			ctx.fillStyle=this.faceColor;
 			ctx.beginPath();
@@ -115,6 +215,9 @@ export namespace spudslices{
 			//ctx.closePath();
 			return this;
 		};
+		/**
+		 * Transposes the shape by (x,y)
+		 */
 		transpose(x: number,y: number) {
 			for (var i=0; i<this.points.length; i++) {
 				if (typeof this.points[i]=="number") continue;
@@ -123,6 +226,13 @@ export namespace spudslices{
 			}
 			return this;
 		};
+		/**
+		 * A basic scale function. (NOTE: Doesn't morph the shape of [[Circle]]
+		 * elements)
+		 * @param x How much the shape is scaled along the x-position
+		 * @param y Inferred to be `x` if missing. If not missing, how
+		 *   much the shape is scaled along the y-position.
+		 */
 		scale(x: number,y?: number) {
 			if(typeof y==="undefined") y=x;
 			for(var i=0;i<this.points.length;i++) {
@@ -135,6 +245,10 @@ export namespace spudslices{
 			}
 			return this;
 		};
+		/**
+		 * Rotate the shape around (x,y)
+		 * @param rad How many radians to rotate it by.
+		 */
 		rotate(x: number,y: number,rad: number) {
 			this.transpose(-x,-y);//to Center
 			for (var i=0;i<this.points.length;i++) {
@@ -144,6 +258,10 @@ export namespace spudslices{
 			this.transpose(x,y);//from Center
 			return this;
 		};
+		/**
+		 * Round all points in the function. (Will also round the radius of a circle)
+		 * @param otherF Optional function to use instead of `Math.round`
+		 */
 		roundPoints(otherF?: {(x: number): number}) {
 			if (typeof otherF==="undefined") {
 				otherF=Math.round;
@@ -156,10 +274,17 @@ export namespace spudslices{
 			}
 			return this;
 		};
+		/**
+		 * Rotate the shape around it's own center.
+		 * @param rad How far to rotate.
+		 */
 		rotCenter(rad: number) {
 			var pos=this.findCenter();
 			return this.rotate(pos[0],pos[1],rad);
 		};
+		/**
+		 * Return a duplicate of this object, removing all pointers to the original..
+		 */
 		makeDup=function() {
 			var s=new this.__proto__.constructor();
 			for (var i in this) {
@@ -231,15 +356,14 @@ export namespace spudslices{
 			}
 			return s;
 		};
+		/**
+		 * Search for the [[Shape.category]] of both, then run the
+		 * other's function if it can be found. If not, run this one's.
+		 *
+		 * Why? Because I want it to be possible to override one if you really
+		 * wanted to. This should make it easier.  -- NOTE: NOT ACTUALY HAPPENING RN!
+		 */
 		collisionWith(sh:Shape) {
-			/*
-			* Search for the shape category `Shape.category` of both, then run the
-			* other's function if it can be found. If not, run this one's.
-			*
-			* Why? Because I want it to be possible to override one if you really
-			* wanted to. This should make it easier.  -- NOTE: NOT ACTUALY HAPPENING RN!
-			*/
-			//input: another Shape instance
 			if (typeof collisionDetectors[this.category]!=="undefined"&&
 				typeof collisionDetectors[this.category][sh.category]!==
 					"undefined") {
@@ -255,6 +379,9 @@ export namespace spudslices{
 			}else throw "Could not find shape collision detector for a \""+
 				this.category+"\"-\""+sh.category+"\" collision.";
 		};
+		/**
+		 * Find the center of (almost) any shape, relative to the points.
+		 */
 		findCenter() {
 			var center=new Array(this.dimensions);
 			for (var dem=0;dem<this.dimensions;dem++) {
@@ -266,7 +393,16 @@ export namespace spudslices{
 			return center;
 		};
 	};
+	/**
+	 * > Causes minor conflict as [[Shape.points]] [0] is the radius, whereas the
+	 * > rest of the library expects the type of [[Shape.points]] to be
+	 * > `number[][]`
+	 */
 	export class Circle extends Shape{
+		/**
+		 * Constuctor for [[Circle]], with circle placed at (x,y)
+		 * @param r Radius of [[Circle]]
+		 */
 		constructor(public x:number,public y:number,public r:number) {
 			super();
 			this.category="circle";
@@ -275,6 +411,9 @@ export namespace spudslices{
 			this.segments[0]=[0,1];
 			this.faces[0]=[0];
 		}
+		/**
+		 * Find the center of a [[Circle]].
+		 */
 		findCenter() {
 			return this.points[1];
 		};
@@ -308,6 +447,11 @@ export namespace spudslices{
 		return [];
 	};
 	export class Polygon extends Shape {
+		/**
+		 * @param args Each point of the polygon. Points are pre-connected with
+		 * segments, and the last point is automatically connected to the first
+		 * point.
+		 */
 		constructor(...args: any[]) {
 			super();
 			this.category="polygon";
@@ -320,8 +464,13 @@ export namespace spudslices{
 				this.faces[0].push(i);
 			}
 		}
+		/**
+		 * Makes a point at the center, draws lines from that point to every
+		 * other point, and ends up cutting up the shape like a pizza.
+		 * 
+		 * > Requires the shape to have 1 face.
+		 */
 		convertToTriangles=function() {
-			//throw "Doesn't work in typescript.";
 			if (this.points.length==3) {//Don't you just love it when your code is a readable sentence?
 				console.warn(this,"is already a triangle!");
 				//return [this];//you can do this with any polygon
@@ -334,6 +483,12 @@ export namespace spudslices{
 			}
 			return out;
 		};
+		/**
+		 * Removes the segments' shared point, then replaces them with a single
+		 * segment.
+		 * @param segA: Index of the first segment
+		 * @param segB: Index of the second segement
+		 */
 		joinSegments=function(segA: number,segB: number) {//lol sega
 			if (typeof this.segments[segA]==="undefined"||
 				typeof this.segments[segB]==="undefined") {
@@ -368,10 +523,18 @@ export namespace spudslices{
 			//if (rm>=0) this.faces=this.faces.slice(0,rm).concat(this.faces.slice(rm+1));
 			return this;
 		};
+		/**
+		 * Replaces this segment with two segments, placing a point in the
+		 * middle, unless overridden.
+		 * @param segNum Index of segment to be replaced
+		 * @param sugP Optional location of new point.
+		 * @param color Not implemented yet, possible way to define the color of
+		 * the new point, and the colors of the new segments.
+		 */
 		splitSegment=function(
-			segNum: number,//Index of segment to be replaced
-			sugP?: { length: number; },//(optional) location of new point
-			color?: boolean) {
+			segNum: number,
+			sugP?: number[]/*,
+			color?: boolean*/) {
 			var npoint=(typeof sugP!="undefined"&&typeof sugP.length=="number")?
 					sugP:
 					new Polygon(
@@ -380,12 +543,12 @@ export namespace spudslices{
 					).findCenter(),
 				pointL=this.segments[segNum][0]+1;
 			this.points.splice(pointL,0,npoint);
-			if (typeof color !="undefined") {
-				console.warn("Color feature may not be implemented");
-				if (color===true) {
+			/*if (typeof color !="undefined") {
+				throw("Color feature may not be implemented");
+				//if (color===true) {
 					
-				}
-			}
+				//}
+			}*/
 			for (var i=0;i<this.segments.length;i++) {//increase the reference indexes for those that are now off by one because of the point spliced in the middle
 				if (this.segments[i][0]>=pointL) this.segments[i][0]++;
 				if (this.segments[i][1]>=pointL) this.segments[i][1]++;
@@ -665,7 +828,18 @@ export namespace spudslices{
 			super(x,y,w,w);
 		}
 	};
+	/**
+	 * A way of defining a shape, such as an Octogon.
+	 * 
+	 * > I don't plan on adding Octogon, Pentagon..., as this is so easy to use.
+	 */
 	export class EqualDistShape extends Polygon {
+		/**
+		 * Make an [[EqualDistShape]], with one point on the right side, due to
+		 * the way that [[spudslices.rawRotate]] works.
+		 * @param sideCount Number of sides.
+		 * @param radius Distance of any point from (x,y)
+		 */
 		constructor(x: number,y: number,sideCount: number,radius: number) {
 			var points:number[][]=[],
 				amountPer=(Math.PI*2)/sideCount,
@@ -679,4 +853,7 @@ export namespace spudslices{
 		}
 	};
 }
+/**
+ * A shorthand alias for your conveniance
+ */
 export var ss=spudslices;

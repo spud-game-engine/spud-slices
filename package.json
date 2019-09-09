@@ -11,7 +11,10 @@
     "watch:build": "tsc --watch",
     "watch:all": "npm run watch:test & npm run watch:build",
     "watch": "npm run watch:all",
-    "build": "tsc",
+    "build:typescript": "tsc",
+    "build:typedoc": "typedoc --out docs lib",
+    "build:all": "npm run build:typescript && npm run build:typedoc",
+    "build": "npm run build:all",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
@@ -31,6 +34,7 @@
     "coveralls": "^3.0.6",
     "eslint": "^6.3.0",
     "nyc": "^14.1.1",
+    "typedoc": "^0.15.0",
     "typescript": "^3.6.2"
   },
   "dependencies": {},
@@ -38,6 +42,7 @@
     "spud-slices": "dist/spudslices.js"
   },
   "directories": {
+    "doc": "docs",
     "lib": "lib",
     "test": "test"
   },
