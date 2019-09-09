@@ -1,5 +1,5 @@
 export namespace spudslices{
-	export const version:string="1.2.0";
+	export const version:string="1.2.1";
 	/**
 	 * Find the distance of (x,y) from the origin (0,0)
 	 */

@@ -15,21 +15,6 @@ function passiveDeepEqual(t:{is:(A:any,B:any)=>any}) {
 		if (!ranAlready) re(b,a,true,deepness);
 	};
 };
-test.todo("Make proper untested api finder?");//The coverage tester may do better at this anyway.
-/*PANIC MODE: TEST NOT VALID
-test("new, untested apis or modules",t => {
-	var   actualList:string[]=[],
-		shouldbeList:string="version 24780,distance 32500,findRot 30600,rawRotate 40014,rotate 31464,Shape 20999,collisionDetectors 126225,Circle 18492,Polygon 24000,RightTriangle 38130,IsosolesRightTriangle 54093,Rectagle 26650,Square 22908,EqualDistShape 34224";
-	for (var i in ss) {
-		var strData=i+typeof ss[i]+String(JSON.stringify(ss[i])),
-			sum=0;
-		for(var ii=0;ii<strData.length;++ii) {//make checksum
-			sum+=strData.charCodeAt(0)*(ii+1);
-		}
-		actualList.push(i+" "+sum);
-	}
-	t.is(actualList.join(","),shouldbeList);
-});//*/
 test("`spudslices` is equal to ss",t=> t.is(ss,spudslices));
 test("The distance of (0,1) from the origin",t => {
 	t.is(ss.distance(0,1),1);
