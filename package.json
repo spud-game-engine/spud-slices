@@ -6,8 +6,8 @@
   "types": "dist/spudslices.js",
   "scripts": {
     "prepublish": "npm test",
-    "test": "npm run build && nyc ava",
-    "watch:test": "ava --watch",
+    "test": "npm run build && nyc intern",
+    "watch:test": "intern --watch",
     "watch:build": "tsc --watch",
     "watch:all": "npm run watch:build & npm run watch:test",
     "watch": "npm run watch:all",
@@ -29,9 +29,9 @@
   },
   "homepage": "https://github.com/spud-game-engine/spud-slices#readme",
   "devDependencies": {
-    "ava": "^2.3.0",
     "browser-env": "^3.2.6",
     "coveralls": "^3.0.6",
+    "intern": "^4.4.3",
     "nyc": "^14.1.1",
     "typedoc": "^0.15.0",
     "typescript": "^3.6.2"
