@@ -2,7 +2,7 @@
  * The main namespace for spudslices.
  */
 export namespace spudslices{
-	export const version:string="1.2.2-a";
+	export const version:string="1.2.2";
 	/**
 	 * Find the distance of (x,y) from the origin (0,0)
 	 */
