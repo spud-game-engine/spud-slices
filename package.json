@@ -1,6 +1,6 @@
 {
   "name": "spud-slices",
-  "version": "1.2.1",
+  "version": "1.2.2.a",
   "description": "The library that lets you make shapes. Part of the Spud Game Engine.",
   "main": "dist/spudslices.js",
   "types": "dist/spudslices.js",
@@ -9,7 +9,7 @@
     "test": "npm run build && nyc ava",
     "watch:test": "ava --watch",
     "watch:build": "tsc --watch",
-    "watch:all": "npm run watch:test & npm run watch:build",
+    "watch:all": "npm run watch:build & npm run watch:test",
     "watch": "npm run watch:all",
     "build:typescript": "tsc",
     "build:typedoc": "typedoc --out docs lib",
@@ -32,7 +32,6 @@
     "ava": "^2.3.0",
     "browser-env": "^3.2.6",
     "coveralls": "^3.0.6",
-    "eslint": "^6.3.0",
     "nyc": "^14.1.1",
     "typedoc": "^0.15.0",
     "typescript": "^3.6.2"

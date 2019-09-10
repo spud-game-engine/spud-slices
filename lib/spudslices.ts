@@ -1,5 +1,8 @@
+/**
+ * The main namespace for spudslices.
+ */
 export namespace spudslices{
-	export const version:string="1.2.1";
+	export const version:string="1.2.2.a";
 	/**
 	 * Find the distance of (x,y) from the origin (0,0)
 	 */
@@ -48,7 +51,6 @@ export namespace spudslices{
 		lineTo: { apply: (arg0: any, arg1: any) => void; };
 		stroke: () => void;
 	};
-
 	/**
 	 * An object that follows the template below in structure.
 	 * See [[Shape.collisionWith]] for more info
@@ -403,7 +405,7 @@ export namespace spudslices{
 		 * Constuctor for [[Circle]], with circle placed at (x,y)
 		 * @param r Radius of [[Circle]]
 		 */
-		constructor(public x:number,public y:number,public r:number) {
+		constructor(x:number,y:number,r:number) {
 			super();
 			this.category="circle";
 			this.points[0]=r;
@@ -854,6 +856,6 @@ export namespace spudslices{
 	};
 }
 /**
- * A shorthand alias for your conveniance
+ * A shorthand alias for your convenience
  */
 export var ss=spudslices;
