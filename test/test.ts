@@ -103,6 +103,10 @@ suite("shape root class",()=>{
 		var a=new ss.Polygon([10,20],[93,23],[23,93]);
 		passiveDeepEqual()(a.makeDup(),a);
 	});
+	test("The return of makeDup on a Circle",() => {
+		var a=new ss.Circle(100,40,30);
+		passiveDeepEqual()(a.makeDup(),a);
+	});
 });
 suite("polygon class",()=>{
 	test("polygon.category",() => {

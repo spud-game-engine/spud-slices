@@ -114,6 +114,10 @@ suite("shape root class", () => {
         var a = new spudslices_1.ss.Polygon([10, 20], [93, 23], [23, 93]);
         passiveDeepEqual()(a.makeDup(), a);
     });
+    test("The return of makeDup on a Circle", () => {
+        var a = new spudslices_1.ss.Circle(100, 40, 30);
+        passiveDeepEqual()(a.makeDup(), a);
+    });
 });
 suite("polygon class", () => {
     test("polygon.category", () => {

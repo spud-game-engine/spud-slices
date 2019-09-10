@@ -316,44 +316,32 @@ export namespace spudslices{
 			}
 			s.segments=[];
 			for (iterator=0; iterator<this.segments.length;iterator++) {
-				if (typeof this.segments[iterator]=="number") s.segments[iterator]=this.segments[iterator];
-				else {
-					s.segments.push([]);
-					for (ii=0;ii< this.segments[iterator].length; ii++) {
-						s.segments[iterator][ii]=this.segments[iterator][ii];
-					}
+				s.segments.push([]);
+				for (ii=0;ii< this.segments[iterator].length; ii++) {
+					s.segments[iterator][ii]=this.segments[iterator][ii];
 				}
 			}
 			s.segmentColor=this.segmentColor+"";
 			s.segmentColors=[];
 			for (iterator=0; iterator<this.segmentColors.length;iterator++) {
-				if (typeof this.segmentColors[iterator]=="number") s.segmentColors[iterator]=this.segmentColors[iterator];
-				else {
-					s.segmentColors.push([]);
-					for (ii=0;ii< this.segmentColors[iterator].length; ii++) {
-						s.segmentColors[iterator][ii]=this.segmentColors[iterator][ii];
-					}
+				s.segmentColors.push([]);
+				for (ii=0;ii< this.segmentColors[iterator].length; ii++) {
+					s.segmentColors[iterator][ii]=this.segmentColors[iterator][ii];
 				}
 			}
 			s.faces=[];
 			for (iterator=0; iterator<this.faces.length;iterator++) {
-				if (typeof this.faces[iterator]=="number") s.faces[iterator]=this.faces[iterator];
-				else{
-					s.faces.push([]);
-					for (ii=0;ii< this.faces[iterator].length; ii++) {
-						s.faces[iterator][ii]=this.faces[iterator][ii];
-					}
+				s.faces.push([]);
+				for (ii=0;ii< this.faces[iterator].length; ii++) {
+					s.faces[iterator][ii]=this.faces[iterator][ii];
 				}
 			}
 			s.faceColor=this.faceColor+"";
 			s.faceColors=[];
 			for (iterator=0; iterator<this.faceColors.length;iterator++) {
-				if (typeof this.faceColors[iterator]=="number") s.faceColors[iterator]=this.faceColors[iterator];
-				else {
-					s.faceColors.push([]);
-					for (ii=0;ii< this.faceColors[iterator].length; ii++) {
-						s.faceColors[iterator][ii]=this.faceColors[iterator][ii];
-					}
+				s.faceColors.push([]);
+				for (ii=0;ii< this.faceColors[iterator].length; ii++) {
+					s.faceColors[iterator][ii]=this.faceColors[iterator][ii];
 				}
 			}
 			return s;
