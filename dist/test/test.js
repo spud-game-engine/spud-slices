@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 /* istanbul ignore file */
-//import intern from 'intern';
+/// <reference types="intern"/>
 const { suite, test } = intern.getPlugin('interface.tdd');
 const { assert } = intern.getPlugin('chai');
 const spudslices_1 = require("../lib/spudslices");
@@ -11,12 +11,12 @@ function passiveDeepEqual() {
         if (typeof deepness === "undefined")
             deepness = 0;
         for (let i in a) {
-            if (typeof a[i] === "function" &&
-                typeof b[i] === "function")
-                continue;
-            if (typeof a[i] !== typeof b[i])
+            var toA = typeof a[i];
+            if (toA !== typeof b[i])
                 throw ne;
-            if (typeof a[i] === "object")
+            if (toA === "function")
+                continue;
+            if (toA === "object")
                 re(a[i], b[i], false, deepness + 1);
             else
                 assert.equal(a[i], b[i]);
@@ -26,6 +26,9 @@ function passiveDeepEqual() {
     };
 }
 ;
+//TODO: USE `assert.changes` for scaling, other effects, etc.
+//(see also changesBy doesNotChange changesButNotBy increases increacesBy
+//doesNotIncrease increacesButNotBy decreaces [apply same iterations], )
 suite("library config", () => {
     test("`spudslices` is equal to ss", () => assert.equal(spudslices_1.ss, spudslices_1.spudslices));
 });
@@ -43,8 +46,7 @@ suite("math section", () => {
         assert.equal(spudslices_1.ss.findRot(0, 1), Math.PI / 2);
     });
     test("The radian rotation of (1,1) from (1,0)", () => {
-        assert.deepEqual(spudslices_1.ss.findRot(1, 1).toString().split("").slice(0, 17), //I am trimming off the last didget as it founds different
-        (Math.PI / 4).toString().split("").slice(0, 17));
+        assert.approximately(spudslices_1.ss.findRot(1, 1), Math.PI / 4, 0.000000000000001);
     });
     test("The radian rotation of (0,-1) from (1,0)", () => {
         assert.equal(spudslices_1.ss.findRot(0, -1), 3 * Math.PI / 2);
@@ -58,49 +60,43 @@ suite("math section", () => {
 });
 suite("shape root class", () => {
     test("The type of newShape.dimensions", () => {
-        assert.equal(typeof new spudslices_1.ss.Shape().dimensions, "number");
+        assert.isNumber(new spudslices_1.ss.Shape().dimensions);
     });
     test("The type of newShape.category", () => {
-        assert.equal(typeof new spudslices_1.ss.Shape().category, "string");
+        assert.isString(new spudslices_1.ss.Shape().category);
     });
     test("The type of newShape.points", () => {
-        assert.equal(typeof new spudslices_1.ss.Shape().points, "object");
-        assert.equal(typeof new spudslices_1.ss.Shape().points.length, "number");
+        assert.isArray(new spudslices_1.ss.Shape().points);
     });
     test("The type of newShape.pointColor", () => {
-        assert.equal(typeof new spudslices_1.ss.Shape().pointColor, "string");
+        assert.isString(new spudslices_1.ss.Shape().pointColor);
     });
     test("The type of newShape.pointColors", () => {
-        assert.equal(typeof new spudslices_1.ss.Shape().pointColors, "object");
-        assert.equal(typeof new spudslices_1.ss.Shape().pointColors.length, "number");
+        assert.isArray(new spudslices_1.ss.Shape().pointColors);
     });
     test("The type of newShape.pointSize", () => {
-        assert.equal(typeof new spudslices_1.ss.Shape().pointSize, "number");
+        assert.isNumber(new spudslices_1.ss.Shape().pointSize);
     });
     test("The type of newShape.segments", () => {
-        assert.equal(typeof new spudslices_1.ss.Shape().segments, "object");
-        assert.equal(typeof new spudslices_1.ss.Shape().segments.length, "number");
+        assert.isArray(new spudslices_1.ss.Shape().segments);
     });
     test("The type of newShape.segmentColor", () => {
-        assert.equal(typeof new spudslices_1.ss.Shape().segmentColor, "string");
+        assert.isString(new spudslices_1.ss.Shape().segmentColor);
     });
     test("The type of newShape.segmentColors", () => {
-        assert.equal(typeof new spudslices_1.ss.Shape().segmentColors, "object");
-        assert.equal(typeof new spudslices_1.ss.Shape().segmentColors.length, "number");
+        assert.isArray(new spudslices_1.ss.Shape().segmentColors);
     });
     test("The type of newShape.segmentSize", () => {
-        assert.equal(typeof new spudslices_1.ss.Shape().segmentSize, "number");
+        assert.isNumber(new spudslices_1.ss.Shape().segmentSize);
     });
     test("The type of newShape.faces", () => {
-        assert.equal(typeof new spudslices_1.ss.Shape().faces, "object");
-        assert.equal(typeof new spudslices_1.ss.Shape().faces.length, "number");
+        assert.isArray(new spudslices_1.ss.Shape().faces);
     });
     test("The type of newShape.faceColor", () => {
-        assert.equal(typeof new spudslices_1.ss.Shape().faceColor, "string");
+        assert.isString(new spudslices_1.ss.Shape().faceColor);
     });
     test("The type of newShape.faceColors", () => {
-        assert.equal(typeof new spudslices_1.ss.Shape().faceColors, "object");
-        assert.equal(typeof new spudslices_1.ss.Shape().faceColors.length, "number");
+        assert.isArray(new spudslices_1.ss.Shape().faceColors);
     });
     //Both of these skipped tests relate to how `__proto__` and `prototype` work. It's really a hassle.
     test("The constructor for shape", () => {
@@ -111,12 +107,18 @@ suite("shape root class", () => {
             assert.equal(spudslices_1.ss.Shape, spudslices_1.ss.Shape.constructor);
     });
     test("The return of makeDup", () => {
-        var a = new spudslices_1.ss.Polygon([10, 20], [93, 23], [23, 93]);
-        passiveDeepEqual()(a.makeDup(), a);
+        var a = new spudslices_1.ss.Polygon([10, 20], [93, 23], [23, 93]), b = a.makeDup();
+        passiveDeepEqual()(b, a);
+        assert.instanceOf(b, spudslices_1.ss.Polygon);
+        assert.instanceOf(b, spudslices_1.ss.Shape);
+        assert.notInstanceOf(b, spudslices_1.ss.Circle);
     });
     test("The return of makeDup on a Circle", () => {
-        var a = new spudslices_1.ss.Circle(100, 40, 30);
-        passiveDeepEqual()(a.makeDup(), a);
+        var a = new spudslices_1.ss.Circle(100, 40, 30), b = a.makeDup();
+        passiveDeepEqual()(b, a);
+        assert.instanceOf(b, spudslices_1.ss.Circle);
+        assert.instanceOf(b, spudslices_1.ss.Shape);
+        assert.notInstanceOf(b, spudslices_1.ss.Polygon);
     });
 });
 suite("polygon class", () => {
@@ -244,25 +246,25 @@ suite("core functionality", () => {
     //a.transpose(-40*3,0).scale(1/2);
     //var b=a.makeDup();
     test("The type of the value of collisionDetecors", () => {
-        assert.equal(typeof spudslices_1.ss.collisionDetectors, "object");
+        assert.isObject(spudslices_1.ss.collisionDetectors);
     });
     test("The type of the value of collisionDetecors.circle", () => {
-        assert.equal(typeof spudslices_1.ss.collisionDetectors["circle"], "object");
+        assert.isObject(spudslices_1.ss.collisionDetectors["circle"]);
     });
     test("The type of the value of collisionDetecors.circle.circle", () => {
-        assert.equal(typeof spudslices_1.ss.collisionDetectors["circle"].circle, "function");
+        assert.isFunction(spudslices_1.ss.collisionDetectors["circle"].circle);
     });
     test("The type of the value of collisionDetecors.circle.polygon", () => {
-        assert.equal(typeof spudslices_1.ss.collisionDetectors["circle"].polygon, "undefined");
+        assert.isUndefined(spudslices_1.ss.collisionDetectors["circle"].polygon);
     });
     test("The type of the value of collisionDetecors.polygon", () => {
-        assert.equal(typeof spudslices_1.ss.collisionDetectors["polygon"], "object");
+        assert.isObject(spudslices_1.ss.collisionDetectors["polygon"]);
     });
     test("The type of the value of collisionDetecors.polygon.circle", () => {
-        assert.equal(typeof spudslices_1.ss.collisionDetectors["polygon"].circle, "function");
+        assert.isFunction(spudslices_1.ss.collisionDetectors["polygon"].circle);
     });
     test("The type of the value of collisionDetecors.polygon.polygon", () => {
-        assert.equal(typeof spudslices_1.ss.collisionDetectors["polygon"].polygon, "function");
+        assert.isFunction(spudslices_1.ss.collisionDetectors["polygon"].polygon);
     });
     test("The result of identical collisionWith (square,square)", () => {
         var a = new spudslices_1.ss.Square(10, 10, 10), b = new spudslices_1.ss.Square(10, 10, 10);

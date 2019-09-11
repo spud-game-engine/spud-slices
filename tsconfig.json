@@ -44,9 +44,7 @@
 		"suppressImplicitAnyIndexErrors": false,
 		"strictFunctionTypes": true,
 		"strictNullChecks": true,
-		"strictPropertyInitialization": true,
-
-		"types": ["intern"]
+		"strictPropertyInitialization": true
 	},
 	"include": [
 		"lib","test/*.*"
