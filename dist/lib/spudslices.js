@@ -2,9 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * The main namespace for spudslices.
+ * @alias [[ss]]
  */
 var spudslices;
 (function (spudslices) {
+    /**
+     * A string that should be identical to that of this repo's package.json
+     */
     spudslices.version = "1.2.3";
     /**
      * Find the distance of (x,y) from the origin (0,0)
@@ -134,7 +138,8 @@ var spudslices;
              */
             this.faceColors = [];
             /**
-             * Return a duplicate of this object, removing all pointers to the original..
+             * Return a duplicate of this object, removing all pointers to the
+             * original.
              */
             this.makeDup = function () {
                 var s = new this.__proto__.constructor();
@@ -156,13 +161,9 @@ var spudslices;
                 s.pointColor = this.pointColor + "";
                 s.pointColors = [];
                 for (iterator = 0; iterator < this.pointColors.length; iterator++) {
-                    if (typeof this.pointColors[iterator] == "number")
-                        s.pointColors[iterator] = this.pointColors[iterator];
-                    else {
-                        s.pointColors.push([]);
-                        for (ii = 0; ii < this.pointColors[iterator].length; ii++) {
-                            s.pointColors[iterator][ii] = this.pointColors[iterator][ii];
-                        }
+                    s.pointColors.push([]);
+                    for (ii = 0; ii < this.pointColors[iterator].length; ii++) {
+                        s.pointColors[iterator][ii] = this.pointColors[iterator][ii];
                     }
                 }
                 s.segments = [];
@@ -809,5 +810,6 @@ var spudslices;
 })(spudslices = exports.spudslices || (exports.spudslices = {}));
 /**
  * A shorthand alias for your convenience
+ * @alias [[spudslices]]
  */
 exports.ss = spudslices;

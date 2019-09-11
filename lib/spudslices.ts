@@ -1,7 +1,11 @@
 /**
  * The main namespace for spudslices.
+ * @alias [[ss]]
  */
 export namespace spudslices{
+	/**
+	 * A string that should be identical to that of this repo's package.json
+	 */
 	export const version:string="1.2.3";
 	/**
 	 * Find the distance of (x,y) from the origin (0,0)
@@ -285,7 +289,8 @@ export namespace spudslices{
 			return this.rotate(pos[0],pos[1],rad);
 		};
 		/**
-		 * Return a duplicate of this object, removing all pointers to the original..
+		 * Return a duplicate of this object, removing all pointers to the
+		 * original.
 		 */
 		makeDup=function() {
 			var s=new this.__proto__.constructor();
@@ -306,12 +311,9 @@ export namespace spudslices{
 			s.pointColor=this.pointColor+"";
 			s.pointColors=[];
 			for (iterator=0; iterator<this.pointColors.length;iterator++) {
-				if (typeof this.pointColors[iterator]=="number") s.pointColors[iterator]=this.pointColors[iterator];
-				else {
-					s.pointColors.push([]);
-					for (ii=0;ii< this.pointColors[iterator].length; ii++) {
-						s.pointColors[iterator][ii]=this.pointColors[iterator][ii];
-					}
+				s.pointColors.push([]);
+				for (ii=0;ii< this.pointColors[iterator].length; ii++) {
+					s.pointColors[iterator][ii]=this.pointColors[iterator][ii];
 				}
 			}
 			s.segments=[];
@@ -845,5 +847,6 @@ export namespace spudslices{
 }
 /**
  * A shorthand alias for your convenience
+ * @alias [[spudslices]]
  */
 export var ss=spudslices;

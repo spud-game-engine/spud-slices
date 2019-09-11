@@ -1,7 +1,11 @@
 /**
  * The main namespace for spudslices.
+ * @alias [[ss]]
  */
 export declare namespace spudslices {
+    /**
+     * A string that should be identical to that of this repo's package.json
+     */
     export const version: string;
     /**
      * Find the distance of (x,y) from the origin (0,0)
@@ -176,7 +180,8 @@ export declare namespace spudslices {
          */
         rotCenter(rad: number): this;
         /**
-         * Return a duplicate of this object, removing all pointers to the original..
+         * Return a duplicate of this object, removing all pointers to the
+         * original.
          */
         makeDup: () => any;
         /**
@@ -269,5 +274,6 @@ export declare namespace spudslices {
 }
 /**
  * A shorthand alias for your convenience
+ * @alias [[spudslices]]
  */
 export declare var ss: typeof spudslices;
