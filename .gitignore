@@ -30,6 +30,8 @@ node_modules
 # Coveralls uses this
 # dist
 
+docs
+
 .nyc_output
 
 *.swp

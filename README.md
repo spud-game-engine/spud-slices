@@ -14,3 +14,9 @@ in 3d.
 Run `npm test` for basic testing. It will build, then run the program in node,
 as it is written in TypeScript. I don't yet know how to make it run in a browser
 env, but I'm looking into it.
+
+## Documentation
+
+Run `npm install` then `npm run build`. This will make the html5 documentation,
+using the source code. If you don't want to use a browser, just read the code,
+as the html5 version is only there because it is convenieant.
