@@ -5,7 +5,7 @@ namespace spudslices{
 	/**
 	 * A string that should be identical to that of this repo's package.json
 	 */
-	export const version:string="1.2.3";
+	export const version:string="1.3.0";
 	/**
 	 * Find the distance of (x,y) from the origin (0,0)
 	 */
@@ -855,7 +855,7 @@ namespace spudslices{
 	 * 
 	 * If you are using `import {ss} from 'spudslices'` or 
 	 * `import {spudslices} from 'spudslices'` use `import ss from 'spudslices` 
-	 * or `import spudslices from 'spudslices'`.
+	 * or `import spudslices from 'spudslices'` instead.
 	 */
 	export var ss:any,
 		spudslices:any;

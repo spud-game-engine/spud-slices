@@ -21,6 +21,9 @@ function deepEqualExcludingMethods(a:any,b:any,ranAlready?: boolean,deepness?: n
 var smallestNum=0.000000000000001
 suite("library config",()=>{
 	test("`spudslices` is equal to ss",() => assert.equal(ss,spudslices));
+	test("Version number test",()=>{
+		assert.equal(ss.version,"1.3.0");
+	});
 });
 suite("math section",()=>{
 	test("The distance of (0,1) from the origin",() => {
