@@ -3,23 +3,22 @@
 const { suite, test } = intern.getPlugin('interface.tdd');
 const { assert } = intern.getPlugin('chai');
 import {ss,spudslices} from "../lib/spudslices";
-function passiveDeepEqual() {
-	return function re(a:any,b:any,ranAlready?: boolean,deepness?: number) {
-		var ne={message:"Not equal (type conflict, depth "+deepness+")"};
-		if (typeof deepness==="undefined") deepness=0;
-		for(let i in a) {
-			var toA=typeof a[i];
-			if (toA!==typeof b[i]) throw ne;
-			if (toA==="function") continue;
-			if (toA==="object") re(a[i],b[i],false,deepness+1);
-			else assert.equal(a[i],b[i]);
-		}
-		if (!ranAlready) re(b,a,true,deepness);
-	};
+function deepEqualExcludingMethods(a:any,b:any,ranAlready?: boolean,deepness?: number) {
+	var ne={message:"Not equal (type conflict, depth "+deepness+")"};
+	if (typeof deepness==="undefined") deepness=0;
+	for(let i in a) {
+		var toA=typeof a[i];
+		if (toA!==typeof b[i]) throw ne;
+		if (toA==="function") continue;
+		if (toA==="object") deepEqualExcludingMethods(a[i],b[i],false,deepness+1);
+		else assert.equal(a[i],b[i]);
+	}
+	if (!ranAlready) deepEqualExcludingMethods(b,a,true,deepness);
 };
 //TODO: USE `assert.changes` for scaling, other effects, etc.
 //(see also changesBy doesNotChange changesButNotBy increases increacesBy
 //doesNotIncrease increacesButNotBy decreaces [apply same iterations], )
+var smallestNum=0.000000000000001
 suite("library config",()=>{
 	test("`spudslices` is equal to ss",() => assert.equal(ss,spudslices));
 });
@@ -37,7 +36,7 @@ suite("math section",()=>{
 		assert.equal(ss.findRot(0,1),Math.PI/2);
 	});
 	test("The radian rotation of (1,1) from (1,0)",() => {
-		assert.approximately(ss.findRot(1,1),Math.PI/4,0.000000000000001);
+		assert.approximately(ss.findRot(1,1),Math.PI/4,smallestNum);
 	});
 	test("The radian rotation of (0,-1) from (1,0)",() => {
 		assert.equal(ss.findRot(0,-1),3*Math.PI/2);
@@ -98,7 +97,7 @@ suite("shape root class",()=>{
 	test("The return of makeDup",() => {
 		var a=new ss.Polygon([10,20],[93,23],[23,93]),
 			b=a.makeDup();
-		passiveDeepEqual()(b,a);
+		deepEqualExcludingMethods(b,a);
 		assert.instanceOf(b,ss.Polygon);
 		assert.instanceOf(b,ss.Shape);
 		assert.notInstanceOf(b,ss.Circle);
@@ -106,7 +105,7 @@ suite("shape root class",()=>{
 	test("The return of makeDup on a Circle",() => {
 		var a=new ss.Circle(100,40,30),
 			b=a.makeDup();
-		passiveDeepEqual()(b,a);
+		deepEqualExcludingMethods(b,a);
 		assert.instanceOf(b,ss.Circle);
 		assert.instanceOf(b,ss.Shape);
 		assert.notInstanceOf(b,ss.Polygon);
@@ -143,7 +142,7 @@ suite("polygon class",()=>{
 	});
 	test("The return of polygon.convertToTriangles",() => {
 		var a=new ss.Polygon([0,0],[0,10],[10,10],[10,0]);
-		passiveDeepEqual()(a.convertToTriangles(),[
+		deepEqualExcludingMethods(a.convertToTriangles(),[
 			new ss.Polygon([10,0],[0,0],[5,5]),
 			new ss.Polygon([0,0],[0,10],[5,5]),
 			new ss.Polygon([0,10],[10,10],[5,5]),
@@ -153,7 +152,7 @@ suite("polygon class",()=>{
 	test("polygon.joinSegments",() => {
 		var a=new ss.Polygon([0,0],[0,10],[10,10],[10,0]);
 		assert.equal(a.joinSegments(1,2),a);
-		passiveDeepEqual()(a,new ss.Polygon([0,0],[10,10],[10,0]));
+		deepEqualExcludingMethods(a,new ss.Polygon([0,0],[10,10],[10,0]));
 	});
 	test("The return of polygon.findCenter",() => {
 		var a=new ss.Polygon([0,0],[10,10],[10,0]);
@@ -162,26 +161,26 @@ suite("polygon class",()=>{
 	test("The return of polygon.splitSegment",() => {
 		var a=new ss.Polygon([0,0],[10,10],[10,0]);
 		assert.equal(a.splitSegment(1),a);
-		passiveDeepEqual()(a,new ss.Polygon([0,0],[5,5],[10,10],[10,0]));
+		deepEqualExcludingMethods(a,new ss.Polygon([0,0],[5,5],[10,10],[10,0]));
 	});
 	test("The result of polygon.splitSegment (manual point)",() => {
 		var a=new ss.Polygon([0,0],[5,5],[10,10],[10,0]);
-		passiveDeepEqual()(a.splitSegment(1,[0,10]),
+		deepEqualExcludingMethods(a.splitSegment(1,[0,10]),
 			new ss.Polygon([0,0],[0,10],[5,5],[10,10],[10,0]));
 	});
 });
 suite("Polygon dirivitiaves",()=>{
 	test("The result of righttriangle",() => {
-		passiveDeepEqual()(new ss.RightTriangle(1,2,3,4),new ss.Polygon([1,2],[4,2],[1,6]));
+		deepEqualExcludingMethods(new ss.RightTriangle(1,2,3,4),new ss.Polygon([1,2],[4,2],[1,6]));
 	});
 	test("The result of IsosolesRightTriangle",() => {
-		passiveDeepEqual()(new ss.IsosolesRightTriangle(2,3,4),new ss.Polygon([2,3],[6,3],[2,7]));
+		deepEqualExcludingMethods(new ss.IsosolesRightTriangle(2,3,4),new ss.Polygon([2,3],[6,3],[2,7]));
 	});
 	test("The result of Rectagle",() => {
-		passiveDeepEqual()(new ss.Rectagle(1,2,3,4),new ss.Polygon([1,2],[4,2],[4,6],[1,6]));
+		deepEqualExcludingMethods(new ss.Rectagle(1,2,3,4),new ss.Polygon([1,2],[4,2],[4,6],[1,6]));
 	});
 	test("The result of Square",() => {
-		passiveDeepEqual()(new ss.Square(2,3,4),new ss.Polygon([2,3],[6,3],[6,7],[2,7]));
+		deepEqualExcludingMethods(new ss.Square(2,3,4),new ss.Polygon([2,3],[6,3],[6,7],[2,7]));
 	});
 });
 suite("core functionality",()=>{
@@ -203,7 +202,7 @@ suite("core functionality",()=>{
 		assert.equal(a.roundPoints(),a);
 	});//round the points
 	test("The result of EqualDistShape",() => {
-		passiveDeepEqual()(new ss.EqualDistShape(0,0,4,1).roundPoints(),
+		deepEqualExcludingMethods(new ss.EqualDistShape(0,0,4,1).roundPoints(),
 			new ss.Polygon([1,0],[0,1],[-1,0],[-0,-1]));
 	});
 	test("The return of rotCenter",() => {
@@ -268,6 +267,11 @@ suite("core functionality",()=>{
 		var a=new ss.Square(10,10,10),
 			b=new ss.Square(15,15,10);
 		assert.deepEqual(a.collisionWith(b),[[[20,10],[20,20]],[[15,15],[25,15]]]);
+	});
+	test("The result of good collisionWith, identical side (poly,poly)",() => {
+		var a=new ss.Polygon([10,10],[20,20]),
+			b=new ss.Polygon([10,10],[20,20]);
+		assert.deepEqual(a.collisionWith(b),[[[20,20],[10,10]],[[20,20],[10,10]]]);
 	});
 	test("The result of failed collisionWith (square,square)",() => {
 		var a=new ss.Square(10,10,10),

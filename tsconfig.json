@@ -30,6 +30,7 @@
 		"outDir": "dist",
 		"strict":true,
 		//"checkJs":true,
+		"esModuleInterop":true,
 
 		"allowUnreachableCode": false,
 		"allowUnusedLabels": false,

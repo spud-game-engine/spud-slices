@@ -1,8 +1,7 @@
 /**
  * The main namespace for spudslices.
- * @alias [[ss]]
  */
-export namespace spudslices{
+namespace spudslices{
 	/**
 	 * A string that should be identical to that of this repo's package.json
 	 */
@@ -57,8 +56,12 @@ export namespace spudslices{
 	};
 	/**
 	 * An object that follows the template below in structure.
-	 * See [[Shape.collisionWith]] for more info
-	*/
+	 * 
+	 * A database of the functions that get called when checking to see if any
+	 * two shapes are touching.
+	 * 
+	 * @see [[Shape.collisionWith]] for more info.
+	 */
 	export var collisionDetectors:{
 		[index:string]:{//Shape name
 			[index:string]://Another shape name
@@ -844,9 +847,33 @@ export namespace spudslices{
 			this.transpose(x,y);
 		}
 	};
+	/**
+	 * > **Will be DEPRECATED in v2**
+	 * 
+	 * Include ss and spudslices in the main export
+	 * Put here for compatibility with v1.2.3
+	 * 
+	 * If you are using `import {ss} from 'spudslices'` or 
+	 * `import {spudslices} from 'spudslices'` use `import ss from 'spudslices` 
+	 * or `import spudslices from 'spudslices'`.
+	 */
+	export var ss:any,
+		spudslices:any;
 }
-/**
- * A shorthand alias for your convenience
- * @alias [[spudslices]]
- */
-export var ss=spudslices;
+(function(){
+	var __warnedAboutv1_2_3ExportDep=false;
+	function get() {
+		if (!__warnedAboutv1_2_3ExportDep){
+			__warnedAboutv1_2_3ExportDep=true;
+			var __useInstead__="\n\nIf you are using `import {ss} from 'spudslices'` or `import {spudslices} from 'spudslices'` use `import ss from 'spudslices` or `import spudslices from 'spudslices'`\n";
+			console.warn("DEPRECATION WARNING: Using this style of import is going to be deprecated in v2 of spud-slices."+__useInstead__);//remove this line, uncomment next line on v2
+			//console.error("DEPRECATION WARNING: Using this style of import has been deprecated as of v2 of spud-slices. This will be thrown in v2.1 (or later)"+__useInstead__);//remove this line, uncomment next line on v2.1
+			//throw new Error("DEPRECATION WARNING: Using this style of import has been deprecated as of v2 of spud-slices. This feature will be wiped in v2.2 (or later)"+__useInstead__);//remove, along with other simmalar code in v2.2
+		}
+		return spudslices;
+	}
+	Object.defineProperty(spudslices,"spudslices",{get});
+	Object.defineProperty(spudslices,"ss",{get});
+})()
+//export spudslices as the only thing exported
+export = spudslices;
