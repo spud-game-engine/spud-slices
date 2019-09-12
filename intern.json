@@ -1,3 +1,4 @@
 {
-  "suites": "dist/test/*.js"
+  "plugins": "node_modules/ts-node/register/index.js",
+  "suites": "test/test.ts"
 }

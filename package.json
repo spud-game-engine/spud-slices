@@ -5,7 +5,6 @@
   "main": "dist/spudslices.js",
   "types": "dist/spudslices.js",
   "scripts": {
-    "prepublish": "npm test",
     "test": "npm run build && nyc intern",
     "watch:test": "intern --watch",
     "watch:build": "tsc --watch",
@@ -29,12 +28,15 @@
   },
   "homepage": "https://github.com/spud-game-engine/spud-slices#readme",
   "devDependencies": {
-    "browser-env": "^3.2.6",
+    "@istanbuljs/nyc-config-typescript": "^0.1.3",
     "coveralls": "^3.0.6",
+    "eslint": "^6.3.0",
     "intern": "^4.4.3",
     "nyc": "^14.1.1",
+    "source-map-support": "^0.5.13",
+    "ts-node": "^8.3.0",
     "typedoc": "^0.15.0",
-    "typescript": "^3.6.2"
+    "typescript": "^3.6.3"
   },
   "dependencies": {},
   "bin": {
