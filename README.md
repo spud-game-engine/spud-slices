@@ -1,4 +1,4 @@
-# Spud-Slices v1.3.2a
+# Spud-Slices v1.3.2b
 
 [![Coverage Status](https://coveralls.io/repos/github/spud-game-engine/spud-slices/badge.svg?branch=master)](https://coveralls.io/github/spud-game-engine/spud-slices?branch=master)
 [![Build Status](https://travis-ci.org/spud-game-engine/spud-slices.svg?branch=master)](https://travis-ci.org/spud-game-engine/spud-slices)
