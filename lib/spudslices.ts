@@ -41,20 +41,6 @@ namespace spudslices{
 		return rawRotate(x,y,rad+findRot(x,y));
 	};
 	/**
-	 * A private interface that represents a 2d canvas instance
-	 */
-	interface ctx{
-		fillStyle: string;
-		beginPath: () => void;
-		arc: (arg0: number, arg1: number, arg2: number, arg3: number, arg4: number) => void;
-		fill: () => void;
-		strokeStyle: string;
-		lineWidth: number;
-		moveTo: { apply: (arg0: any, arg1: any) => void; };
-		lineTo: { apply: (arg0: any, arg1: any) => void; };
-		stroke: () => void;
-	};
-	/**
 	 * An object that follows the template below in structure.
 	 * 
 	 * A database of the functions that get called when checking to see if any
@@ -147,20 +133,20 @@ namespace spudslices{
 		 */
 		faceColors:string[]=[];
 		/**
-		 * Draws this [[Shape]] instance on this [[ctx]] instance.
-		 * @param ctx see the [[ctx]] interface
+		 * Draws this [[Shape]] instance on this CanvasRenderingContext2D
+		 * instance.
 		 */
-		drawOn(ctx: ctx) {
+		drawOn(ctx: CanvasRenderingContext2D) {
 			this.drawFacesOn(ctx);
 			this.drawSegmentsOn(ctx);
 			this.drawPointsOn(ctx);
 			return this;
 		};
 		/**
-		 * Draws the points of this [[Shape]] instance on this [[ctx]] instance.
-		 * @param ctx see the [[ctx]] interface
+		 * Draws the points of this [[Shape]] instance on this
+		 * CanvasRenderingContext2D instance.
 		 */
-		drawPointsOn(ctx: ctx) {
+		drawPointsOn(ctx: CanvasRenderingContext2D) {
 			ctx.fillStyle=this.pointColor;
 			ctx.beginPath();
 			for (var i=0; i<this.points.length; i++) {
@@ -175,10 +161,10 @@ namespace spudslices{
 			return this;
 		};
 		/**
-		 * Draws the segments of this [[Shape]] instance on this [[ctx]] instance.
-		 * @param ctx see the [[ctx]] interface
+		 * Draws the segments of this [[Shape]] instance on this
+		 * CanvasRenderingContext2D instance.
 		 */
-		drawSegmentsOn(ctx: ctx) {
+		drawSegmentsOn(ctx: CanvasRenderingContext2D) {
 			ctx.strokeStyle=this.segmentColor;
 			ctx.lineWidth=this.segmentSize;
 			ctx.beginPath();
@@ -200,10 +186,10 @@ namespace spudslices{
 			return this;
 		};
 		/**
-		 * Draws the faces of this [[Shape]] instance on this [[ctx]] instance.
-		 * @param ctx see the [[ctx]] interface
+		 * Draws the faces of this [[Shape]] instance on this
+		 * CanvasRenderingContext2D instance.
 		 */
-		drawFacesOn(ctx: ctx) {
+		drawFacesOn(ctx: CanvasRenderingContext2D) {
 			ctx.fillStyle=this.faceColor;
 			ctx.beginPath();
 			for (var fac=0; fac<this.faces.length; fac++) {
@@ -447,7 +433,7 @@ namespace spudslices{
 		 * segments, and the last point is automatically connected to the first
 		 * point.
 		 */
-		constructor(...args: any[]) {
+		constructor(...args: number[][]|number[]) {
 			super();
 			this.category="polygon";
 			this.faces[0]=[];
