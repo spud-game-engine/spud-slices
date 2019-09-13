@@ -3,9 +3,9 @@
  */
 namespace spudslices{
 	/**
-	 * A string that should be identical to that of this repo's package.json
+	 * A string that identifies the version number.
 	 */
-	export const version:string="1.3.0";
+	export const version:string="1.3.0";//should be identical to that of this repo's package.json
 	/**
 	 * Find the distance of (x,y) from the origin (0,0)
 	 */
@@ -13,7 +13,8 @@ namespace spudslices{
 		return Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
 	};
 	/**
-	 * Find the rotation (in radians) of (x,y) from (0,1)
+	 * Find the rotation (in radians) of (x,y) from (0,1) around the origin
+	 * (0,0)
 	 */
 	export function findRot(x:number,y:number) {
 		var dist=distance(x,y),
@@ -23,8 +24,9 @@ namespace spudslices{
 		return Math.acos(pos[0]);
 	};
 	/**
-	 * Get the location of the point, given that the distance is (x,y) and the
-	 * rotation to offset it by is `rad`
+	 * Rotate a point (x,y) around (0,0)
+	 * @param rad The rotation to offset the new rotation from (0,distance),
+	 * where distance is the distance of (x,y) from (0,0)
 	 */
 	export function rawRotate(x:number,y:number,rad:number) {
 		var dist=distance(x,y);
@@ -68,6 +70,10 @@ namespace spudslices{
 		 * 
 		 * These internal mechanisims will expect the length of each
 		 * array inside of `points` to equal this value.
+		 * 
+		 * Sometime in the future, if 3D support is ever added, this will be
+		 * used to have any-dimention shapes, but it will require a few more
+		 * base shapes, and much, much more complicated collisions.
 		 */
 		dimensions=2;
 		/**
@@ -136,7 +142,7 @@ namespace spudslices{
 		 * Draws this [[Shape]] instance on this CanvasRenderingContext2D
 		 * instance.
 		 */
-		drawOn(ctx: CanvasRenderingContext2D) {
+		drawOn(ctx: CanvasRenderingContext2D):Shape {
 			this.drawFacesOn(ctx);
 			this.drawSegmentsOn(ctx);
 			this.drawPointsOn(ctx);
@@ -146,7 +152,7 @@ namespace spudslices{
 		 * Draws the points of this [[Shape]] instance on this
 		 * CanvasRenderingContext2D instance.
 		 */
-		drawPointsOn(ctx: CanvasRenderingContext2D) {
+		drawPointsOn(ctx: CanvasRenderingContext2D):Shape {
 			ctx.fillStyle=this.pointColor;
 			ctx.beginPath();
 			for (var i=0; i<this.points.length; i++) {
@@ -164,7 +170,7 @@ namespace spudslices{
 		 * Draws the segments of this [[Shape]] instance on this
 		 * CanvasRenderingContext2D instance.
 		 */
-		drawSegmentsOn(ctx: CanvasRenderingContext2D) {
+		drawSegmentsOn(ctx: CanvasRenderingContext2D):Shape {
 			ctx.strokeStyle=this.segmentColor;
 			ctx.lineWidth=this.segmentSize;
 			ctx.beginPath();
@@ -189,7 +195,7 @@ namespace spudslices{
 		 * Draws the faces of this [[Shape]] instance on this
 		 * CanvasRenderingContext2D instance.
 		 */
-		drawFacesOn(ctx: CanvasRenderingContext2D) {
+		drawFacesOn(ctx: CanvasRenderingContext2D):Shape {
 			ctx.fillStyle=this.faceColor;
 			ctx.beginPath();
 			for (var fac=0; fac<this.faces.length; fac++) {
@@ -213,7 +219,7 @@ namespace spudslices{
 		/**
 		 * Transposes the shape by (x,y)
 		 */
-		transpose(x: number,y: number) {
+		transpose(x: number,y: number):Shape {
 			for (var i=0; i<this.points.length; i++) {
 				if (typeof this.points[i]=="number") continue;
 				this.points[i][0]+=x;
@@ -222,13 +228,20 @@ namespace spudslices{
 			return this;
 		};
 		/**
-		 * A basic scale function. (NOTE: Doesn't morph the shape of [[Circle]]
-		 * elements)
+		 * A basic scale function.
+		 * 
+		 * > NOTE: Doesn't morph the shape of [[Circle]] elements, but it does
+		 * > scale its position, and will take the average of x and y to figure
+		 * > out how much to scale the radius.
+		 * >
+		 * > TL;DR: Circles scaled with this function still are circles, never
+		 * > ovals.
+		 * 
 		 * @param x How much the shape is scaled along the x-position
 		 * @param y Inferred to be `x` if missing. If not missing, how
 		 *   much the shape is scaled along the y-position.
 		 */
-		scale(x: number,y?: number) {
+		scale(x: number,y?: number):Shape {
 			if(typeof y==="undefined") y=x;
 			for(var i=0;i<this.points.length;i++) {
 				if (typeof this.points[i]=="number") {
@@ -244,7 +257,7 @@ namespace spudslices{
 		 * Rotate the shape around (x,y)
 		 * @param rad How many radians to rotate it by.
 		 */
-		rotate(x: number,y: number,rad: number) {
+		rotate(x: number,y: number,rad: number):Shape {
 			this.transpose(-x,-y);//to Center
 			for (var i=0;i<this.points.length;i++) {
 				if (typeof this.points[i]=="number") continue;
@@ -257,7 +270,7 @@ namespace spudslices{
 		 * Round all points in the function. (Will also round the radius of a circle)
 		 * @param otherF Optional function to use instead of `Math.round`
 		 */
-		roundPoints(otherF?: {(x: number): number}) {
+		roundPoints(otherF?: {(x: number): number}):Shape {
 			if (typeof otherF==="undefined") {
 				otherF=Math.round;
 			}
@@ -270,10 +283,10 @@ namespace spudslices{
 			return this;
 		};
 		/**
-		 * Rotate the shape around it's own center.
+		 * Rotate the shape around its own center.
 		 * @param rad How far to rotate.
 		 */
-		rotCenter(rad: number) {
+		rotCenter(rad: number):Shape {
 			var pos=this.findCenter();
 			return this.rotate(pos[0],pos[1],rad);
 		};
@@ -339,10 +352,16 @@ namespace spudslices{
 		};
 		/**
 		 * Search for the [[Shape.category]] of both, then run the
-		 * other's function if it can be found. If not, run this one's.
-		 *
-		 * Why? Because I want it to be possible to override one if you really
-		 * wanted to. This should make it easier.  -- NOTE: NOT ACTUALY HAPPENING RN!
+		 * this one's function if it can be found. If not, run this the other
+		 * ones function.
+		 * 
+		 * > NOTE: I plan on having it call the other one's first, but there is
+		 * > a deep-rooted bug that doesn't properly call the other's.
+		 * > 
+		 * > The
+		 * > reasoning behind having the other's called first is the fact that
+		 * > it allows for someone to create their own collisionDetector &/or
+		 * > type of shape in a better way.
 		 */
 		collisionWith(sh:Shape) {
 			if (typeof collisionDetectors[this.category]!=="undefined"&&
@@ -361,7 +380,7 @@ namespace spudslices{
 				this.category+"\"-\""+sh.category+"\" collision.";
 		};
 		/**
-		 * Find the center of (almost) any shape, relative to the points.
+		 * Find the center of any shape, relative to the points.
 		 */
 		findCenter() {
 			var center=new Array(this.dimensions);
@@ -375,13 +394,17 @@ namespace spudslices{
 		};
 	};
 	/**
-	 * > Causes minor conflict as [[Shape.points]] [0] is the radius, whereas the
-	 * > rest of the library expects the type of [[Shape.points]] to be
-	 * > `number[][]`
+	 * The base class for circle- like shapes.
+	 * 
+	 * > Note: Causes minor conflict as [[Shape.points]] [0] is the radius,
+	 * > whereas the rest of the library expects the type of [[Shape.points]] to
+	 * > be `number[][]`. This may be redesigned in a future major release.
 	 */
 	export class Circle extends Shape{
 		/**
-		 * Constuctor for [[Circle]], with circle placed at (x,y)
+		 * Constuctor for [[Circle]]
+		 * @param x X-location of Circle
+		 * @param y Y-location of Circle
 		 * @param r Radius of [[Circle]]
 		 */
 		constructor(x:number,y:number,r:number) {
@@ -395,7 +418,7 @@ namespace spudslices{
 		/**
 		 * Find the center of a [[Circle]].
 		 */
-		findCenter() {
+		findCenter():[number,number] {
 			return this.points[1];
 		};
 	}
@@ -449,7 +472,7 @@ namespace spudslices{
 		 * Makes a point at the center, draws lines from that point to every
 		 * other point, and ends up cutting up the shape like a pizza.
 		 * 
-		 * > Requires the shape to have 1 face.
+		 * > NOTE: Assumes the shape to have 1 face.
 		 */
 		convertToTriangles=function() {
 			if (this.points.length==3) {//Don't you just love it when your code is a readable sentence?
@@ -467,10 +490,10 @@ namespace spudslices{
 		/**
 		 * Removes the segments' shared point, then replaces them with a single
 		 * segment.
-		 * @param segA: Index of the first segment
-		 * @param segB: Index of the second segement
+		 * @param segA Index of the first segment
+		 * @param segB Index of the second segement
 		 */
-		joinSegments=function(segA: number,segB: number) {//lol sega
+		joinSegments=function(segA: number,segB: number):Shape {//lol sega
 			if (typeof this.segments[segA]==="undefined"||
 				typeof this.segments[segB]==="undefined") {
 				console.warn("Segments not found!");
@@ -515,7 +538,7 @@ namespace spudslices{
 		splitSegment=function(
 			segNum: number,
 			sugP?: number[]/*,
-			color?: boolean*/) {
+			color?: boolean*/):Shape {
 			var npoint=(typeof sugP!="undefined"&&typeof sugP.length=="number")?
 					sugP:
 					new Polygon(
@@ -795,6 +818,9 @@ namespace spudslices{
 		}
 	}
 	export class IsosolesRightTriangle extends RightTriangle{
+		/**
+		 * @param w Both the width and height of the Right triangle.
+		 */
 		constructor(x: number,y: number,w: number) {
 			super(x,y,w,w);
 		}
@@ -805,6 +831,9 @@ namespace spudslices{
 		}
 	};
 	export class Square extends Rectagle {
+		/**
+		 * @param w Both the width and height of the square.
+		 */
 		constructor(x: number,y: number,w: number) {
 			super(x,y,w,w);
 		}
@@ -819,7 +848,7 @@ namespace spudslices{
 		 * Make an [[EqualDistShape]], with one point on the right side, due to
 		 * the way that [[spudslices.rawRotate]] works.
 		 * @param sideCount Number of sides.
-		 * @param radius Distance of any point from (x,y)
+		 * @param radius Distance of all points from (x,y)
 		 */
 		constructor(x: number,y: number,sideCount: number,radius: number) {
 			var points:number[][]=[],
@@ -837,7 +866,10 @@ namespace spudslices{
 	 * > **Will be DEPRECATED in v2**
 	 * 
 	 * Include ss and spudslices in the main export
-	 * Put here for compatibility with v1.2.3
+	 * 
+	 * Put here for compatibility with v1.2.3. Please don't use in new code.
+	 * (If you would like me to keep these redundant exports, tell me, and I
+	 * will consider canceling their deprecation)
 	 * 
 	 * If you are using `import {ss} from 'spudslices'` or 
 	 * `import {spudslices} from 'spudslices'` use `import ss from 'spudslices` 

@@ -225,6 +225,11 @@ suite("core functionality",()=>{
 		assert.equal(a.scale(1/2,1/2),a);
 		assert.deepEqual(a.points[1],[40,20]);
 	});
+	test("The return of scale (circle)",() => {
+		var a=new ss.Circle(10,10,10).scale(4);
+		assert.equal(a.scale(1/2,1/2),a);
+		assert.deepEqual(a.points,[20,[20,20]]);
+	});
 	//claimT("The return of drawPointsOn",[a.drawPointsOn(ctx),a]);
 	//test.todo("The return of drawPointsOn"/*,() => {
 	//	var a=Square(0,0,10,10);
