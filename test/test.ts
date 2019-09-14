@@ -22,7 +22,7 @@ var smallestNum=0.000000000000001
 suite("library config",()=>{
 	test("`spudslices` is equal to ss",() => assert.equal(ss,spudslices));
 	test("Version number test",()=>{
-		assert.equal(ss.version,"1.3.2c");
+		assert.equal(ss.version,"1.3.2-c");
 	});
 });
 suite("math section",()=>{

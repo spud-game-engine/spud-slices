@@ -1,4 +1,4 @@
-# Spud-Slices v1.3.2b
+# Spud-Slices v1.3.2-c
 
 [![Coverage Status](https://coveralls.io/repos/github/spud-game-engine/spud-slices/badge.svg?branch=master)](https://coveralls.io/github/spud-game-engine/spud-slices?branch=master)
 [![Build Status](https://travis-ci.org/spud-game-engine/spud-slices.svg?branch=master)](https://travis-ci.org/spud-game-engine/spud-slices)
@@ -11,6 +11,11 @@ it works with 2d applications only, but it should, in the future be able to work
 in 3d.
 
 ## Using the library
+
+Download and mark as a dependancy with `npm i spud-slices -D`.
+
+<!--Right now, ss depends on tslib, as I plans on using tslib in all of my SGE
+components. (NOT TRUE RIGHT NOW: I'll need to look into it)-->
 
 Import the library with one of the following:
 

@@ -5,7 +5,7 @@ namespace spudslices{
 	/**
 	 * A string that identifies the version number.
 	 */
-	export const version:string="1.3.2c";//should be identical to that of this repo's package.json
+	export const version:string="1.3.2-c";//should be identical to that of this repo's package.json
 	/**
 	 * Find the distance of (x,y) from the origin (0,0)
 	 */
@@ -60,6 +60,7 @@ namespace spudslices{
 	 * The base class for all shapes.
 	 */
 	export class Shape {
+		//[x: string]: any;
 		/**
 		 * This string is what identifies to `collisionWith` which of the
 		 * `collisionDetectors` to use.
@@ -294,7 +295,7 @@ namespace spudslices{
 		 * Return a duplicate of this object, removing all pointers to the
 		 * original.
 		 */
-		makeDup=function() {
+		makeDup() {
 			var s=new this.__proto__.constructor();
 			for (var i in this) {
 				s[i]=this[i];
@@ -350,6 +351,14 @@ namespace spudslices{
 			}
 			return s;
 		};
+		/*makeDup() {
+			var s=new this.__proto__.constructor();
+			for (var i in this) {
+				if (s[i]==this[i]) continue;
+				Object.assign(this[i],s[i]);
+			}
+			return s;
+		};*/
 		/**
 		 * Search for the [[Shape.category]] of both, then run the
 		 * this one's function if it can be found. If not, run this the other
@@ -474,7 +483,7 @@ namespace spudslices{
 		 * 
 		 * > NOTE: Assumes the shape to have 1 face.
 		 */
-		convertToTriangles=function() {
+		convertToTriangles() {
 			if (this.points.length==3) {//Don't you just love it when your code is a readable sentence?
 				console.warn(this,"is already a triangle!");
 				//return [this];//you can do this with any polygon
@@ -493,7 +502,7 @@ namespace spudslices{
 		 * @param segA Index of the first segment
 		 * @param segB Index of the second segement
 		 */
-		joinSegments=function(segA: number,segB: number):Shape {//lol sega
+		joinSegments(segA: number,segB: number):Shape {//lol sega
 			if (typeof this.segments[segA]==="undefined"||
 				typeof this.segments[segB]==="undefined") {
 				console.warn("Segments not found!");
@@ -535,7 +544,7 @@ namespace spudslices{
 		 * @param color Not implemented yet, possible way to define the color of
 		 * the new point, and the colors of the new segments.
 		 */
-		splitSegment=function(
+		splitSegment(
 			segNum: number,
 			sugP?: number[]/*,
 			color?: boolean*/):Shape {

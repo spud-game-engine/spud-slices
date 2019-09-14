@@ -1,11 +1,11 @@
 {
   "name": "spud-slices",
-  "version": "1.3.2b",
+  "version": "1.3.2-c",
   "description": "The library that lets you make shapes. Part of the Spud Game Engine.",
   "main": "dist/lib/spudslices.js",
   "types": "dist/lib/spudslices.d.ts",
   "scripts": {
-    "prepublish": "npm run build",
+    "prepare": "npm run build",
     "test": "npm run build && nyc intern",
     "watch:test": "intern --watch",
     "watch:build": "tsc --watch",
@@ -41,13 +41,12 @@
   },
   "dependencies": {},
   "bin": {
-    "spud-slices": "dist/spudslices.js"
+    "spud-slices": "dist/lib/spudslices.js"
   },
   "directories": {
     "doc": "docs",
     "lib": "lib",
-    "test": "test",
-    "bin": "dist"
+    "test": "test"
   },
   "nyc": {
     "extends": "@istanbuljs/nyc-config-typescript"
