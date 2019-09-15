@@ -22,7 +22,7 @@ var smallestNum=0.000000000000001
 suite("library config",()=>{
 	test("`spudslices` is equal to ss",() => assert.equal(ss,spudslices));
 	test("Version number test",()=>{
-		assert.equal(ss.version,"1.3.2-c");
+		assert.equal(ss.version,"1.3.2-d");
 	});
 });
 suite("math section",()=>{
@@ -155,6 +155,11 @@ suite("polygon class",()=>{
 	test("polygon.joinSegments",() => {
 		var a=new ss.Polygon([0,0],[0,10],[10,10],[10,0]);
 		assert.equal(a.joinSegments(1,2),a);
+		deepEqualExcludingMethods(a,new ss.Polygon([0,0],[10,10],[10,0]));
+	});
+	test("polygon.joinSegments reverse",() => {
+		var a=new ss.Polygon([0,0],[0,10],[10,10],[10,0]);
+		assert.equal(a.joinSegments(2,1),a);
 		deepEqualExcludingMethods(a,new ss.Polygon([0,0],[10,10],[10,0]));
 	});
 	test("The return of polygon.findCenter",() => {
@@ -295,6 +300,17 @@ suite("core functionality",()=>{
 		var a=new ss.Square(10,10,10),
 			b=new ss.Circle(30,30,10);
 		assert.deepEqual([a.collisionWith(b)],[[]]);
+	});
+	test("The result of good collisionWith (square,circle)",t => {
+		t.skip("Known bug to be adressed in v2. Fixing it fundemintally changes certian components of the API.");
+		var a=new ss.Square(10,10,10),
+			b=new ss.Circle(20,20,10);
+		assert.deepEqual(b.collisionWith(a),[[[10,20],[10,10]],[10,[20,20]]]);
+	});
+	test("The result of failed collisionWith (square,circle)",() => {
+		var a=new ss.Square(10,10,10),
+			b=new ss.Circle(30,30,10);
+		assert.deepEqual([b.collisionWith(a)],[[]]);
 	});
 	test("The result of identical collisionWith (circle,circle)",() => {
 		var a=new ss.Circle(30,30,10),

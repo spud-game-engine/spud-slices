@@ -1,22 +1,24 @@
 /**
- * The main namespace for spudslices.
+ * This is the main source file for spudslices, the library that lets you make
+ * shapes.
+ */
+/**
+ * The main namespace for spudslices, the library that lets you make shapes.
  */
 namespace spudslices{
 	/**
 	 * A string that identifies the version number.
 	 */
-	export const version:string="1.3.2-c";//should be identical to that of this repo's package.json
+	export const version:string="1.3.2-d";//should be identical to that of this repo's package.json
 	/**
 	 * Find the distance of (x,y) from the origin (0,0)
 	 */
-	export function distance(x:number,y:number) {
-		return Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
-	};
+	export let distance = (x:number,y:number) => Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
 	/**
 	 * Find the rotation (in radians) of (x,y) from (0,1) around the origin
 	 * (0,0)
 	 */
-	export function findRot(x:number,y:number) {
+	export function findRot(x:number,y:number):number {
 		var dist=distance(x,y),
 			pos=[x/dist,
 				y/dist];
@@ -28,7 +30,7 @@ namespace spudslices{
 	 * @param rad The rotation to offset the new rotation from (0,distance),
 	 * where distance is the distance of (x,y) from (0,0)
 	 */
-	export function rawRotate(x:number,y:number,rad:number) {
+	export function rawRotate(x:number,y:number,rad:number):[number,number] {
 		var dist=distance(x,y);
 		return [
 			dist*(Math.cos(rad)),
@@ -39,9 +41,7 @@ namespace spudslices{
 	 * Get the location of where a point will be rotated (given `rad`) from it's
 	 * current location (x,y)
 	 */
-	export function rotate (x: number,y: number,rad: number) {
-		return rawRotate(x,y,rad+findRot(x,y));
-	};
+	export let rotate=(x: number,y: number,rad: number)=>rawRotate(x,y,rad+findRot(x,y));
 	/**
 	 * An object that follows the template below in structure.
 	 * 
@@ -50,7 +50,7 @@ namespace spudslices{
 	 * 
 	 * @see [[Shape.collisionWith]] for more info.
 	 */
-	export var collisionDetectors:{
+	export let collisionDetectors:{
 		[index:string]:{//Shape name
 			[index:string]://Another shape name
 				(sh:Shape) => any[]
@@ -60,7 +60,7 @@ namespace spudslices{
 	 * The base class for all shapes.
 	 */
 	export class Shape {
-		//[x: string]: any;
+		[x: string]: any;//Allows __proto__ to work.
 		/**
 		 * This string is what identifies to `collisionWith` which of the
 		 * `collisionDetectors` to use.
@@ -106,9 +106,10 @@ namespace spudslices{
 		/**
 		 * Each item in the array symbolises a segment, where each item within
 		 * is a number referring to the index of its respective point. The
-		 * length of the innermost array should always be `2`.
+		 * length of the innermost array should always be `2` as segments are
+		 * comprised of exactly two points.
 		 */
-		segments:number[][]=[];
+		segments:[number,number][]=[];
 		/**
 		 * The color that segments are rendered when calling either [[drawOn]] or 
 		 * [[drawSegmentsOn]]. Overrided by [[segmentColors]].
@@ -373,16 +374,15 @@ namespace spudslices{
 		 * > type of shape in a better way.
 		 */
 		collisionWith(sh:Shape) {
-			if (typeof collisionDetectors[this.category]!=="undefined"&&
-				typeof collisionDetectors[this.category][sh.category]!==
-					"undefined") {
-				return collisionDetectors[this.category]
-					[sh.category].call(this,sh);
-			}else if (typeof collisionDetectors[sh.category]!=="undefined"&&
-				typeof collisionDetectors[sh.category][this.category]!==
-					"undefined") {
-				var tmp=collisionDetectors[sh.category]
-					[this.category].call(sh,this);
+			if (typeof  collisionDetectors[this.category]!=="undefined"&&
+				typeof  collisionDetectors[this.category][  sh.category]!=="undefined") {
+
+				return  collisionDetectors[this.category][  sh.category].call(this,sh);
+			}else if (
+				typeof  collisionDetectors[  sh.category]!=="undefined"&&
+				typeof  collisionDetectors[  sh.category][this.category]!=="undefined") {
+
+				let tmp=collisionDetectors[  sh.category][this.category].call(sh,this);
 				if (tmp.length===0) return [];
 				else return [tmp[1],tmp[0]];
 			}else throw "Could not find shape collision detector for a \""+
@@ -427,9 +427,7 @@ namespace spudslices{
 		/**
 		 * Find the center of a [[Circle]].
 		 */
-		findCenter():[number,number] {
-			return this.points[1];
-		};
+		findCenter=():[number,number]=>this.points[1];
 	}
 	collisionDetectors["circle"]={};
 	collisionDetectors["circle"].circle=function(sh: Circle|Shape) {
@@ -484,10 +482,6 @@ namespace spudslices{
 		 * > NOTE: Assumes the shape to have 1 face.
 		 */
 		convertToTriangles() {
-			if (this.points.length==3) {//Don't you just love it when your code is a readable sentence?
-				console.warn(this,"is already a triangle!");
-				//return [this];//you can do this with any polygon
-			}
 			var out:Polygon[]=[],
 				center=this.findCenter();
 			for (var i=0; i<this.segments.length; i++) {
@@ -511,7 +505,8 @@ namespace spudslices{
 			var a=this.segments[segA],
 				b=this.segments[segB];
 			if (a[1]!==b[0]) {
-				console.log("Segments not joinable! (or at least not with the current algorithim.)");
+				if (a[0]!==b[1]) throw "Segments not joinable! They need to share a pointer to the same point.";
+				else return this.joinSegments(segB,segA);
 			}
 			this.points=this.points.slice(0,a[1]).concat(this.points.slice(a[1]+1));
 			for(var i=0;i<this.segments.length;i++) {
