@@ -91,7 +91,6 @@ suite("shape root class",()=>{
 	test("The type of newShape.faceColors",() => {
 		assert.isArray(new ss.Shape().faceColors);
 	});
-	//Both of these skipped tests relate to how `__proto__` and `prototype` work. It's really a hassle.
 	test("The constructor for shape",() => {
 		if (typeof ss.Shape.prototype!=="undefined") {
 			assert.equal(ss.Shape,ss.Shape.prototype.constructor);

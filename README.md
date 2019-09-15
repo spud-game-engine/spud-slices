@@ -14,7 +14,7 @@ in 3d.
 
 Download and mark as a dependancy with `npm i spud-slices -D`.
 
-<!--Right now, ss depends on tslib, as I plans on using tslib in all of my SGE
+<!--Right now, ss depends on tslib, as I plan on using tslib in all of my SGE
 components. (NOT TRUE RIGHT NOW: I'll need to look into it)-->
 
 Import the library with one of the following:

@@ -816,11 +816,20 @@ namespace spudslices{
 		}
 		return [];
 	};
+	/**
+	 * A right triangle.
+	 * 
+	 * The 90 degree angle is at (x,y).
+	 * Next point is at (x+w,y), then (x,y+h)
+	 */
 	export class RightTriangle extends Polygon {
 		constructor(x: number,y: number,w: number,h:number) {
 			super([x,y],[x+w,y],[x,y+h]);
 		}
 	}
+	/**
+	 * A 45,45,90 triangle.
+	 */
 	export class IsosolesRightTriangle extends RightTriangle{
 		/**
 		 * @param w Both the width and height of the Right triangle.
@@ -829,6 +838,7 @@ namespace spudslices{
 			super(x,y,w,w);
 		}
 	};
+	//TODO: add 30,60,90 triangle?
 	export class Rectagle extends Polygon {
 		constructor(x:number,y:number,w:number,h:number) {
 			super([x,y],[x+w,y],[x+w,y+h],[x,y+h]);
@@ -855,12 +865,10 @@ namespace spudslices{
 		 * @param radius Distance of all points from (x,y)
 		 */
 		constructor(x: number,y: number,sideCount: number,radius: number) {
-			var points:number[][]=[],
-				amountPer=(Math.PI*2)/sideCount,
-				thusFar=0;
-			while (thusFar<sideCount) {
+			let points:[number,number][]=[];
+			for (let amountPer=(Math.PI*2)/sideCount,
+				thusFar=0; thusFar<sideCount; ++thusFar) {
 				points.push(rotate(radius,0,thusFar*amountPer));
-				thusFar++;
 			}
 			super(...points);
 			this.transpose(x,y);
