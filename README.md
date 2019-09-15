@@ -35,8 +35,8 @@ would rather just use this.](modules/_spudslices_.spudslices.html)
 ## Unit testing
 
 Run `npm test` for basic testing. It will build, then run the program in node,
-as it is written in TypeScript. I don't yet know how to make it run in a browser
-env, but I'm looking into it.
+as it is written in TypeScript. I don't yet know how to make the tests run in a
+browser env, but I'm looking into it.
 
 ## Licencing
 

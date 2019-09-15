@@ -2,7 +2,7 @@
 /// <reference types="intern"/>
 const { suite, test } = intern.getPlugin('interface.tdd');
 const { assert } = intern.getPlugin('chai');
-import {ss,spudslices} from "../lib/spudslices";
+import ss from "../lib/spudslices";
 function deepEqualExcludingMethods(a:any,b:any,ranAlready?: boolean,deepness?: number) {
 	var ne={message:"Not equal (type conflict, depth "+deepness+")"};
 	if (typeof deepness==="undefined") deepness=0;
@@ -20,7 +20,10 @@ function deepEqualExcludingMethods(a:any,b:any,ranAlready?: boolean,deepness?: n
 //doesNotIncrease increacesButNotBy decreaces [apply same iterations], )
 var smallestNum=0.000000000000001
 suite("library config",()=>{
-	test("`spudslices` is equal to ss",() => assert.equal(ss,spudslices));
+	test("`spudslices` is equal to ss",() => {
+		assert.equal(ss.ss,ss.spudslices);
+		assert.equal(ss.ss,ss);
+	});
 	test("Version number test",()=>{
 		assert.equal(ss.version,"1.3.2-d");
 	});
@@ -203,10 +206,11 @@ suite("core functionality",()=>{
 		a.roundPoints();
 		assert.deepEqual(a.points[1],[10,20]);
 	});//round the points
-	test("The return of roundpoints",() => {
+	test("roundpoints",() => {
 		var a=new ss.Square(0,10,10).transpose(10,0)
-			.rotate(15,15,Math.PI);
+			.rotate(15,15,Math.PI/4);
 		assert.equal(a.roundPoints(),a);
+		assert.deepEqual(a.points,[[15,8],[22,15],[15,22],[8,15]]);
 	});//round the points
 	test("The result of EqualDistShape",() => {
 		deepEqualExcludingMethods(new ss.EqualDistShape(0,0,4,1).roundPoints(),
@@ -251,6 +255,11 @@ suite("core functionality",()=>{
 	//var b=a.makeDup();
 	test("The type of the value of collisionDetecors",() => {
 		assert.isObject(ss.collisionDetectors);
+	});
+	test("collisionDetecors can have new objects",() => {
+		assert.extensible(ss.collisionDetectors);
+		assert.extensible(ss.collisionDetectors.circle);
+		assert.extensible(ss.collisionDetectors.polygon);
 	});
 	test("The type of the value of collisionDetecors.circle",() => {
 		assert.isObject(ss.collisionDetectors["circle"]);
@@ -300,11 +309,10 @@ suite("core functionality",()=>{
 			b=new ss.Circle(30,30,10);
 		assert.deepEqual([a.collisionWith(b)],[[]]);
 	});
-	test("The result of good collisionWith (square,circle)",t => {
-		t.skip("Known bug to be adressed in v2. Fixing it fundemintally changes certian components of the API.");
+	test("The result of good collisionWith (square,circle)",() => {
 		var a=new ss.Square(10,10,10),
 			b=new ss.Circle(20,20,10);
-		assert.deepEqual(b.collisionWith(a),[[[10,20],[10,10]],[10,[20,20]]]);
+		assert.deepEqual(b.collisionWith(a),[[10,[20,20]],[[10,20],[10,10]]]);
 	});
 	test("The result of failed collisionWith (square,circle)",() => {
 		var a=new ss.Square(10,10,10),
@@ -321,6 +329,11 @@ suite("core functionality",()=>{
 			b=new ss.Circle(35,35,10);
 		assert.deepEqual(a.collisionWith(b),[[10,[30,30]],[10,[35,35]]]);
 	});
+	/*test("The result of good collisionWith (circle,circle) edge",() => {
+		var a=new ss.Circle(0,0,10),
+			b=new ss.Circle(20,0,10);
+		assert.deepEqual(a.collisionWith(b),[[10,[0,0]],[10,[20,0]]]);
+	});*///No gain seen, no useless testing if I can help it.
 	test("The result of failed collisionWith (circle,circle)",() => {
 		var a=new ss.Circle(30,30,10),
 			b=new ss.Circle(45,135,10);
