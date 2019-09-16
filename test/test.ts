@@ -26,6 +26,8 @@ suite("library config",()=>{
 	});
 	test("Version number test",()=>{
 		assert.equal(ss.version,"1.3.2-d");
+		//TODO: assert that version matches that of package.json
+		//TODO: assert that version matches that of README.md
 	});
 });
 suite("math section",()=>{

@@ -20,6 +20,22 @@ change a on "Changes that break backward compatibility"
 
 reset all numbers following a changed num to 0.
 
+## Tags
+
+published with `--tag alpha` (or whatever other tag)
+
+* Use `@latest` for stable code only.
+* `@alpha` for code that is in current development. (git versions and npm
+  version should have `.alpha` at the end, followed by `.x` given that `x` is a
+  number that is only there if there are multiple alphas, where the first is
+  zero, and not present, (x>0))
+* `@beta` for code that isn't quite ready for the public, but is 90% done. Just
+  needs testing, primarally hands-on functional testing.
+
+tag-reassignment is done with `npm dist-tags add spud-slices@1.2.3 tagname`
+
+removing a tag is done with `npm dist-tags rm tagname`
+
 ## Deprications
 
 * If you are using `import {ss} from 'spudslices'` or
