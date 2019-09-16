@@ -1,4 +1,4 @@
-# Spud-Slices v1.3.2-d
+# Spud-Slices v1.3.2-e
 
 [![Coverage Status](https://coveralls.io/repos/github/spud-game-engine/spud-slices/badge.svg?branch=master)](https://coveralls.io/github/spud-game-engine/spud-slices?branch=master)
 [![Build Status](https://travis-ci.org/spud-game-engine/spud-slices.svg?branch=master)](https://travis-ci.org/spud-game-engine/spud-slices)
@@ -23,7 +23,9 @@ Import the library with one of the following:
 * Include just parts you are using:
   `include {Polygon, Circle, version} from 'spud-slices'`
 
-Should you need support for more than just recent browsers, you could use the name `spud-slices-es3` instead
+Should you need support for more than just recent browsers, you could use the
+es3 file instead. (I actually have no idea how to do this. If you need to know,
+the file is at `dist/es3/lib/spudslices.ts`)
 
 ## Documentation
 
