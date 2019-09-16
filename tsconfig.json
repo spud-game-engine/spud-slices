@@ -1,29 +1,8 @@
 {
 	"compilerOptions": {
-		"target": "es2017",
-		//must be: 'es3', 'es5', 'es6', 'es2015', 'es2016', 'es2017', 'es2018', 'es2019', 'es2020', 'esnext'.
-		"module":"commonjs",//must be: 'none', 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015', 'esnext'
-
-		/*//The hash of what works (the rest may just be that I don't know how to make it work with them)
-		{//also, I am assuming that es2015+ are identical, as I don't have time to test all of them
-			ts:{
-				es3:`./es5`,
-				es5:`./es6`,
-				es6:"commonjs".split(","),
-			},
-			node_from_ts:{
-				es3:`./es5`,
-				es5:`./es6`,
-				es6:"none,commonjs,umd".split(","),
-			}
-			chrome_from_ts_enhanced:`./firefox_from_ts_enhanced`,
-			firefox_from_ts_enhanced:{
-				es3:`./es5`,
-				es5:`./es6`,
-				es6:"none,commonjs,amd,system,umd".split(","),
-			}
-		}
-		*/
+		"target": "es2017",//I'm gonna keep it at the newest, most env support as according to https://kangax.github.io/compat-table (checked whenever_I_feel_like_it|monthy|yearly|whenever_I_do_a_big_update) I also take env usage stats into account.
+		//The only feature that most browsers don't seem to have in es2017 as of the time of writing, is shared memory and atomics
+		"module":"commonjs",
 		
 		"declaration":true,
 		//"allowJs": true,
@@ -56,40 +35,5 @@
 	},
 	"include": [
 		"lib","test/*.*"
-	],
-	"exclude":[]
+	]
 }
-
-/*
-Replace immediately-invoked function expressions with namespace/module
-Use classes when possible
-Replace var with let or const
-Replace magic numbers/strings with enumeration
-Replace require() with import (check the previous section)
-Use async await to simplify the usage of asynchronous code
-Replace property names with nameof equivalent
-
-Finally, you should change the compiler options to enable more and more checks. This will help you find more errors at compile time. Some of them such as strictNullChecks will generates lots of errors (maybe thousands). So, you should enable these option one by one and fix the new errors. You can check how the vscode team handled this problem in this issue.
-
-{
-	"compilerOptions": {
-		"allowUnreachableCode": false,
-		"allowUnusedLabels": false,
-		"alwaysStrict": true,
-		"noImplicitAny": true,
-		"noImplicitReturns": true,
-		"noImplicitThis": true,
-		"noFallthroughCasesInSwitch": true,
-		"noUnusedLocals": true,
-		"noUnusedParameters": true,
-		"suppressExcessPropertyErrors": false,
-		"suppressImplicitAnyIndexErrors": false,
-		"strictFunctionTypes": true,
-		"strictNullChecks": true,
-		"strictPropertyInitialization": true,
-		"checkJs": true // If you are still using some js files
-	}
-}
-
-*/
-//

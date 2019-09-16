@@ -19,9 +19,11 @@ components. (NOT TRUE RIGHT NOW: I'll need to look into it)-->
 
 Import the library with one of the following:
 
-* Include everything: `include ss from 'spudslices'`
+* Include everything: `include ss from 'spud-slices'`
 * Include just parts you are using:
-  `include {Polygon, Circle, version} from 'spudslices'`
+  `include {Polygon, Circle, version} from 'spud-slices'`
+
+Should you need support for more than just recent browsers, you could use the name `spud-slices-es3` instead
 
 ## Documentation
 

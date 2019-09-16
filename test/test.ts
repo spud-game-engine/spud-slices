@@ -4,7 +4,7 @@ const { suite, test } = intern.getPlugin('interface.tdd');
 const { assert } = intern.getPlugin('chai');
 import ss from "../lib/spudslices";
 function deepEqualExcludingMethods(a:any,b:any,ranAlready?: boolean,deepness?: number) {
-	var ne={message:"Not equal (type conflict, depth "+deepness+")"};
+	let ne={message:"Not equal (type conflict, depth "+deepness+")"};
 	if (typeof deepness==="undefined") deepness=0;
 	for(let i in a) {
 		var toA=typeof a[i];

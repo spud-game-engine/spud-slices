@@ -19,7 +19,7 @@ namespace spudslices{
 	 * (0,0)
 	 */
 	export function findRot(x:number,y:number):number {
-		var dist=distance(x,y),
+		let dist=distance(x,y),
 			pos=[x/dist,
 				y/dist];
 		if(pos[1]<0) return(2*Math.PI)-Math.acos(pos[0]);//if it is > pi radians
@@ -31,7 +31,7 @@ namespace spudslices{
 	 * where distance is the distance of (x,y) from (0,0)
 	 */
 	export function rawRotate(x:number,y:number,rad:number):[number,number] {
-		var dist=distance(x,y);
+		let dist=distance(x,y);
 		return [
 			dist*(Math.cos(rad)),
 			dist*(Math.sin(rad)),
@@ -60,15 +60,15 @@ namespace spudslices{
 				let ths:Circle=this.makeDup(),//make sure that the original ones aren't altered
 					sha:Circle=sh.makeDup();
 				//iterate through each segment on ths
-				for (var thsPt=0;thsPt<ths.segments.length;thsPt++) {
+				for (let thsPt=0;thsPt<ths.segments.length;thsPt++) {
 					//variables must be declared here so they are properly global
-					var seg=ths.segments[thsPt],//ths's current segment
+					let seg=ths.segments[thsPt],//ths's current segment
 						thsRadius=ths.points[seg[0]],//will be different in vv22
 						thsX=ths.points[seg[1]][0],
 						thsY=ths.points[seg[1]][1];
 					//iterate through each segment on sha
-					for (var shaPt=0;shaPt<sha.segments.length;shaPt++) {
-						var segS=sha.segments[shaPt],/*sha's current segment */
+					for (let shaPt=0;shaPt<sha.segments.length;shaPt++) {
+						let segS=sha.segments[shaPt],/*sha's current segment */
 							shaRadius=sha.points[segS[0]],//will be different in v2
 							shaX=sha.points[segS[1]][0],
 							shaY=sha.points[segS[1]][1];
@@ -87,12 +87,12 @@ namespace spudslices{
 		polygon:{
 			/** Collision of two polygons */
 			polygon:function(sh: Polygon|Shape) {//change to two args in v2?
-				var ths:Polygon=this.makeDup(),//make sure that the original ones aren't altered
+				let ths:Polygon=this.makeDup(),//make sure that the original ones aren't altered
 					sha:Polygon=sh.makeDup();
 				//iterate through each segment on ths
-				for (var thsPt=0;thsPt<ths.segments.length;thsPt++) {
+				for (let thsPt=0;thsPt<ths.segments.length;thsPt++) {
 					//variables must be declared here so they are properly global
-					var seg=ths.segments[thsPt],//ths's current segment
+					let seg=ths.segments[thsPt],//ths's current segment
 						innerR=false,//See usage below for a better comment description
 						thsRX=ths.points[seg[0]][0],
 						thsLX=ths.points[seg[1]][0],
@@ -114,8 +114,8 @@ namespace spudslices{
 						continue;
 					}
 					//iterate through each segment on sha
-					for (var shaPt=0;shaPt<sha.segments.length;shaPt++) {
-						var segS=sha.segments[shaPt],/*sha's current segment */
+					for (let shaPt=0;shaPt<sha.segments.length;shaPt++) {
+						let segS=sha.segments[shaPt],/*sha's current segment */
 							//The value we return
 							retVal=[[this.points[seg [0]],this.points[seg [1]]],
 									[  sh.points[segS[0]],  sh.points[segS[1]]]],
@@ -175,7 +175,7 @@ namespace spudslices{
 							break;
 						}
 		
-						var thsM=(thsRY-thsLY)/(thsRX-thsLX),//find slope of thsSegment
+						let thsM=(thsRY-thsLY)/(thsRX-thsLX),//find slope of thsSegment
 							thsB=thsRY-(thsM*thsRX),//find y intercept of thsSegment
 							//find slope of shaSegment //sham mate
 							shaM=(shaRY-shaLY)/(shaRX-shaLX),
@@ -185,7 +185,7 @@ namespace spudslices{
 							but have different bounds*/
 						if (thsB==shaB&&thsM==shaM) return retVal;
 						if (thsM==shaM) continue;//lines are paralell (never touch)
-						var x=(shaB-thsB)/(thsM-shaM);
+						let x=(shaB-thsB)/(thsM-shaM);
 							//get the x position of the x,y intercept
 						if (!(((x>=shaRX && x<=shaLX)|| //(shaRX > x > shaLX or
 							(x>=shaLX && x<=shaRX))&&// shaLX > x > shaRX) and
@@ -194,7 +194,7 @@ namespace spudslices{
 								)) continue;
 						//if it is outside of bounds, it's not a collision
 		
-						//var y=(thsM*x)+thsB;
+						//let y=(thsM*x)+thsB;
 						//if (!(((y>=shaRY&&y<=shaLY)|| //(shaRY > y > shaLY or
 						//	   (y>=shaLY&&y<=shaRY))&&// shaLY > y > shaRY) and
 						//	  ((y>=thsRY&&y<=thsLY)|| //(thsRY > y > thsLY or
@@ -215,12 +215,12 @@ namespace spudslices{
 			/** Collision of a polygon with a circle, or a circle with a polygon */
 			circle:function(sh: Circle|Shape) {//change to two args in v2?
 				//input: another Shape instance
-				var ths:Polygon=this.makeDup(),//make sure that the original ones aren't altered
+				let ths:Polygon=this.makeDup(),//make sure that the original ones aren't altered
 					sha:Circle=sh.makeDup();
 				//Sha is Circle, ths is Line
 				//iterate through each segment on ths
-				for (var thsPt=0;thsPt<ths.segments.length;thsPt++) {
-					var seg=ths.segments[thsPt],//ths's current segment
+				for (let thsPt=0;thsPt<ths.segments.length;thsPt++) {
+					let seg=ths.segments[thsPt],//ths's current segment
 						innerR=false,//See usage below for a better comment description
 						thsRX=ths.points[seg[0]][0],
 						thsLX=ths.points[seg[1]][0],
@@ -242,8 +242,8 @@ namespace spudslices{
 						continue;
 					}
 		
-					for (var shaPt=0;shaPt<sha.segments.length;shaPt++) {
-						var segS=sha.segments[shaPt],/*sha's current segment */
+					for (let shaPt=0;shaPt<sha.segments.length;shaPt++) {
+						let segS=sha.segments[shaPt],/*sha's current segment */
 							shaX=sha.points[segS[1]][0],
 							shaY=sha.points[segS[1]][1];
 		
@@ -268,7 +268,7 @@ namespace spudslices{
 							* Much of this code was cleanly formatted only after
 							* making the unit tests.
 							*/
-						var d_x=thsLX-thsRX,
+						let d_x=thsLX-thsRX,
 							d_y=thsLY-thsRY,
 							D=(thsRX*thsLY)-(thsLX*thsRY),
 							d_r=distance(d_x,d_y),
@@ -277,7 +277,7 @@ namespace spudslices{
 						if ((Math.pow(radius,2)*Math.pow(d_r,2))<
 							Math.pow(D,2)) break;//line doesn't collide.
 		
-						var x_p =(((D*d_y)+
+						let x_p =(((D*d_y)+
 								(Math.sign(d_y)*d_x*Math.sqrt(
 									(Math.pow(radius,2)*Math.pow(d_r,2))-
 										Math.pow(D,2)
@@ -295,7 +295,7 @@ namespace spudslices{
 							(thsLX <=x_p2 && x_p2<= thsRX)))
 							continue; //If outside of bounds, continue
 		
-						var y_p =((-D*d_x)+
+						let y_p =((-D*d_x)+
 									(Math.abs(d_y)*
 										Math.sqrt(
 											(Math.pow(radius,2)*
@@ -432,7 +432,7 @@ namespace spudslices{
 		drawPointsOn(ctx: CanvasRenderingContext2D):Shape {
 			ctx.fillStyle=this.pointColor;
 			ctx.beginPath();
-			for (var i=0; i<this.points.length; i++) {
+			for (let i=0; i<this.points.length; i++) {
 				if (typeof this.pointColors[i]=="string")
 					ctx.fillStyle=this.pointColors[i];
 				ctx.beginPath();
@@ -451,8 +451,8 @@ namespace spudslices{
 			ctx.strokeStyle=this.segmentColor;
 			ctx.lineWidth=this.segmentSize;
 			ctx.beginPath();
-			for (var i=0; i<this.segments.length; i++) {
-				var seg=this.segments[i];
+			for (let i=0; i<this.segments.length; i++) {
+				let seg=this.segments[i];
 				if (typeof this.segmentColors[i]=="string")
 					ctx.strokeStyle=this.segmentColors[i];
 				if (typeof this.points[seg[0]]=="number") {
@@ -474,11 +474,11 @@ namespace spudslices{
 		drawFacesOn(ctx: CanvasRenderingContext2D):Shape {
 			ctx.fillStyle=this.faceColor;
 			ctx.beginPath();
-			for (var fac=0; fac<this.faces.length; fac++) {
-				for (var i=0; i<this.faces[fac].length; i++) {
+			for (let fac=0; fac<this.faces.length; fac++) {
+				for (let i=0; i<this.faces[fac].length; i++) {
 					if (typeof this.faceColors[fac]=="string")
 						ctx.fillStyle=this.faceColors[i];
-					var seg=this.segments[this.faces[fac][i]];
+					let seg=this.segments[this.faces[fac][i]];
 					if (typeof this.points[seg[0]]=="number") {
 						ctx.arc(this.points[seg[1]][0], this.points[seg[1]][1],
 							this.points[seg[0]], 0, 2 * Math.PI);
@@ -496,7 +496,7 @@ namespace spudslices{
 		 * Transposes the shape by (x,y)
 		 */
 		transpose(x: number,y: number):Shape {
-			for (var i=0; i<this.points.length; i++) {
+			for (let i=0; i<this.points.length; i++) {
 				if (typeof this.points[i]=="number") continue;//will be removed in v2
 				this.points[i][0]+=x;
 				this.points[i][1]+=y;
@@ -519,7 +519,7 @@ namespace spudslices{
 		 */
 		scale(x: number,y?: number):Shape {
 			if(typeof y==="undefined") y=x;
-			for(var i=0;i<this.points.length;i++) {
+			for(let i=0;i<this.points.length;i++) {
 				if (typeof this.points[i]=="number") {//remove in v2
 					this.points[i]*=((x+y)/2);
 					continue;
@@ -535,7 +535,7 @@ namespace spudslices{
 		 */
 		rotate(x: number,y: number,rad: number):Shape {
 			this.transpose(-x,-y);//to Center
-			for (var i=0;i<this.points.length;i++) {
+			for (let i=0;i<this.points.length;i++) {
 				if (typeof this.points[i]=="number") continue;//will be removed in v2
 				this.points[i]=rotate(this.points[i][0],this.points[i][1],rad);
 			}
@@ -550,12 +550,12 @@ namespace spudslices{
 			if (typeof otherF==="undefined") {
 				otherF=Math.round;
 			}
-			for (var i=0;i<this.points.length;i++) {
+			for (let i=0;i<this.points.length;i++) {
 				if (typeof this.points[i]=="number") {//remove in v2
 					this.points[i]=otherF(this.points[i]);
 					continue;
 				}
-				for (var ii=0;ii<this.points[i].length;ii++)
+				for (let ii=0;ii<this.points[i].length;ii++)
 					this.points[i][ii]=otherF(this.points[i][ii]);
 			}
 			return this;
@@ -565,7 +565,7 @@ namespace spudslices{
 		 * @param rad How far to rotate.
 		 */
 		rotCenter(rad: number):Shape {
-			var pos=this.findCenter();
+			let pos=this.findCenter();
 			return this.rotate(pos[0],pos[1],rad);
 		};
 		/**
@@ -573,64 +573,64 @@ namespace spudslices{
 		 * original.
 		 */
 		makeDup() {
-			var s=new this.__proto__.constructor();
-			for (var i in this) {
+			let s=new this.__proto__.constructor();
+			for (let i in this) {
 				s[i]=this[i];
 			}
 			s.category=this.category;
 			s.points=[];
-			for (var iterator=0,ii: number; iterator<this.points.length;iterator++) {
-				if (typeof this.points[iterator]=="number") s.points[iterator]=this.points[iterator];//will be removed in v2
+			for (let i=0; i<this.points.length;i++) {
+				if (typeof this.points[i]=="number") s.points[i]=this.points[i];//will be removed in v2
 				else {
 					s.points.push([]);
-					for (ii=0; ii<this.points[iterator].length; ii++) {
-						s.points[iterator][ii]=this.points[iterator][ii];
+					for (let ii=0; ii<this.points[i].length; ii++) {
+						s.points[i][ii]=this.points[i][ii];
 					}
 				}
 			}
 			s.pointColor=this.pointColor+"";
 			s.pointColors=[];
-			for (iterator=0; iterator<this.pointColors.length;iterator++) {
+			for (let i=0; i<this.pointColors.length;i++) {
 				s.pointColors.push([]);
-				for (ii=0;ii< this.pointColors[iterator].length; ii++) {
-					s.pointColors[iterator][ii]=this.pointColors[iterator][ii];
+				for (let ii=0;ii< this.pointColors[i].length; ii++) {
+					s.pointColors[i][ii]=this.pointColors[i][ii];
 				}
 			}
 			s.segments=[];
-			for (iterator=0; iterator<this.segments.length;iterator++) {
+			for (let i=0; i<this.segments.length;i++) {
 				s.segments.push([]);
-				for (ii=0;ii< this.segments[iterator].length; ii++) {
-					s.segments[iterator][ii]=this.segments[iterator][ii];
+				for (let ii=0;ii< this.segments[i].length; ii++) {
+					s.segments[i][ii]=this.segments[i][ii];
 				}
 			}
 			s.segmentColor=this.segmentColor+"";
 			s.segmentColors=[];
-			for (iterator=0; iterator<this.segmentColors.length;iterator++) {
+			for (let i=0; i<this.segmentColors.length;i++) {
 				s.segmentColors.push([]);
-				for (ii=0;ii< this.segmentColors[iterator].length; ii++) {
-					s.segmentColors[iterator][ii]=this.segmentColors[iterator][ii];
+				for (let ii=0;ii< this.segmentColors[i].length; ii++) {
+					s.segmentColors[i][ii]=this.segmentColors[i][ii];
 				}
 			}
 			s.faces=[];
-			for (iterator=0; iterator<this.faces.length;iterator++) {
+			for (let i=0; i<this.faces.length;i++) {
 				s.faces.push([]);
-				for (ii=0;ii< this.faces[iterator].length; ii++) {
-					s.faces[iterator][ii]=this.faces[iterator][ii];
+				for (let ii=0;ii< this.faces[i].length; ii++) {
+					s.faces[i][ii]=this.faces[i][ii];
 				}
 			}
 			s.faceColor=this.faceColor+"";
 			s.faceColors=[];
-			for (iterator=0; iterator<this.faceColors.length;iterator++) {
+			for (let i=0; i<this.faceColors.length;i++) {
 				s.faceColors.push([]);
-				for (ii=0;ii< this.faceColors[iterator].length; ii++) {
-					s.faceColors[iterator][ii]=this.faceColors[iterator][ii];
+				for (let ii=0;ii< this.faceColors[i].length; ii++) {
+					s.faceColors[i][ii]=this.faceColors[i][ii];
 				}
 			}
 			return s;
 		};
 		/*makeDup() {
-			var s=new this.__proto__.constructor();
-			for (var i in this) {
+			let s=new this.__proto__.constructor();
+			for (let i in this) {
 				if (s[i]==this[i]) continue;
 				Object.assign(this[i],s[i]);
 			}
@@ -668,9 +668,10 @@ namespace spudslices{
 		 * Find the center of any shape, relative to the points.
 		 */
 		findCenter() {
-			var center=new Array(this.dimensions);
-			for (var dem=0;dem<this.dimensions;dem++) {
-				for (var pointi=0,avrge=0;pointi<this.points.length;pointi++) {
+			let center=new Array(this.dimensions);
+			for (let dem=0,avrge:number;dem<this.dimensions;dem++) {
+				avrge=0;
+				for (let pointi=0;pointi<this.points.length;pointi++) {
 					avrge+=this.points[pointi][dem];
 				}
 				center[dem]=avrge/this.points.length;
@@ -717,7 +718,7 @@ namespace spudslices{
 			super();
 			this.category="polygon";
 			this.faces[0]=[];
-			for (var i=0; i<args.length; i++) {
+			for (let i=0; i<args.length; i++) {
 				this.points.push(args[i]);
 				if (i>0) {
 					this.segments.push([i-1,i]);
@@ -732,9 +733,9 @@ namespace spudslices{
 		 * > NOTE: Assumes the shape to have 1 face.
 		 */
 		convertToTriangles() {
-			var out:Polygon[]=[],
+			let out:Polygon[]=[],
 				center=this.findCenter();
-			for (var i=0; i<this.segments.length; i++) {
+			for (let i=0; i<this.segments.length; i++) {
 				out[i]=new Polygon(this.points[this.segments[i][0]],
 					this.points[this.segments[i][1]],center);
 			}
@@ -752,22 +753,22 @@ namespace spudslices{
 				console.warn("Segments not found!");
 				return this;
 			}
-			var a=this.segments[segA],
+			let a=this.segments[segA],
 				b=this.segments[segB];
 			if (a[1]!==b[0]) {
 				if (a[0]!==b[1]) throw "Segments not joinable! They need to share a pointer to the same point.";
 				else return this.joinSegments(segB,segA);
 			}
 			this.points=this.points.slice(0,a[1]).concat(this.points.slice(a[1]+1));
-			for(var i=0;i<this.segments.length;i++) {
+			for(let i=0;i<this.segments.length;i++) {
 				if(i===segA) this.segments[i]=[a[0],b[1]];
 				if(this.segments[i][0]>a[1]) this.segments[i][0]--;
 				if(this.segments[i][1]>a[1]) this.segments[i][1]--;
 			}
 			this.segments=this.segments.slice(0,segB).concat(this.segments.slice(segB+1));
-			var rm=-1;
-			for(i=0;i<this.faces.length;i++) {
-				for (var ii=0;ii<this.faces[i].length;ii++) {
+			let rm=-1;
+			for(let i=0;i<this.faces.length;i++) {
+				for (let ii=0;ii<this.faces[i].length;ii++) {
 					if (this.faces[i][ii]===segB) rm=ii;
 					else if (this.faces[i][ii]>segB) this.faces[i][ii]--;
 				}
@@ -793,7 +794,7 @@ namespace spudslices{
 			segNum: number,
 			sugP?: number[]/*,
 			color?: boolean*/):Shape {
-			var npoint=(typeof sugP!="undefined"&&typeof sugP.length=="number")?
+			let npoint=(typeof sugP!="undefined"&&typeof sugP.length=="number")?
 					sugP:
 					new Polygon(
 						this.points[this.segments[segNum][0]],
@@ -807,14 +808,14 @@ namespace spudslices{
 					
 				//}
 			}*/
-			for (var i=0;i<this.segments.length;i++) {//increase the reference indexes for those that are now off by one because of the point spliced in the middle
+			for (let i=0;i<this.segments.length;i++) {//increase the reference indexes for those that are now off by one because of the point spliced in the middle
 				if (this.segments[i][0]>=pointL) this.segments[i][0]++;
 				if (this.segments[i][1]>=pointL) this.segments[i][1]++;
 			}
 			this.segments.splice(segNum+1,0,[pointL,this.segments[segNum][1]]);
 			this.segments[segNum]=[this.segments[segNum][0],pointL];
 			/*for(i=0;i<this.faces.length;i++) {
-				for (var ii=0;ii<this.faces[i].length;ii++) {
+				for (let ii=0;ii<this.faces[i].length;ii++) {
 					if (this.faces[i][ii]>=segNum) this.faces[i][ii]++;
 				}
 			}
@@ -894,15 +895,15 @@ namespace spudslices{
 	 * `import {spudslices} from 'spudslices'` use `import ss from 'spudslices` 
 	 * or `import spudslices from 'spudslices'` instead.
 	 */
-	export var ss:any,
+	export let ss:any,
 		spudslices:any;
 }
 (function(){
-	var __warnedAboutv1_2_3ExportDep=false;
+	let __warnedAboutv1_2_3ExportDep=false;
 	function get() {
 		if (!__warnedAboutv1_2_3ExportDep){
 			__warnedAboutv1_2_3ExportDep=true;
-			var __useInstead__="\n\nIf you are using `import {ss} from 'spudslices'` or `import {spudslices} from 'spudslices'` use `import ss from 'spudslices` or `import spudslices from 'spudslices'`\n";
+			let __useInstead__="\n\nIf you are using `import {ss} from 'spudslices'` or `import {spudslices} from 'spudslices'` use `import ss from 'spudslices` or `import spudslices from 'spudslices'`\n";
 			console.warn("DEPRECATION WARNING: Using this style of import is going to be deprecated in v2 of spud-slices."+__useInstead__);//remove this line, uncomment next line on v2
 			//console.error("DEPRECATION WARNING: Using this style of import has been deprecated as of v2 of spud-slices. This will be thrown in v2.1 (or later)"+__useInstead__);//remove this line, uncomment next line on v2.1
 			//throw new Error("DEPRECATION WARNING: Using this style of import has been deprecated as of v2 of spud-slices. This feature will be wiped in v2.2 (or later)"+__useInstead__);//remove, along with other simmalar code in v2.2

@@ -11,7 +11,7 @@
     "watch:build": "tsc --watch",
     "watch:all": "npm run watch:build & npm run watch:test",
     "watch": "npm run watch:all",
-    "build:typescript": "tsc",
+    "build:typescript": "tsc && tsc -p tsconfig.es3.json",
     "build:typedoc": "typedoc --out docs lib",
     "build:all": "npm run build:typescript && npm run build:typedoc",
     "build": "npm run build:all",
@@ -41,7 +41,8 @@
   },
   "dependencies": {},
   "bin": {
-    "spud-slices": "dist/lib/spudslices.js"
+    "spud-slices": "dist/lib/spudslices.js",
+    "spud-slices-es3": "dist/es3/lib/spudslices.js"
   },
   "directories": {
     "doc": "docs",
