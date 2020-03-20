@@ -10,6 +10,12 @@ It is designed to be a base for libraries such as physics engines. Primarally,
 it works with 2d applications only, but it should, in the future be able to work
 in 3d.
 
+Here's some of the coolest features:
+
+* The ability to make almost any 2d shape.
+* The ability to test the collision of any shape with any other shape. (Using
+  line-intercept collision only, for now)
+
 ## Using the library
 
 Download and mark as a dependancy with `npm i spud-slices -D`.
@@ -24,8 +30,7 @@ Import the library with one of the following:
   `include {Polygon, Circle, version} from 'spud-slices'`
 
 Should you need support for more than just recent browsers, you could use the
-es3 file instead. (I actually have no idea how to do this. If you need to know,
-the file is at `dist/es3/lib/spudslices.ts`)
+es3 file instead: `import ss from 'spud-slices/dist/es3/lib/spudslices';`
 
 ## Documentation
 
