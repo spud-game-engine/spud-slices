@@ -1,6 +1,6 @@
 {
   "name": "spud-slices",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "The library that lets you make shapes. Part of the Spud Game Engine.",
   "main": "dist/lib/spudslices.js",
   "types": "dist/lib/spudslices.d.ts",
