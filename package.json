@@ -56,7 +56,6 @@
     "typedoc": "^0.17.1",
     "typescript": "^3.8.3"
   },
-  "dependencies": {},
   "directories": {
     "doc": "docs",
     "lib": "lib",
