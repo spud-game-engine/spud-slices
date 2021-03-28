@@ -25,9 +25,9 @@ components. (NOT TRUE RIGHT NOW: I'll need to look into it)-->
 
 Import the library with one of the following:
 
-* Include everything: `include ss from 'spud-slices'`
+* Include everything: `include ss from 'spud-slices';`
 * Include just parts you are using:
-  `include {Polygon, Circle, version} from 'spud-slices'`
+  `include {Polygon, Circle, version} from 'spud-slices';`
 
 Should you need support for more than just recent browsers, you could use the
 es3 file instead: `import ss from 'spud-slices/dist/es3/lib/spudslices';`
@@ -46,6 +46,34 @@ would rather just use this.](modules/_spudslices_.spudslices.html)
 Run `npm test` for basic testing. It will build, then run the program in node,
 as it is written in TypeScript. I don't yet know how to make the tests run in a
 browser env, but I'm looking into it.
+
+## (May) pair well with
+
+If you need _something more_.
+
+* [Wilderness](https://wilderness.now.sh/) A library made for the purpose of
+  having fancy animation stuff, all with SVG. I highly reccomend this over using
+  canvases for everything, as it is more native.
+* [subdivide-arc](https://www.npmjs.com/package/subdivide-arc) This may be
+  useful if you want a round part attached to the rest of a polygon.
+* [Shapes-Interaction-Library](https://www.npmjs.com/package/shapes-interaction)
+  Just in case I'm not good enough at collision algorithims for your taste. With
+  the exeption of circles, there is a direct mapping from `Shape.points` to
+  the arguments of their `intersection` or their `contain`. For circles, swap
+  the first and second elms of the `Circle.points` array, then it's a perfect
+  fit. Note that it doesn't give info about the location, or angle of collision.
+
+## Alternatives
+
+If this is close, but not quite what you need.
+
+* [@thi.ng/geom](https://www.npmjs.com/package/@thi.ng/geom) Really big, but can
+  do everything this can do and more.
+* [Shapes-Interaction-Library](https://www.npmjs.com/package/shapes-interaction)
+  Just collisions, nothing more. (Doesn't give lines as output when there is a
+  collision, so this may not be what you want)
+* [Paper.js](http://paperjs.org/) It's like Spud-Slices, but it focues more on
+  rendering.
 
 ## Licencing
 
