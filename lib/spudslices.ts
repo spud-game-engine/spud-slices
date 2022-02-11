@@ -9,7 +9,7 @@ namespace spudslices{
 	/**
 	* A string that identifies the version number.
 	*/
-	export const version:string="1.3.2";//should be identical to that of this repo's package.json
+	export const version:string="1.3.4";//should be identical to that of this repo's package.json
 	/**
 	* Find the distance of (x,y) from the origin (0,0)
 	*/
