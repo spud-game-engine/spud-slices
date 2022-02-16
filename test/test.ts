@@ -25,7 +25,7 @@ suite("library config",()=>{
 		assert.equal(ss.ss,ss);
 	});
 	test("Version number test",()=>{
-		assert.equal(ss.version,"1.3.2");
+		assert.equal(ss.version,"1.3.5");
 		//TODO: assert that version matches that of package.json
 		//TODO: assert that version matches that of README.md
 	});
