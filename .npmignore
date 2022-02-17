@@ -15,3 +15,9 @@ docs
 
 versioning.md
 whyTS.md
+
+# It wasn't getting used when packaged on npm anyway. Trim the size a bit.
+dist/es3
+*.json
+*.md
+lib/
