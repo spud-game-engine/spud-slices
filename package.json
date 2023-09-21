@@ -6,8 +6,8 @@
   "types": "dist/lib/spudslices.d.ts",
   "scripts": {
     "prepare": "npm run build",
-    "test": "npm run build && nyc intern",
-    "watch:test": "intern --watch",
+    "test": "npm run build && nyc jest",
+    "watch:test": "jest --watch",
     "watch:build": "tsc --watch",
     "watch:all": "npm run watch:build & npm run watch:test",
     "watch": "npm run watch:all",
@@ -48,8 +48,9 @@
   "homepage": "https://github.com/spud-game-engine/spud-slices#readme",
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
+    "@types/jest": "^23.3.14",
     "coveralls": "^3.1.1",
-    "intern": "^4.10.1",
+    "jest": "^23.0.0",
     "nyc": "^15.1.0",
     "source-map-support": "^0.5.21",
     "ts-node": "^10.5.0",

@@ -1,8 +1,7 @@
 /* istanbul ignore file */
-/// <reference types="intern"/>
-const { suite, test } = intern.getPlugin('interface.tdd');
-const { assert } = intern.getPlugin('chai');
+import { assert } from 'chai'
 import ss from "../lib/spudslices";
+var suite = describe
 function deepEqualExcludingMethods(a:any,b:any,ranAlready?: boolean,deepness?: number) {
 	let ne={message:"Not equal (type conflict, depth "+deepness+")"};
 	if (typeof deepness==="undefined") deepness=0;
