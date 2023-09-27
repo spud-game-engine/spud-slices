@@ -48,7 +48,9 @@
   "homepage": "https://github.com/spud-game-engine/spud-slices#readme",
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
+    "@types/chai": "^4.3.6",
     "@types/jest": "^23.3.14",
+    "chai": "^4.3.8",
     "coveralls": "^3.1.1",
     "jest": "^23.0.0",
     "nyc": "^15.1.0",
