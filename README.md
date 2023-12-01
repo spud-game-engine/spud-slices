@@ -1,3 +1,6 @@
+> :warning: Deprecated! Use [@thi.ng/geom](https://www.npmjs.com/package/@thi.ng/geom) instead!
+
+
 # Spud-Slices v1.3.5
 
 [![Coverage Status](https://coveralls.io/repos/github/spud-game-engine/spud-slices/badge.svg?branch=master)](https://coveralls.io/github/spud-game-engine/spud-slices?branch=master)
