@@ -1,4 +1,5 @@
-> :warning: Deprecated! Use [@thi.ng/geom](https://www.npmjs.com/package/@thi.ng/geom) instead!
+> [!WARNING]  
+> Deprecated! Use [@thi.ng/geom](https://www.npmjs.com/package/@thi.ng/geom) instead!
 
 
 # Spud-Slices v1.3.5
